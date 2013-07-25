@@ -1,5 +1,4 @@
 require_relative 'xmlrpc_client.rb'
-require 'json'
 require 'base64'
 
 class AddressStore
@@ -8,7 +7,7 @@ class AddressStore
   def initialize
     @client = XmlrpcClient.new
     @addresses = {}
-    update
+    # update
   end
   
   def log x
@@ -16,7 +15,7 @@ class AddressStore
   end
 
   def update
-    address_infos = JSON.parse(@client.listAddresses)['addresses']
+    address_infos = @client.listAddresses['addresses']
     address_infos.each do |address_info|
       address = address_info['address']
       if @addresses.has_key? address

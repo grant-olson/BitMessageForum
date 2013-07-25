@@ -19,16 +19,29 @@ def folder folder_name
   end
 end
 
+def sync
+  $message_store.update
+  $address_store.update
+rescue Errno::ECONNREFUSED => ex
+  halt(500, "Couldn't connect to PyBitmessage server.  Is it running and enabled? ")
+rescue XmlrpcClientError => ex
+  halt(500, "XmlrpcClient issued error '#{ex.message}'.  Do you have the correct information in keys.dat?")
+end
+
+
+
 
 get "/", :provides => :html do
-  $message_store.update
+  sync
+
   @messages = folder("inbox")
   @addresses = $address_store.addresses
   haml :threaded_messages, :layout => :layout
 end
 
 get "/:folder/", :provides => :html do
-  $message_store.update
+  sync
+
   @messages = folder params[:folder]
   
   @addresses = $address_store.addresses
@@ -36,7 +49,7 @@ get "/:folder/", :provides => :html do
 end
 
 get "/:folder/:address/", :provides => :html do
-  $message_store.update
+  sync
   
   @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
   @addresses = $address_store.addresses
@@ -46,7 +59,7 @@ get "/:folder/:address/", :provides => :html do
 end
 
 get "/:folder/:address/:thread", :provides => :html do
-  $message_store.update
+  sync
   
   @address, threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
   @thread, @messages = threads.detect do |thread, messages|

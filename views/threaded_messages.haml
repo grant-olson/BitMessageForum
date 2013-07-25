@@ -1,6 +1,10 @@
 - @messages.each do |user, threads|
   .recipient
-    %h2= user
+    %h2
+      - if @addresses.has_key? user
+        = @addresses[user]['label']
+      - else
+        = user
     - threads.each do |thread, messages|
       .thread
         %h3
@@ -10,7 +14,10 @@
           .message
             %h4
               FROM
-              = message['fromAddress']
+              - if @addresses.has_key? message['fromAddress']
+                = @addresses[message['fromAddress']]['label']
+              - else
+                = message['fromAddress']
             - body = message['message']
             - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
             - body.each do |paragraph|

@@ -14,6 +14,9 @@
             = @addresses[message['fromAddress']]['label']
           - else
             = message['fromAddress']
+
+          \- received 
+          = Time.at(message['receivedTime'].to_i).to_datetime
         - body = message['message']
         - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
         - body.each do |paragraph|

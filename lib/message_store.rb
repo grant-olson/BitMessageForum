@@ -6,10 +6,11 @@ require_relative 'xmlrpc_client.rb'
 class MessageStore
   include Singleton
 
-  attr_reader :messages
+  attr_reader :messages, :address_last_updates
 
   def initialize
     @messages = {} # messages by msgid
+    @address_last_updates = {}
     # update
   end
   
@@ -26,6 +27,16 @@ class MessageStore
         m["subject"] = Base64.decode64(m["subject"])
         m["_source"] = source
         messages[msgid] = m
+
+        to_address = m["toAddress"]
+        received_time = m["receivedTime"].to_i
+     
+        address_last_updates[to_address] ||= 0
+        if address_last_updates[to_address] < received_time
+          address_last_updates[to_address] = received_time
+        end
+        
+        puts m["toAddr"]
 
         log "Added new message #{msgid}."
       end

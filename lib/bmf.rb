@@ -79,7 +79,7 @@ class BMF < Sinatra::Base
     sync
 
     @messages = folder params[:folder]
-    
+    @messages = @messages.sort { |a,b| MessageStore.instance.address_last_updates[a[0]] <=> MessageStore.instance.address_last_updates[b[0]] }.reverse
     @addresses = AddressStore.instance.addresses
     haml :addresses
   end

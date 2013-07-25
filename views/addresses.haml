@@ -6,6 +6,8 @@
           = @addresses[user]['label']
         - else
           = user
+      \- Last Updated:
+      = Time.at(MessageStore.instance.address_last_updates[user]).to_datetime
       \-
       %a{:href => "/messages/compose/?to=#{CGI.escape(user)}"}
         [send]

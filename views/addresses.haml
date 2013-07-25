@@ -6,3 +6,5 @@
           = @addresses[user]['label']
         - else
           = user
+      %a{:href => "/messages/compose/?to=#{CGI.escape(user)}"}
+        [send]

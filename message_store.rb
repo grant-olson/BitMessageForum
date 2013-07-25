@@ -24,9 +24,7 @@ class MessageStore
     inbox.each do |m|
       msgid = m["msgid"]
 
-      if @messages.has_key? msgid
-        log "Already saw #{msgid}, skipping..."
-      else
+      if !@messages.has_key?(msgid)
         m["message"] = Base64.decode64(m["message"])
         m["subject"] = Base64.decode64(m["subject"])
         messages[msgid] = m

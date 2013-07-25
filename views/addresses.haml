@@ -1,10 +1,11 @@
 .recipient
   - @messages.each do |user, threads|
-    %h2
+    %div
       %a{:href => "./#{user}/"}
         - if @addresses.has_key? user
           = @addresses[user]['label']
         - else
           = user
+      \-
       %a{:href => "/messages/compose/?to=#{CGI.escape(user)}"}
         [send]

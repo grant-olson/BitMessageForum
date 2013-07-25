@@ -1,9 +1,10 @@
-#!/usr/bin/env ruby
-require_relative 'threaded_messages.rb'
+require_relative 'message_store.rb'
+
+$message_store = MessageStore.new
 
 def messageHtml
   output = []
-  ThreadedMessages.by_recipient.each do |user, threads|
+  $message_store.by_recipient.each do |user, threads|
     output << "<div class='recipient'>"
     output << "<h2>TO: #{user}</h2>"
     threads.each do |thread, messages|
@@ -39,6 +40,9 @@ end
 require 'sinatra'
 
 get "/", :provides => :html do
+  $message_store.update
+
+  
   <<html
 <html>
 <head>

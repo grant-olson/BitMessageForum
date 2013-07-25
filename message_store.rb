@@ -2,24 +2,42 @@ require_relative 'xmlrpc_client.rb'
 require 'json'
 require 'base64'
 
-module ThreadedMessages
-  def self.by_recipient
-    client = XmlrpcClient.new
+class MessageStore
 
-    inbox_messages = JSON.parse client.getAllInboxMessages
+  attr_reader :messages
 
-
+  def initialize
+    @client = XmlrpcClient.new
+    @messages = {} # messages by msgid
+    update
+  end
+  
+  def log x
+    puts x
+  end
+    
+  def update
+    inbox_messages = JSON.parse @client.getAllInboxMessages
     inbox = inbox_messages['inboxMessages']
-
-    messages = {}
 
     # fix messages
     inbox.each do |m|
-      m["message"] = Base64.decode64(m["message"])
-      m["subject"] = Base64.decode64(m["subject"])
-      messages[m["msgid"]] = m
-    end
+      msgid = m["msgid"]
 
+      if @messages.has_key? msgid
+        log "Already saw #{msgid}, skipping..."
+      else
+        m["message"] = Base64.decode64(m["message"])
+        m["subject"] = Base64.decode64(m["subject"])
+        messages[msgid] = m
+
+        log "Added new message #{msgid}."
+      end
+    end
+  end
+  
+  def by_recipient
+ 
     #display messages
 
     by_recipient = {}

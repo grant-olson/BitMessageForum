@@ -1,4 +1,5 @@
 require 'xmlrpc/client'
+require 'json'
 
 class XmlrpcClient
   def initialize

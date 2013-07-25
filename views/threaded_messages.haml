@@ -1,0 +1,22 @@
+- @messages.each do |user, threads|
+  .recipient
+    %h2= user
+    - threads.each do |thread, messages|
+      .thread
+        %h3
+          THREAD
+          = thread
+        - messages.each do |message|
+          .message
+            %h4
+              FROM
+              = message['fromAddress']
+            - body = message['message']
+            - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
+            - body.each do |paragraph|
+              - if paragraph == "------------------------------------------------------"
+                %p
+                  Show Quoted Text
+                - break
+              - else
+                %p= paragraph

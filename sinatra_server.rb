@@ -47,23 +47,7 @@ get "/", :provides => :html do
 <html>
 <head>
 <title>BitBrowser!</title>
-<style type='text/css'>
-.recipient, .thread, .message {
-  border: 1pt solid black;
-}
-
-body {
-  background-color: #666666;
-  font-family: sans-serif;
-  font-size: 75%;
-}
-
-div { margin: 0.5em;padding:0.5em }
-
-.recipient { background-color:#999999;}
-.thread { background-color:#BBBBBB;}
-.message { background-color:#EEEEEE;}
-</style>
+<link rel='stylesheet' type='text/css' href='/bitbrowser.css'>
 </head>
 <body>
 <h1>Bitbrowser!</h1>

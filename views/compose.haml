@@ -5,6 +5,7 @@
   From: 
   %select{:name => :from}
     - AddressStore.instance.addresses.each do |addr, addr_info|
+      - next if !addr_info['enabled']
       %option{:value => addr, :selected => (addr == @from)}
         = addr_info['label']
   %br

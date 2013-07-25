@@ -3,7 +3,10 @@
   %input{:type => :text, :name => :to, :size => 50, :value => @to}
   %br
   From: 
-  %input{:type => :text, :name => :from, :size => 50, :value => @from}
+  %select{:name => :from}
+    - AddressStore.instance.addresses.each do |addr, addr_info|
+      %option{:value => addr, :selected => (addr == @from)}
+        = addr_info['label']
   %br
   Subject
   %input{:type => :text, :name => :subject, :size => 50, :value => @subject}

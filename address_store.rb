@@ -18,9 +18,7 @@ class AddressStore
     address_infos = @client.listAddresses['addresses']
     address_infos.each do |address_info|
       address = address_info['address']
-      if @addresses.has_key? address
-        log "Already seen #{address}, skipping..."
-      else
+      if !@addresses.has_key? address
         @addresses[address] = address_info
         log "Added #{address}."
       end

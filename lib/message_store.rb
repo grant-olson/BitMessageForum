@@ -1,12 +1,14 @@
-require_relative 'xmlrpc_client.rb'
+require 'singleton'
 require 'base64'
+require_relative 'xmlrpc_client.rb'
 
 class MessageStore
+  include Singleton
 
   attr_reader :messages
 
   def initialize
-    @client = XmlrpcClient.new
+    @client = XmlrpcClient.instance
     @messages = {} # messages by msgid
     # update
   end
@@ -62,8 +64,8 @@ class MessageStore
 
   def inbox
     by_recipient.select do |toAddress, messages|
-      label = if $address_store.addresses.has_key? toAddress
-                $address_store.addresses[toAddress]['label']
+      label = if AddressStore.instance.addresses.has_key? toAddress
+                AddressStore.instance.addresses[toAddress]['label']
               else
                 ""
               end
@@ -79,8 +81,8 @@ class MessageStore
 
   def chans
     by_recipient.select do |toAddress, messages|
-      label = if $address_store.addresses.has_key? toAddress
-                $address_store.addresses[toAddress]['label']
+      label = if AddressStore.instance.addresses.has_key? toAddress
+                AddressStore.instance.addresses[toAddress]['label']
               else
                 ""
               end

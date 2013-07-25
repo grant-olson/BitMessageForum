@@ -12,25 +12,22 @@ class BMF < Sinatra::Base
     register Sinatra::Reloader
   end
 
-  $message_store = MessageStore.new
-  $address_store = AddressStore.new
-
   def folder folder_name
     case folder_name
     when "chans"
-      $message_store.chans
+      MessageStore.instance.chans
     when "inbox"
-      $message_store.inbox
+      MessageStore.instance.inbox
     when "lists"
-      $message_store.lists
+      MessageStore.instance.lists
     else
       raise "BADFOLDER"
     end
   end
 
   def sync
-    $message_store.update
-    $address_store.update
+    MessageStore.instance.update
+    AddressStore.instance.update
   rescue Errno::ECONNREFUSED => ex
     halt(500, "Couldn't connect to PyBitmessage server.  Is it running and enabled? ")
   rescue XmlrpcClientError => ex
@@ -44,7 +41,7 @@ class BMF < Sinatra::Base
     sync
 
     @messages = folder("inbox")
-    @addresses = $address_store.addresses
+    @addresses = AddressStore.instance.addresses
     haml :threaded_messages, :layout => :layout
   end
 
@@ -53,7 +50,7 @@ class BMF < Sinatra::Base
 
     @messages = folder params[:folder]
     
-    @addresses = $address_store.addresses
+    @addresses = AddressStore.instance.addresses
     haml :addresses, :layout => :layout
   end
 
@@ -61,7 +58,7 @@ class BMF < Sinatra::Base
     sync
     
     @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
-    @addresses = $address_store.addresses
+    @addresses = AddressStore.instance.addresses
 
     haml :threads, :layout => :layout
     
@@ -77,7 +74,7 @@ class BMF < Sinatra::Base
     end
     
     
-    @addresses = $address_store.addresses
+    @addresses = AddressStore.instance.addresses
 
     haml :messages, :layout => :layout
 

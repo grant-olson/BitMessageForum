@@ -1,11 +1,14 @@
-require_relative 'xmlrpc_client.rb'
+require 'singleton'
 require 'base64'
+require_relative 'xmlrpc_client.rb'
 
 class AddressStore
+  include Singleton
+
   attr_reader :addresses
 
   def initialize
-    @client = XmlrpcClient.new
+    @client = XmlrpcClient.instance
     @addresses = {}
     # update
   end

@@ -8,8 +8,6 @@
 
 + Figure out how to tell if messages are new.  Track this.
 
-+ Make stores and xmlrpc client singletons.
-
 + Extract conn info into a .yml file.
 
 + Chan list, most recently updated first.

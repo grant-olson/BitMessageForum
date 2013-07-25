@@ -4,8 +4,6 @@
 
 + Shouldn't look like a PoS.
 
-+ Post/Send/Reply!
-
 + Figure out how to tell if messages are new.  Track this.
 
 + Extract conn info into a .yml file.

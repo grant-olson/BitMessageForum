@@ -1,0 +1,17 @@
+%form{:method => :post, :action => "/messages/send/"}
+  To: 
+  %input{:type => :text, :name => :to, :size => 50, :value => @to}
+  %br
+  From: 
+  %input{:type => :text, :name => :from, :size => 50, :value => @from}
+  %br
+  Subject
+  %input{:type => :text, :name => :subject, :size => 50, :value => @subject}
+  %br
+
+  Message
+  %br
+  %textarea{:name => :message, :cols => 50, :rows => 50 }
+    = @message
+  %br
+  %input{:type => :submit, :value => :send}

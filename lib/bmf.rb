@@ -8,6 +8,8 @@ class BMF < Sinatra::Base
 
   set :server, 'thin'
   set :root, File.expand_path("../../", __FILE__)
+  set :layout, :layout
+
   configure :development do
     register Sinatra::Reloader
   end
@@ -43,6 +45,28 @@ class BMF < Sinatra::Base
     @messages = folder("inbox")
     @addresses = AddressStore.instance.addresses
     haml :threaded_messages, :layout => :layout
+  end
+
+  get "/messages/compose/", :provides => :html do
+    @to = params[:to]
+    @from = params[:from]
+    @subject = params[:subject]
+    @message = params[:message]
+    haml :compose, :layout => :layout
+  end
+
+  post "/messages/send/", :provides => :html do
+    to = params[:to]
+    from = params[:from]
+    subject = Base64.encode64(params[:subject])
+    message = Base64.encode64(params[:message])
+
+    res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
+    if XmlrpcClient.is_error? res
+      halt(500, haml(res))
+    else
+      haml "Sent.  Confirmation #{res}", :layout => :layout
+    end
   end
 
   get "/:folder/", :provides => :html do

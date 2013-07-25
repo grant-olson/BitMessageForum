@@ -12,6 +12,9 @@ class XmlrpcClient
   def method_missing meth, *args
     @client.call(meth.to_s, *args)
   end
-  
+
+  def self.is_error? response_string
+    response_string =~ /^API Error /
+  end
 end
 

@@ -3,4 +3,20 @@
     Bitbrowser
   %link{:rel => 'stylesheet', :type => 'text/css', :href => '/bitbrowser.css'}
 %body
-  = yield
+  %h1
+    BitBrowser
+  %p
+    Navigating BitMessage since 2013!
+  .nav
+    %ul
+      %li
+        %a{:href => "/inbox/"}
+          Inbox
+      %li
+        %a{:href => "/lists/"}
+          Lists
+      %li
+        %a{:href => "/chans/"}
+          Chans
+  .content
+    = yield

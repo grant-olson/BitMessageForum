@@ -1,0 +1,25 @@
+.recipient
+  %h2
+    - if @addresses.has_key? @address
+      = @addresses[@address]['label']
+    - else
+      = @address
+  .thread
+    %h3= @thread
+    - @messages.each do |message|
+      .message
+        %h4
+          FROM
+          - if @addresses.has_key? message['fromAddress']
+            = @addresses[message['fromAddress']]['label']
+          - else
+            = message['fromAddress']
+        - body = message['message']
+        - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
+        - body.each do |paragraph|
+          - if paragraph == "------------------------------------------------------"
+            %p
+              Show Quoted Text
+            - break
+          - else
+            %p= paragraph

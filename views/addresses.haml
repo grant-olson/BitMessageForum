@@ -1,0 +1,8 @@
+- @messages.each do |user, threads|
+  .recipient
+    %h2
+      %a{:href => "./#{user}/"}
+        - if @addresses.has_key? user
+          = @addresses[user]['label']
+        - else
+          = user

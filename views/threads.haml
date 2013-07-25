@@ -1,0 +1,11 @@
+.recipient
+  %h2
+    - if @addresses.has_key? @address
+      = @addresses[@address]['label']
+    - else
+      = @address
+  - @threads.each do |thread, messages|
+    .thread
+      %h3
+        %a{:href => "./#{CGI.escape(thread)}"}
+          = thread

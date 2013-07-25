@@ -6,6 +6,7 @@ require_relative 'address_store.rb'
 
 class BMF < Sinatra::Base
 
+  set :server, 'thin'
   configure :development do
     register Sinatra::Reloader
   end

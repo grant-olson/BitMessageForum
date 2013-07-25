@@ -1,5 +1,6 @@
 require 'singleton'
 require 'base64'
+require 'json'
 require_relative 'xmlrpc_client.rb'
 
 class MessageStore
@@ -8,7 +9,6 @@ class MessageStore
   attr_reader :messages
 
   def initialize
-    @client = XmlrpcClient.instance
     @messages = {} # messages by msgid
     # update
   end
@@ -34,10 +34,10 @@ class MessageStore
   end
 
   def update
-    inbox_messages = @client.getAllInboxMessages
+    inbox_messages = JSON.parse(XmlrpcClient.instance.getAllInboxMessages)
     process_messages inbox_messages['inboxMessages']
 
-    sent_messages = @client.getAllSentMessages
+    sent_messages = JSON.parse(XmlrpcClient.instance.getAllSentMessages)
     process_messages sent_messages['sentMessages'], "sent"
   end
   

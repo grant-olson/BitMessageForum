@@ -51,7 +51,13 @@ class BMF < Sinatra::Base
     @to = params[:to]
     @from = params[:from]
     @subject = params[:subject]
-    @message = params[:message]
+
+    if params[:reply_to]
+      @message = "\n.\n------------------------------------------------------\n" + MessageStore.instance.messages[params[:reply_to]]['message']
+    else
+      @message = params[:message]
+    end
+    
     haml :compose
   end
 
@@ -96,7 +102,8 @@ class BMF < Sinatra::Base
       # puts messages.inspect
       thread == CGI.unescape(params[:thread])
     end
-    
+
+    @messages = @messages.sort {|a,b| a['receivedAt'].to_i <=> b['receivedAt'].to_i}
     
     @addresses = AddressStore.instance.addresses
 

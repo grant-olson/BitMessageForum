@@ -26,3 +26,6 @@
             - break
           - else
             %p= paragraph
+
+        %a{:href => "/messages/compose/?to=#{CGI.escape(@address)}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
+          [Reply]

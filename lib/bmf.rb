@@ -44,7 +44,7 @@ class BMF < Sinatra::Base
 
     @messages = folder("inbox")
     @addresses = AddressStore.instance.addresses
-    haml :threaded_messages, :layout => :layout
+    haml :threaded_messages
   end
 
   get "/messages/compose/", :provides => :html do
@@ -52,7 +52,7 @@ class BMF < Sinatra::Base
     @from = params[:from]
     @subject = params[:subject]
     @message = params[:message]
-    haml :compose, :layout => :layout
+    haml :compose
   end
 
   post "/messages/send/", :provides => :html do
@@ -65,7 +65,7 @@ class BMF < Sinatra::Base
     if XmlrpcClient.is_error? res
       halt(500, haml(res))
     else
-      haml "Sent.  Confirmation #{res}", :layout => :layout
+      haml "Sent.  Confirmation #{res}"
     end
   end
 
@@ -75,7 +75,7 @@ class BMF < Sinatra::Base
     @messages = folder params[:folder]
     
     @addresses = AddressStore.instance.addresses
-    haml :addresses, :layout => :layout
+    haml :addresses
   end
 
   get "/:folder/:address/", :provides => :html do
@@ -84,7 +84,7 @@ class BMF < Sinatra::Base
     @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
     @addresses = AddressStore.instance.addresses
 
-    haml :threads, :layout => :layout
+    haml :threads
     
   end
 
@@ -100,7 +100,7 @@ class BMF < Sinatra::Base
     
     @addresses = AddressStore.instance.addresses
 
-    haml :messages, :layout => :layout
+    haml :messages
 
 
   end

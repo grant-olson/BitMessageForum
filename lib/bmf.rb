@@ -7,6 +7,7 @@ require_relative 'address_store.rb'
 class BMF < Sinatra::Base
 
   set :server, 'thin'
+  set :root, File.expand_path("../../", __FILE__)
   configure :development do
     register Sinatra::Reloader
   end

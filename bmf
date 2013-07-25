@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require_relative "bmf.rb"
+require_relative "lib/bmf.rb"
 BMF.run!

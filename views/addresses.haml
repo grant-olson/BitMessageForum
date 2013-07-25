@@ -1,5 +1,5 @@
-- @messages.each do |user, threads|
-  .recipient
+.recipient
+  - @messages.each do |user, threads|
     %h2
       %a{:href => "./#{user}/"}
         - if @addresses.has_key? user

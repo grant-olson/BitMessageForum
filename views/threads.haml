@@ -4,8 +4,8 @@
       = @addresses[@address]['label']
     - else
       = @address
-  - @threads.each do |thread, messages|
-    .thread
+  .thread
+    - @threads.each do |thread, messages|
       %h3
         %a{:href => "./#{CGI.escape(thread)}"}
           = thread

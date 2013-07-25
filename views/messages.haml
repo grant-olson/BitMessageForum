@@ -4,8 +4,9 @@
       = @addresses[@address]['label']
     - else
       = @address
+    \-
+    = @thread
   .thread
-    %h3= @thread
     - @messages.each do |message|
       .message
         %h4

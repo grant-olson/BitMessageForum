@@ -16,3 +16,5 @@ div { margin: 0.5em;padding:0.5em }
 .recipient { background-color:#AAAAAA;}
 .thread, .nav { background-color:#CCCCCC;}
 .message { background-color:#EEEEEE;}
+
+.sent { background-color:#CCCCFF;}

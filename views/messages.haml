@@ -8,7 +8,7 @@
     = @thread
   .thread
     - @messages.each do |message|
-      .message
+      %div{:class => (message['_source'] == 'sent' ? "message sent" : "message")}
         %h4
           FROM
           - if @addresses.has_key? message['fromAddress']

@@ -16,22 +16,28 @@ class MessageStore
     puts x
   end
     
-  def update
-    inbox_messages = JSON.parse @client.getAllInboxMessages
-    inbox = inbox_messages['inboxMessages']
-
-    # fix messages
-    inbox.each do |m|
+  def process_messages new_messages, source="inbox"
+    new_messages.each do |m|
       msgid = m["msgid"]
 
       if !@messages.has_key?(msgid)
         m["message"] = Base64.decode64(m["message"])
         m["subject"] = Base64.decode64(m["subject"])
+        m["_source"] = source
         messages[msgid] = m
 
         log "Added new message #{msgid}."
       end
     end
+
+  end
+
+  def update
+    inbox_messages = JSON.parse @client.getAllInboxMessages
+    process_messages inbox_messages['inboxMessages']
+
+    sent_messages = JSON.parse @client.getAllSentMessages
+    process_messages sent_messages['sentMessages'], "sent"
   end
   
   def by_recipient

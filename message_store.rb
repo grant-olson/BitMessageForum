@@ -56,4 +56,34 @@ class MessageStore
 
     by_recipient
   end
+
+  def inbox
+    by_recipient.select do |toAddress, messages|
+      label = if $address_store.addresses.has_key? toAddress
+                $address_store.addresses[toAddress]['label']
+              else
+                ""
+              end
+      not( label.include?("[chan]") || toAddress == "[Broadcast subscribers]")
+    end
+  end
+
+  def lists
+    by_recipient.select do |toAddress, messages|
+      toAddress == "[Broadcast subscribers]"
+    end
+  end
+
+  def chans
+    by_recipient.select do |toAddress, messages|
+      label = if $address_store.addresses.has_key? toAddress
+                $address_store.addresses[toAddress]['label']
+              else
+                ""
+              end
+      label.include?("[chan]")
+    end
+  end
+  
+
 end

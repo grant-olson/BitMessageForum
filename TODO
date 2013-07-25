@@ -1,0 +1,19 @@
++ Can't link to blank subject
+
++ Should show sent messages with different branding.
+
++ Lists need to group by "from" address not "to"
+
++ Shouldn't look like a PoS.
+
++ Post/Send/Reply!
+
++ Figure out how to tell if messages are new.  Track this.
+
++ Make stores and xmlrpc client singletons.
+
++ Extract conn info into a .yml file.
+
++ Come up with a heart-breakingly awesome name.
+
++ Figure out how to run as a script ./bitbrowser

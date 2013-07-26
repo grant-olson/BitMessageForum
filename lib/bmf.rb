@@ -118,7 +118,7 @@ class BMF < Sinatra::Base
 
     # Get the last time we visited thread, and update to now
     @thread_last_visited = ThreadStatus.instance.thread_last_visited(@address,@thread)
-    ThreadStatus.instance.thread_visited(@address, @thread, @messages.last['receivedTime'].to_i)
+    ThreadStatus.instance.thread_visited(@address, @thread, Message.time(@messages.last))
 
     haml :messages
   end

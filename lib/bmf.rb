@@ -28,7 +28,7 @@ class BMF < Sinatra::Base
   end
 
   def sync
-    MessageStore.instance.update
+    @new_messages = MessageStore.instance.update
     AddressStore.instance.update
   rescue Errno::ECONNREFUSED => ex
     halt(500, haml("Couldn't connect to PyBitmessage server.  Is it running and enabled? "))

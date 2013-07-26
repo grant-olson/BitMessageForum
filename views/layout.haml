@@ -24,6 +24,11 @@
         %a{:href => "/chans/"}
           Chans
   .content
+    - if @new_messages && @new_messages > 0
+      .new_messages
+        = @new_messages
+        new messages!
+
     = yield
 
   .footer

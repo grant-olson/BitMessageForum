@@ -20,3 +20,8 @@ div { margin: 0.5em;padding:0.5em }
 .sent { background-color:#CCCCFF;}
 
 .footer { clear:both; }
+
+.new_messages { 
+  border: 1pt solid black;
+  background-color:#ffcccc;
+  }

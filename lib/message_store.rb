@@ -20,10 +20,13 @@ class MessageStore
   end
     
   def process_messages new_messages, source="inbox"
+    processed_messages = 0
+
     new_messages.each do |m|
       msgid = m["msgid"]
 
       if !@messages.has_key?(msgid)
+        processed_messages += 1
         m["message"] = Base64.decode64(m["message"])
         m["subject"] = Base64.decode64(m["subject"])
         m["_source"] = source
@@ -63,14 +66,19 @@ class MessageStore
       end
     end
 
+    processed_messages
   end
 
   def update
+    processed_messages = 0
+    
     inbox_messages = JSON.parse(XmlrpcClient.instance.getAllInboxMessages)
-    process_messages inbox_messages['inboxMessages']
+    processed_messages += process_messages(inbox_messages['inboxMessages'])
 
     sent_messages = JSON.parse(XmlrpcClient.instance.getAllSentMessages)
-    process_messages sent_messages['sentMessages'], "sent"
+    processed_messages += process_messages(sent_messages['sentMessages'], "sent")
+
+    processed_messages
   end
   
   def by_recipient

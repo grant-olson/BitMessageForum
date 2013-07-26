@@ -31,13 +31,17 @@ class BMF < Sinatra::Base
     end
   end
 
+  
+
   def sync
     @new_messages = MessageStore.instance.update
     AddressStore.instance.update
   rescue Errno::ECONNREFUSED => ex
-    halt(500, haml("Couldn't connect to PyBitmessage server.  Is it running and enabled? "))
+    @halt_message = "Couldn't connect to PyBitmessage server.  Is it running with the API enabled? " 
+    halt(500, haml(:couldnt_reach_pybitmessage))
   rescue JSON::ParserError => ex
-    halt(500, haml("Couldn't sync.  Do you have the correct info in config/settings.yml? "))
+    @halt_message = "Couldn't sync.  It seems like PyBitmessage is running but refused access.  Do you have the correct info in config/settings.yml? "
+    halt(500, haml(:couldnt_reach_pybitmessage))
   end
 
 

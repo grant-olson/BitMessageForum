@@ -1,0 +1,21 @@
+%p= @halt_message
+
+%p
+  You need to be running PyBitmessage with the API enabled.  To enable the API, add the following to the <code></code> section of <code>keys.dat</code>
+
+%pre
+
+  apienabled = true
+  apiport = 8442
+  apiinterface = 127.0.0.1
+  apiusername = bmf
+  apipassword = bmf
+
+%p
+  This file is probably located at <code>~/.config/PyBitmessage</code> on linux and <code>~/Library/Application Suport/PyBitmessage</code> on OSX.
+
+%p
+  You will need to restart PyBitmessage after making these changes
+
+%p
+  If you've already enabled the API and are using a different username/password/port, you'll need to edit the file <code>BitMessageForum/config/settings.yml</config> and provide the appropriate info.

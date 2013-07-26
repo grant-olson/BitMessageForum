@@ -40,11 +40,7 @@ class BMF < Sinatra::Base
 
 
   get "/", :provides => :html do
-    sync
-
-    @messages = folder("inbox")
-    @addresses = AddressStore.instance.addresses
-    haml :threaded_messages
+    haml :home
   end
 
   get "/messages/compose/", :provides => :html do

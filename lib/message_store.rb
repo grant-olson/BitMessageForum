@@ -33,7 +33,7 @@ class MessageStore
 
         # Temp hack for lists
         if to_address == "[Broadcast subscribers]"
-          hack_mailing_list_name =  m["subject"][/\[.*\]/]
+          hack_mailing_list_name =  m["subject"][/\[[^\]]+\]/]
           to_address += " " + hack_mailing_list_name
           m["toAddress"] = to_address
         end

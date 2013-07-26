@@ -1,14 +1,17 @@
 require 'singleton'
 require 'xmlrpc/client'
-require 'yaml'
+require_relative 'settings.rb'
 
 class XmlrpcClientError < StandardError; end
 class XmlrpcClient
   include Singleton
 
   def initialize
-    settings = YAML.load_file(File.expand_path("../../config/settings.yml", __FILE__))['server_url']
-    @client = XMLRPC::Client.new2(settings)
+    initialize_client
+  end
+
+  def initialize_client
+    @client = XMLRPC::Client.new2(Settings.instance.server_url)
   end
 
   def method_missing meth, *args

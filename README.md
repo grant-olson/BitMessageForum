@@ -15,14 +15,48 @@
 BitMessageForum allows you to browse and post bitmessages in a
 forum-like view in the web browser of your choice.
 
-First official Alpha release is pegged for August 1st, 2013.  If
-you've somehow managed to stumble on this repository before then,
-please wait before trying the software and/or opening any issues.
+Although it is configured to run in your browser, it is designed to be
+a local application and not a true web application.  As such, it
+assumes that if you can talk to your bitmessage server, you have full
+rights.
 
-However, if you must:
+## Installation
 
+### Prerequisites
+
+#### Software
+
+The following software is required:
+
+* Ruby
+* bundler
+* PyBitmessage
+
+#### PyBitmessage API configuration
+
+To enable the API for PyBitmessage you must add the following to
+the `[bitmessagesettings]` section of keys.dat:
+
+    apienabled = true
+    apiport = 8442
+    apiinterface = 127.0.0.1
+    apiusername = bmf
+    apipassword = bmf
+
+#### Initial installation
+
+    git clone BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU
     cd BitMessageForum
     bundle install
+
+If you are using different settings for the PyBitmessage server, you
+will need to change that in `config/settings.yml`.
+
+#### Running BMF
+
+    cd BitMessageForum
     ./bmf
 
-- Grant
+After that navigate to http://localhost:4567/
+
+Bam!

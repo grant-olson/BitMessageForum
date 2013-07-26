@@ -60,3 +60,26 @@ will need to change that in `config/settings.yml`.
 After that navigate to [http://localhost:4567/](http://localhost:4567/)
 
 Bam!
+
+## Contact
+
+Found a bug? [File an issue.](https://github.com/grant-olson/BitMessageForum/issues)
+
+Need help?  Ask on the bmf support channel.
+
+    * Name: bmf_support
+    
+    * Address: BM-2DBsnPXWVR7PbC5qMEYAdgtaSQnkr5X7ng 
+
+Or send me a personal bitmessage: BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU 
+
+Email me:  kgo at grant-olson dot net.
+
+OpenPGP Key:
+
+    pub   2048R/E3B5806F 2010-01-11 [expires: 2014-01-03]
+          Key fingerprint = A530 C31C D762 0D26 E2BA  C384 B6F6 FFD0 E3B5 806F
+    uid                  Grant T. Olson (Personal email) <kgo at grant-olson dot net>
+    sub   2048R/6A8F7CF6 2010-01-11 [expires: 2014-01-03]
+    sub   2048R/A18A54D6 2010-03-01 [expires: 2014-01-03]
+    sub   2048R/D53982CE 2010-08-31 [expires: 2014-01-03]

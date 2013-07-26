@@ -3,6 +3,7 @@ require 'sinatra/reloader'
 require 'haml'
 require_relative 'message_store.rb'
 require_relative 'address_store.rb'
+require_relative 'thread_status.rb'
 
 class BMF < Sinatra::Base
 
@@ -99,13 +100,13 @@ class BMF < Sinatra::Base
       thread == CGI.unescape(params[:thread])
     end
 
-    @messages = @messages.sort {|a,b| a['receivedAt'].to_i <=> b['receivedAt'].to_i}
+    @messages = @messages.sort {|a,b| a['receivedTime'].to_i <=> b['receivedTime'].to_i}
     
     @addresses = AddressStore.instance.addresses
 
+    ThreadStatus.instance.thread_visited(@address, @thread, @messages.last['receivedTime'].to_i)
+
     haml :messages
-
-
   end
 
   run! if app_file == $0

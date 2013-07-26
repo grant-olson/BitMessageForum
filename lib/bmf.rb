@@ -22,6 +22,8 @@ class BMF < Sinatra::Base
       MessageStore.instance.chans
     when "inbox"
       MessageStore.instance.inbox
+    when "sent"
+      MessageStore.instance.sent
     when "lists"
       MessageStore.instance.lists
     else

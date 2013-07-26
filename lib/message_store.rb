@@ -81,13 +81,18 @@ class MessageStore
     processed_messages
   end
   
-  def by_recipient
+  def by_recipient sent_or_received=:nil
  
     #display messages
 
     by_recipient = {}
 
     messages.each do |id, m|
+      if sent_or_received
+        next if sent_or_received == :sent && !Message.sent?(m)
+        next if sent_or_received == :received && !Message.received?(m)
+      end
+      
       toAddress = m["toAddress"]
 
       subject = m["subject"]
@@ -104,7 +109,18 @@ class MessageStore
   end
 
   def inbox
-    by_recipient.select do |toAddress, messages|
+    by_recipient(:received).select do |toAddress, messages|
+      label = if AddressStore.instance.addresses.has_key? toAddress
+                AddressStore.instance.addresses[toAddress]['label']
+              else
+                ""
+              end
+      not( label.include?("[chan]") || toAddress.include?("[Broadcast subscribers]"))
+    end
+  end
+
+  def sent
+    by_recipient(:sent).select do |toAddress, messages|
       label = if AddressStore.instance.addresses.has_key? toAddress
                 AddressStore.instance.addresses[toAddress]['label']
               else

@@ -1,3 +1,5 @@
+.breadcrumb
+  = params[:folder]
 .recipient
   - @messages.each do |user, threads|
     - new = ThreadStatus.instance.new_messages_for_address?(user, threads.map {|x| x[0]})

@@ -1,18 +1,20 @@
-.recipient
-  %div
-    - if @addresses.has_key? @address
-      = @addresses[@address]['label']
-    - else
-      = @address
-  .thread
-    - @threads.each do |thread, messages|
-      - new = ThreadStatus.instance.new_messages?(@address, thread)
-      %div{:class => (new ? "new" : "old")}
-        %a{:href => "./#{CGI.escape(thread)}"}
-          = thread
+.breadcrumb
+  %a{:href => "/#{params[:folder]}/"}
+    = params[:folder]
+  >
+  - if @addresses.has_key? @address
+    = @addresses[@address]['label']
+  - else
+    = @address
+.thread
+  - @threads.each do |thread, messages|
+    - new = ThreadStatus.instance.new_messages?(@address, thread)
+    %div{:class => (new ? "new" : "old")}
+      %a{:href => "./#{CGI.escape(thread)}"}
+        = thread
 
-        \- Last Updated:
-        = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
-        - if new
-          %span.new
-            New!
+      \- Last Updated:
+      = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
+      - if new
+        %span.new
+          New!

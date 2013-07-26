@@ -1,34 +1,37 @@
-.recipient
-  %div
+.breadcrumb
+  %a{:href => "/#{params[:folder]}/"}
+    = params[:folder]
+  >
+  %a{:href => "./" }
     - if @addresses.has_key? @address
       = @addresses[@address]['label']
     - else
       = @address
-    \-
-    = @thread
-  - @messages.each do |message|
-    %div{:class => (message['_source'] == 'sent' ? "message sent" : "message")}
+  \-
+  = @thread
+- @messages.each do |message|
+  %div{:class => (message['_source'] == 'sent' ? "message sent" : "message")}
 
-      - message_time = message['receivedTime'].to_i
-      - new = message_time > @thread_last_visited
-      %div{:class => (new ? "new" : "old")}
-        - if @addresses.has_key? message['fromAddress']
-          = @addresses[message['fromAddress']]['label']
-        - else
-          = message['fromAddress']
+    - message_time = message['receivedTime'].to_i
+    - new = message_time > @thread_last_visited
+    %div{:class => (new ? "new" : "old")}
+      - if @addresses.has_key? message['fromAddress']
+        = @addresses[message['fromAddress']]['label']
+      - else
+        = message['fromAddress']
 
-        \- received 
-        = Time.at(message_time).to_datetime
-      - body = message['message']
-      - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
-      - body.each do |paragraph|
-        - if paragraph == "------------------------------------------------------"
-          %p
-            %i
-              [Hiding Quoted Text]
-          - break
-        - else
-          %p= paragraph
+      \- received 
+      = Time.at(message_time).to_datetime
+    - body = message['message']
+    - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
+    - body.each do |paragraph|
+      - if paragraph == "------------------------------------------------------"
+        %p
+          %i
+            [Hiding Quoted Text]
+        - break
+      - else
+        %p= paragraph
 
-      %a{:href => "/messages/compose/?to=#{CGI.escape(@address)}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
-        [Reply]
+    %a{:href => "/messages/compose/?to=#{CGI.escape(@address)}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
+      [Reply]

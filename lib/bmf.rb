@@ -45,16 +45,27 @@ class BMF < Sinatra::Base
   end
 
   get "/messages/compose/", :provides => :html do
+    AddressStore.instance.update #in case this is the first page we hit
+
     @to = params[:to]
     @from = params[:from]
     @subject = params[:subject]
 
+    if (@from.nil? || @from == "") && Settings.instance.default_send_address
+      @from = Settings.instance.default_send_address
+    end
+    
     if params[:reply_to]
       @message = "\n.\n------------------------------------------------------\n" + MessageStore.instance.messages[params[:reply_to]]['message']
     else
       @message = params[:message]
     end
     
+    @message = "" if @message.nil?
+    if Settings.instance.sig
+      @message = Settings.instance.sig + "\n\n" + @message
+    end
+
     haml :compose
   end
 

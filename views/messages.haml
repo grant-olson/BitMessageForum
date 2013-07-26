@@ -8,14 +8,17 @@
     = @thread
   - @messages.each do |message|
     %div{:class => (message['_source'] == 'sent' ? "message sent" : "message")}
-      %div
+
+      - message_time = message['receivedTime'].to_i
+      - new = message_time > @thread_last_visited
+      %div{:class => (new ? "new" : "old")}
         - if @addresses.has_key? message['fromAddress']
           = @addresses[message['fromAddress']]['label']
         - else
           = message['fromAddress']
 
         \- received 
-        = Time.at(message['receivedTime'].to_i).to_datetime
+        = Time.at(message_time).to_datetime
       - body = message['message']
       - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
       - body.each do |paragraph|

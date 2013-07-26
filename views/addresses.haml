@@ -1,6 +1,7 @@
 .recipient
   - @messages.each do |user, threads|
-    %div
+    - new = ThreadStatus.instance.new_messages_for_address?(user, threads.map {|x| x[0]})
+    %div{:class => (new ? "new" : "old") }
       %a{:href => "./#{user}/"}
         - if @addresses.has_key? user
           = @addresses[user]['label']

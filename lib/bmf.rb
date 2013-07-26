@@ -104,6 +104,8 @@ class BMF < Sinatra::Base
     
     @addresses = AddressStore.instance.addresses
 
+    # Get the last time we visited thread, and update to now
+    @thread_last_visited = ThreadStatus.instance.thread_last_visited(@address,@thread)
     ThreadStatus.instance.thread_visited(@address, @thread, @messages.last['receivedTime'].to_i)
 
     haml :messages

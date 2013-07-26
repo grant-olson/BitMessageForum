@@ -1,20 +1,31 @@
 %form{:method => :post, :action => "/messages/send/"}
-  To: 
-  %input{:type => :text, :name => :to, :size => 50, :value => @to}
-  %br
-  From: 
-  %select{:name => :from}
-    - AddressStore.instance.addresses.each do |addr, addr_info|
-      - next if !addr_info['enabled']
-      %option{:value => addr, :selected => (addr == @from)}
-        = addr_info['label']
-  %br
-  Subject
-  %input{:type => :text, :name => :subject, :size => 50, :value => @subject}
-  %br
+  %table
+    %tr
+      %th
+        To:
+      %td 
+        %input{:type => :text, :name => :to, :size => 50, :value => @to}
+    %tr
+      %th
+        From:
+      %td
+        %select{:name => :from}
+          - AddressStore.instance.addresses.each do |addr, addr_info|
+            - next if !addr_info['enabled']
+            %option{:value => addr, :selected => (addr == @from)}
+              = addr_info['label']
 
-  Message
-  %br
-  %textarea{:name => :message, :cols => 80, :rows => 30 }= @message
-  %br
-  %input{:type => :submit, :value => :send}
+    %tr
+      %th
+        Subject
+      %td
+        %input{:type => :text, :name => :subject, :size => 50, :value => @subject}
+    %tr
+      %th
+        Message
+      %td
+        %textarea{:name => :message, :cols => 80, :rows => 30 }= @message
+
+    %tr
+      %th{:colspan => 2}
+        %input{:type => :submit, :value => :send}

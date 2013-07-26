@@ -89,7 +89,7 @@ class BMF < Sinatra::Base
     
     @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
     @addresses = AddressStore.instance.addresses
-
+    @threads = @threads.sort{ |a,b| MessageStore.instance.thread_last_updates[@address][a[0]] <=> MessageStore.instance.thread_last_updates[@address][b[0]] }.reverse
     haml :threads
     
   end

@@ -3,5 +3,3 @@
 + Lists need to group by "from" address not "to"
 
 + Shouldn't look like a PoS.
-
-+ Extract conn info into a .yml file.

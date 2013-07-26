@@ -20,7 +20,7 @@
       - else
         = message['fromAddress']
 
-      \- received 
+      \- #{Message.sent_or_received(message)}
       = Time.at(message_time).to_datetime
     - body = message['message']
     - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}

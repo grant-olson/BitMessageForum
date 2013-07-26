@@ -13,4 +13,15 @@ module Message
     !m['receivedTime'].nil?
   end
   
+  def self.sent_or_received m
+    if sent?(m)
+      :sent
+    elsif received?(m)
+      :received
+    else
+      raise "Don't know if #{m.inspect} was sent or received"
+    end
+  end
+  
+
 end

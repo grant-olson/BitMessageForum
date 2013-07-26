@@ -48,7 +48,7 @@ class BMF < Sinatra::Base
   end
 
   get "/messages/compose/", :provides => :html do
-    AddressStore.instance.update #in case this is the first page we hit
+    sync #need address book if this is the first page we hit
 
     @to = params[:to]
     @from = params[:from]

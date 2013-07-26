@@ -30,6 +30,14 @@ class MessageStore
         messages[msgid] = m
 
         to_address = m["toAddress"]
+
+        # Temp hack for lists
+        if to_address == "[Broadcast subscribers]"
+          hack_mailing_list_name =  m["subject"][/\[.*\]/]
+          to_address += " " + hack_mailing_list_name
+          m["toAddress"] = to_address
+        end
+
         received_time = m["receivedTime"].to_i
 
         # update channel access time
@@ -73,6 +81,7 @@ class MessageStore
 
     messages.each do |id, m|
       toAddress = m["toAddress"]
+
       subject = m["subject"]
       if subject[0..3] == "Re: "
         subject = subject[4..-1]
@@ -93,13 +102,13 @@ class MessageStore
               else
                 ""
               end
-      not( label.include?("[chan]") || toAddress == "[Broadcast subscribers]")
+      not( label.include?("[chan]") || toAddress.include?("[Broadcast subscribers]"))
     end
   end
 
   def lists
     by_recipient.select do |toAddress, messages|
-      toAddress == "[Broadcast subscribers]"
+      toAddress.include? "[Broadcast subscribers]"
     end
   end
 

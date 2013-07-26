@@ -4,8 +4,4 @@
 
 + Shouldn't look like a PoS.
 
-+ Figure out how to tell if messages are new.  Track this.
-
 + Extract conn info into a .yml file.
-
-+ Chan list, most recently updated first.

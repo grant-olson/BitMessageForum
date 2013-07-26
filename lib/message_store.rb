@@ -41,7 +41,7 @@ class MessageStore
           m["toAddress"] = to_address
         end
 
-        received_time = m["receivedTime"].to_i
+        received_time = Message.time(m)
 
         # update channel access time
         address_last_updates[to_address] ||= 0

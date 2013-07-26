@@ -4,6 +4,7 @@ require 'haml'
 require_relative 'message_store.rb'
 require_relative 'address_store.rb'
 require_relative 'thread_status.rb'
+require_relative 'message.rb'
 
 class BMF < Sinatra::Base
 
@@ -111,7 +112,7 @@ class BMF < Sinatra::Base
       thread == CGI.unescape(params[:thread])
     end
 
-    @messages = @messages.sort {|a,b| a['receivedTime'].to_i <=> b['receivedTime'].to_i}
+    @messages = @messages.sort {|a,b| Message.time(a) <=> Message.time(b)}
     
     @addresses = AddressStore.instance.addresses
 

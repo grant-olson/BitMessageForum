@@ -11,7 +11,7 @@
     - new = ThreadStatus.instance.new_messages?(@address, thread)
     %div{:class => (new ? "new" : "old")}
       %a{:href => "./#{CGI.escape(thread)}"}
-        = thread
+        &= thread
 
       \- Last Updated:
       = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime

@@ -57,6 +57,6 @@ will need to change that in `config/settings.yml`.
     cd BitMessageForum
     ./bmf
 
-After that navigate to http://localhost:4567/
+After that navigate to [http://localhost:4567/](http://localhost:4567/)
 
 Bam!

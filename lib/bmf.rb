@@ -31,9 +31,9 @@ class BMF < Sinatra::Base
     MessageStore.instance.update
     AddressStore.instance.update
   rescue Errno::ECONNREFUSED => ex
-    halt(500, "Couldn't connect to PyBitmessage server.  Is it running and enabled? ")
-  rescue XmlrpcClientError => ex
-    halt(500, "XmlrpcClient issued error '#{ex.message}'.  Do you have the correct information in keys.dat? ")
+    halt(500, haml("Couldn't connect to PyBitmessage server.  Is it running and enabled? "))
+  rescue JSON::ParserError => ex
+    halt(500, haml("Couldn't sync.  Do you have the correct info in config/settings.yml? "))
   end
 
 

@@ -23,6 +23,6 @@ However, if you must:
 
     cd BitMessageForum
     bundle install
-    shotgun sinatra_server.rb
+    ./bmf
 
 - Grant

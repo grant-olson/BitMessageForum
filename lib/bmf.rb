@@ -56,14 +56,14 @@ class BMF < Sinatra::Base
     end
     
     if params[:reply_to]
-      @message = "\n.\n------------------------------------------------------\n" + MessageStore.instance.messages[params[:reply_to]]['message']
+      @message = "&nbsp\n------------------------------------------------------\n" + MessageStore.instance.messages[params[:reply_to]]['message']
     else
       @message = params[:message]
     end
     
     @message = "" if @message.nil?
     if Settings.instance.sig
-      @message = Settings.instance.sig + "\n\n" + @message
+      @message = "&nbsp;\n" + Settings.instance.sig + "\n" + @message
     end
 
     haml :compose

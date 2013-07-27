@@ -1,0 +1,17 @@
+%h1 Edit Settings
+
+- if @flash
+  .new_messages
+    = @flash
+
+%form{:method => :post, :action => "/settings/update"}
+  %table
+    - @settings.each_pair do |key, value|
+      %tr
+        %th= key
+        %td
+          %input{:type => :text, :name => key, :value => value, :size => 50}
+
+    %tr
+      %th{:colspan => 2}
+        %input{:type => :submit}

@@ -5,6 +5,7 @@ require_relative 'message_store.rb'
 require_relative 'address_store.rb'
 require_relative 'thread_status.rb'
 require_relative 'message.rb'
+require_relative 'settings.rb'
 
 class BMF < Sinatra::Base
 
@@ -49,6 +50,31 @@ class BMF < Sinatra::Base
 
   get "/", :provides => :html do
     haml :home
+  end
+
+  def load_settings
+    @settings = {}
+
+    Settings::VALID_SETTINGS.each do |key|
+      @settings[key] = Settings.instance.send(key)
+    end
+  end
+  
+  get "/settings/", :provides => :html do
+    load_settings
+    haml :settings
+  end
+
+  post "/settings/update", :provides => :html do
+    params.each_pair do |key, value|
+      Settings.instance.update(key,value)
+    end
+    Settings.instance.persist
+
+    @flash = "Settings updated!"
+
+    load_settings
+    haml :settings
   end
 
   get "/messages/compose/", :provides => :html do

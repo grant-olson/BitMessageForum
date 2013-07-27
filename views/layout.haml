@@ -32,10 +32,14 @@
         %a{:href => "/sent/"}
           Sent Mail
 
+    Edit
     %ul
       %li
+        %a{:href => "/identities/"}
+          Identities
+      %li
         %a{:href => "/settings/"}
-          Edit Settings
+          Settings
 
   .content
     - if @new_messages && @new_messages > 0

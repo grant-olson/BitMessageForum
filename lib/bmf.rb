@@ -60,6 +60,13 @@ class BMF < Sinatra::Base
     end
   end
   
+  get "/identities/", :provides => :html do
+    AddressStore.instance.update
+    @addresses = AddressStore.instance.addresses
+
+    haml :identities
+  end
+
   get "/settings/", :provides => :html do
     load_settings
     haml :settings

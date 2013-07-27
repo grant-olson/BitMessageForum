@@ -35,10 +35,18 @@
           &= paragraph
 
     - if @folder == "chans"
-      %a{:href => "/messages/compose/?to=#{CGI.escape(@address)}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
-        [Reply Chan]
+      %form.button{:method => :get, :action => "/messages/compose/"}
+        %input{:type => :hidden, :name => :to, :value => @address}
+        %input{:type => :hidden, :name => :subject, :value => @thread}
+        %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
+        %input{:type => :submit, :value => "Reply Chan"}
     &nbsp;
     - if @folder != "chans" || (@address != message['fromAddress'])
-      %a{:href => "/messages/compose/?to=#{CGI.escape(message['fromAddress'])}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
-        [Reply]
-
+      %form.button{:method => :get, :action => "/messages/compose/" }
+        %input{:type => :hidden, :name => :to, :value => message['fromAddress']}
+        %input{:type => :hidden, :name => :subject, :value => @thread}
+        %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
+        %input{:type => :submit, :value => "Reply"}
+    %form.button{:method => :post, :action => "/messages/delete/", :onsubmit => "return confirm('Really delete?')"}
+      %input{:type => :hidden, :name => :msgid, :value => message['msgid']}
+      %input{:type => :submit, :value => :delete}

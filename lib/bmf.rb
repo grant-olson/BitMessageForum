@@ -151,6 +151,16 @@ class BMF < Sinatra::Base
     end
   end
 
+  post "/messages/delete/", :provides => :html do
+    msgid = params[:msgid]
+    res = XmlrpcClient.instance.trashMessage msgid
+    if XmlrpcClient.is_error? res
+      halt(500, haml("Delete failed.  #{res}"))
+    else
+      haml("#{res} [#{msgid}]")
+    end
+  end
+
   get "/:folder/", :provides => :html do
     sync
 

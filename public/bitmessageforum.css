@@ -31,7 +31,7 @@ div { margin: 0.5em;padding:0.5em }
 }
 
 ul {margin-left:1em;padding-left:0;}
-ul li {margin-left:0;padding-left:0;}
+ul li {margin-left:0;padding-left:0;font-size:0.9em;}
 
 form.button {display:inline;float:left;margin-right:0.5em;margin-bottom:0.25em;}
 form.inline {display:inline;}

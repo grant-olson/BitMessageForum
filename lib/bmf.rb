@@ -137,8 +137,10 @@ class BMF < Sinatra::Base
 
   get "/:folder/:address/:thread", :provides => :html do
     sync
+
+    @folder = params[:folder]
     
-    @address, threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
+    @address, threads = folder(@folder).detect {|address, threads| address == params[:address] }
     @thread, @messages = threads.detect do |thread, messages|
       # puts messages.inspect
       thread == CGI.unescape(params[:thread])

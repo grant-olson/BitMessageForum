@@ -34,5 +34,11 @@
         %p
           &= paragraph
 
-    %a{:href => "/messages/compose/?to=#{CGI.escape(@address)}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
-      [Reply]
+    - if @folder == "chans"
+      %a{:href => "/messages/compose/?to=#{CGI.escape(@address)}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
+        [Reply Chan]
+    &nbsp;
+    - if @folder != "chans" || (@address != message['fromAddress'])
+      %a{:href => "/messages/compose/?to=#{CGI.escape(message['fromAddress'])}&subject=#{CGI.escape(@thread)}&reply_to=#{CGI.escape(message['msgid'])}" }
+        [Reply]
+

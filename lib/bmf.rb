@@ -190,12 +190,14 @@ class BMF < Sinatra::Base
     
     @address, threads = folder(@folder).detect {|address, threads| address == params[:address] }
 
-    halt(404, haml("Couldn't find thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages")) if threads.nil?
+    halt(404, haml("Couldn't find thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if threads.nil?
 
     @thread, @messages = threads.detect do |thread, messages|
       # puts messages.inspect
       thread == CGI.unescape(params[:thread])
     end
+
+    halt(404, haml("Couldn't find any messages for thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if @messages.nil?
 
     @messages = @messages.sort {|a,b| Message.time(a) <=> Message.time(b)}
     

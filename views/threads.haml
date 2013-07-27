@@ -15,3 +15,7 @@
 
       \- Last Updated:
       = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
+      %form.inline{:method => :post, :action => "/#{params[:folder]}/thread/delete", :onsubmit => "return confirm('Really delete whole thread?');"}
+        %input{:type => :hidden, :name => :address, :value => @address}
+        %input{:type => :hidden, :name => :thread, :value => thread}
+        %input.small_button{:type => :submit, :value => "Delete"}

@@ -188,6 +188,26 @@ class BMF < Sinatra::Base
     haml :messages
   end
 
+  post "/:folder/thread/delete", :provides => :html do
+    folder = Folder.new params[:folder]
+    address = params[:address]
+    thread = params[:thread]
+
+    messages = folder.thread_messages(address, thread)
+
+    if messages
+      messages = messages.map{ |x| x['msgid'] }
+
+      delete_statuses = messages.map { |msgid| XmlrpcClient.instance.trashMessage(msgid) + msgid }
+      
+      delete_status_lines = delete_statuses.map { |x| "<li>#{x}</li>"}.join
+      haml ("Deleted:<ol>#{delete_status_lines}</ol>")
+    else
+      halt(500, haml("No messages found for this thread!"))
+    end
+    
+  end
+
   run! if app_file == $0
 
 end

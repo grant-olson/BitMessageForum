@@ -34,3 +34,5 @@ form.button {display:inline;float:left;margin-right:0.5em;margin-bottom:0.25em;}
 form.inline {display:inline;}
 input.small_button{font-size:0.75em;font-weight:bold;}
 .clear{clear:both;margin:0;padding:0;}
+
+.small {font-size:0.75em;}

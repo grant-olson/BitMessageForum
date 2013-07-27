@@ -42,6 +42,10 @@
         = @new_messages
         new messages!
 
+    - if cookies[:flash] && cookies[:flash] != ""
+      .flash
+        = cookies[:flash]
+        - cookies.delete(:flash)
     = yield
 
   .footer

@@ -1,8 +1,11 @@
 class Folder
   VALID_FOLDERS = %w{chans inbox sent lists}
 
+  attr_reader :name
+
   def initialize folder_name
     raise "Bad folder #{folder_name}" if !VALID_FOLDERS.include?(folder_name)
+    @name = folder_name
     @messages = MessageStore.instance.send(folder_name)
   end
 
@@ -32,6 +35,7 @@ class Folder
     return nil if threads.nil?
 
     msgs = threads[thread_name]
+    msgs = [] if msgs.nil?
 
     if opts[:sort] == :old
       msgs = msgs.sort { |a,b| Message.time(a) <=> Message.time(b) }

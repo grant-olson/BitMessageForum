@@ -26,6 +26,11 @@ div { margin: 0.5em;padding:0.5em }
   background-color:#ffcccc;
   }
 
+.flash {
+  border: 1pt solid black;
+  background-color:#ffcccc;
+  }
+
 .new {
   font-weight:bold;
 }

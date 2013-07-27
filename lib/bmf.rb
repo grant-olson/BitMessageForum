@@ -1,6 +1,9 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/cookies'
+
 require 'haml'
+
 require_relative 'message_store.rb'
 require_relative 'address_store.rb'
 require_relative 'thread_status.rb'
@@ -9,6 +12,7 @@ require_relative 'settings.rb'
 require_relative 'folder.rb'
 
 class BMF < Sinatra::Base
+  helpers Sinatra::Cookies
 
   set :server, 'thin'
   set :root, File.expand_path("../../", __FILE__)
@@ -141,7 +145,12 @@ class BMF < Sinatra::Base
     if XmlrpcClient.is_error? res
       halt(500, haml("Delete failed.  #{res}"))
     else
-      haml("#{res} [#{msgid}]")
+      if request.referrer and request.referrer != ""
+        cookies[:flash] = res
+        redirect request.referrer
+      else
+        haml("#{res} [#{msgid}]")
+      end
     end
   end
 
@@ -183,7 +192,7 @@ class BMF < Sinatra::Base
 
     # Get the last time we visited thread, and update to now
     @thread_last_visited = ThreadStatus.instance.thread_last_visited(@address,@thread)
-    ThreadStatus.instance.thread_visited(@address, @thread, Message.time(@messages.last))
+    ThreadStatus.instance.thread_visited(@address, @thread, Message.time(@messages.last)) if @messages.last
 
     haml :messages
   end
@@ -205,9 +214,11 @@ class BMF < Sinatra::Base
   end
 
   post "/:folder/thread/bulk_modify", :provides => :html do
-    threads_to_update = params.select { |key, value| key =~ /^thread__/}.values
+    folder = Folder.new(params[:folder])
     address = params[:address]
+
     update_action = params[:update_action]
+    threads_to_update = params.select { |key, value| key =~ /^thread__/}.values
 
     updates_list = threads_to_update.map{|t| "<li>#{CGI.escape_html(t)}</li>"}.join
     updates_list = "<ul>" + updates_list + "</ul>"
@@ -216,7 +227,6 @@ class BMF < Sinatra::Base
     when "noop"
       status =  "Noop.  Did nothing to:"
     when "delete"
-      folder = Folder.new(params[:folder])
       address = params[:address]
       threads_to_update.each do |thread|
         folder.delete_thread(address, thread)
@@ -233,7 +243,8 @@ class BMF < Sinatra::Base
       raise "Unknown Action #{update_action}"
     end
 
-    haml("<div>#{status}#{updates_list}</div>")
+    cookies[:flash] = "<div>#{status}#{updates_list}</div>"
+    redirect "/#{folder.name}/#{address}/"
   end
 
   run! if app_file == $0

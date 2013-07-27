@@ -10,8 +10,8 @@ body {
 
 div { margin: 0.5em;padding:0.5em }
 
-.nav { float:left;background-color:#F4F4F4;width:8%;border: 1pt solid black;}
-.content {margin-left:10%;}
+.nav { display:inline-block;float:left;background-color:#F4F4F4;border: 1pt solid black;}
+.content {margin-left:0%;float:left;max-width:80%;}
 
 .recipient { background-color:#F8F8F8;}
 .thread, .nav { background-color:#FCFCFC;}
@@ -29,6 +29,9 @@ div { margin: 0.5em;padding:0.5em }
 .new {
   font-weight:bold;
 }
+
+ul {margin-left:1em;padding-left:0;}
+ul li {margin-left:0;padding-left:0;}
 
 form.button {display:inline;float:left;margin-right:0.5em;margin-bottom:0.25em;}
 form.inline {display:inline;}

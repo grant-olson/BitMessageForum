@@ -50,3 +50,4 @@
     %form.button{:method => :post, :action => "/messages/delete/", :onsubmit => "return confirm('Really delete?')"}
       %input{:type => :hidden, :name => :msgid, :value => message['msgid']}
       %input{:type => :submit, :value => :delete}
+    .clear

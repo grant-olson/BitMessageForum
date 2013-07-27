@@ -19,64 +19,92 @@ class MessageStore
     puts x
   end
     
+  def update_times m
+    received_time = Message.time(m)
+    to_address = m["toAddress"]
+
+    # update channel access time
+    address_last_updates[to_address] ||= 0
+    if address_last_updates[to_address] < received_time
+      address_last_updates[to_address] = received_time
+    end
+
+    subject = m["subject"]
+    if subject[0..3] == "Re: "
+      subject = subject[4..-1]
+    end
+    
+    # update thread access time
+    thread_last_updates[to_address] ||= {}
+    thread_last_updates[to_address][subject] ||= 0
+    
+    if thread_last_updates[to_address][subject] < received_time
+      thread_last_updates[to_address][subject] = received_time
+    end
+  end
+
+  def add_message msgid, m
+    m["message"] = Base64.decode64(m["message"])
+    m["subject"] = Base64.decode64(m["subject"])
+    messages[msgid] = m
+
+    to_address = m["toAddress"]
+
+    # Temp hack for lists
+    if to_address == "[Broadcast subscribers]"
+      hack_mailing_list_name =  m["subject"][/\[[^\]]+\]/]
+      to_address += " " + hack_mailing_list_name
+      m["toAddress"] = to_address
+    end
+
+
+    log "Added new message #{msgid}."
+  end
+
   def process_messages new_messages, source="inbox"
     processed_messages = 0
 
     new_messages.each do |m|
       msgid = m["msgid"]
 
+      @new_msgids[msgid] = true
+
       if !@messages.has_key?(msgid)
         processed_messages += 1
-        m["message"] = Base64.decode64(m["message"])
-        m["subject"] = Base64.decode64(m["subject"])
         m["_source"] = source
-        messages[msgid] = m
-
-        to_address = m["toAddress"]
-
-        # Temp hack for lists
-        if to_address == "[Broadcast subscribers]"
-          hack_mailing_list_name =  m["subject"][/\[[^\]]+\]/]
-          to_address += " " + hack_mailing_list_name
-          m["toAddress"] = to_address
-        end
-
-        received_time = Message.time(m)
-
-        # update channel access time
-        address_last_updates[to_address] ||= 0
-        if address_last_updates[to_address] < received_time
-          address_last_updates[to_address] = received_time
-        end
-
-        subject = m["subject"]
-        if subject[0..3] == "Re: "
-          subject = subject[4..-1]
-        end
-        
-        # update thread access time
-        thread_last_updates[to_address] ||= {}
-        thread_last_updates[to_address][subject] ||= 0
-        
-        if thread_last_updates[to_address][subject] < received_time
-          thread_last_updates[to_address][subject] = received_time
-        end
-
-        log "Added new message #{msgid}."
+        add_message msgid, m
+        update_times m
       end
     end
 
     processed_messages
   end
 
+  def init_gc
+    @new_msgids = {}
+  end
+
+  def do_gc
+    messages.keys.each do |old_msgid|
+      if !@new_msgids[old_msgid]
+        messages.delete(old_msgid)
+        log "Deleted message #{old_msgid}."
+      end
+    end
+  end
+
   def update
     processed_messages = 0
     
+    init_gc
+
     inbox_messages = JSON.parse(XmlrpcClient.instance.getAllInboxMessages)
     processed_messages += process_messages(inbox_messages['inboxMessages'])
 
     sent_messages = JSON.parse(XmlrpcClient.instance.getAllSentMessages)
     processed_messages += process_messages(sent_messages['sentMessages'], "sent")
+
+    do_gc
 
     processed_messages
   end

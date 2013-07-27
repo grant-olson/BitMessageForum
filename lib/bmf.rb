@@ -163,8 +163,11 @@ class BMF < Sinatra::Base
   get "/:folder/:address/", :provides => :html do
     sync
     
-    @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
     @addresses = AddressStore.instance.addresses
+    @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
+
+    halt(404, haml("Couldn't find any threads matching #{params[:address]}.  Maybe you trashed them all.")) if @threads.nil?
+
     @threads = @threads.sort{ |a,b| MessageStore.instance.thread_last_updates[@address][a[0]] <=> MessageStore.instance.thread_last_updates[@address][b[0]] }.reverse
     haml :threads
     
@@ -176,6 +179,9 @@ class BMF < Sinatra::Base
     @folder = params[:folder]
     
     @address, threads = folder(@folder).detect {|address, threads| address == params[:address] }
+
+    halt(404, haml("Couldn't find thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages")) if threads.nil?
+
     @thread, @messages = threads.detect do |thread, messages|
       # puts messages.inspect
       thread == CGI.unescape(params[:thread])

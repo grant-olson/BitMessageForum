@@ -6,6 +6,7 @@ require_relative 'address_store.rb'
 require_relative 'thread_status.rb'
 require_relative 'message.rb'
 require_relative 'settings.rb'
+require_relative 'folder.rb'
 
 class BMF < Sinatra::Base
 
@@ -16,23 +17,6 @@ class BMF < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
-
-  def folder folder_name
-    case folder_name
-    when "chans"
-      MessageStore.instance.chans
-    when "inbox"
-      MessageStore.instance.inbox
-    when "sent"
-      MessageStore.instance.sent
-    when "lists"
-      MessageStore.instance.lists
-    else
-      raise "BADFOLDER"
-    end
-  end
-
-  
 
   def sync
     @new_messages = MessageStore.instance.update
@@ -164,8 +148,8 @@ class BMF < Sinatra::Base
   get "/:folder/", :provides => :html do
     sync
 
-    @messages = folder params[:folder]
-    @messages = @messages.sort { |a,b| MessageStore.instance.address_last_updates[a[0]] <=> MessageStore.instance.address_last_updates[b[0]] }.reverse
+    folder = Folder.new(params[:folder])
+    @messages = folder.messages(:sort => :new)
     @addresses = AddressStore.instance.addresses
     haml :addresses
   end
@@ -174,33 +158,27 @@ class BMF < Sinatra::Base
     sync
     
     @addresses = AddressStore.instance.addresses
-    @address, @threads = folder(params[:folder]).detect {|address, threads| address == params[:address] }
+    folder = Folder.new(params[:folder])
+    @address = params[:address]
+    @threads = folder.threads_for_address(@address, :sort => :new)
 
     halt(404, haml("Couldn't find any threads matching #{params[:address]}.  Maybe you trashed them all.")) if @threads.nil?
 
-    @threads = @threads.sort{ |a,b| MessageStore.instance.thread_last_updates[@address][a[0]] <=> MessageStore.instance.thread_last_updates[@address][b[0]] }.reverse
     haml :threads
-    
   end
 
   get "/:folder/:address/:thread", :provides => :html do
     sync
 
-    @folder = params[:folder]
+    @folder = Folder.new(params[:folder])
     
-    @address, threads = folder(@folder).detect {|address, threads| address == params[:address] }
+    @address = params[:address]
 
-    halt(404, haml("Couldn't find thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if threads.nil?
-
-    @thread, @messages = threads.detect do |thread, messages|
-      # puts messages.inspect
-      thread == CGI.unescape(params[:thread])
-    end
+    @thread = CGI.unescape(params[:thread])
+    @messages = @folder.thread_messages(@address, @thread, :sort => :old)
 
     halt(404, haml("Couldn't find any messages for thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if @messages.nil?
 
-    @messages = @messages.sort {|a,b| Message.time(a) <=> Message.time(b)}
-    
     @addresses = AddressStore.instance.addresses
 
     # Get the last time we visited thread, and update to now

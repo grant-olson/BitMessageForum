@@ -11,6 +11,6 @@
           = user
       \- Last Updated:
       = Time.at(MessageStore.instance.address_last_updates[user]).to_datetime
-      \-
-      %a{:href => "/messages/compose/?to=#{CGI.escape(user)}"}
-        [send]
+      %form.inline{:method => :get, :action => "/messages/compose/"}
+        %input{:type => :hidden, :name => :to, :value => user}
+        %input{:type => :submit, :value => "Send Message"}

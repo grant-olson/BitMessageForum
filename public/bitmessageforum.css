@@ -31,5 +31,6 @@ div { margin: 0.5em;padding:0.5em }
 }
 
 form.button {display:inline;float:left;margin-right:0.5em;margin-bottom:0.25em;}
+form.inline {display:inline;}
 
 .clear{clear:both;margin:0;padding:0;}

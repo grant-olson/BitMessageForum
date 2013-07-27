@@ -7,13 +7,15 @@
   - else
     = @address
 %form{:method => :post, :name => :bulk_update , :action => "/#{params[:folder]}/thread/bulk_modify", :onsubmit => "if (document.forms['bulk_update']['update_action'].value == 'delete'){return confirm('Really delete selected threads?')}else{return true;};" }
-  Update selected items:
+  Update:
   %select.small{:name => :update_action }
     %option{:value => :noop}
     %option{:value => :delete}
       Delete Selected
     %option{:value => :mark_read}
       Mark Selected Read
+    %option{:value => :mark_all_read}
+      Mark All Read
   %input.small_button{:type => :submit, :value => "Go!"}
   %input{:type => :hidden, :name => :address, :value => @address}
   .thread

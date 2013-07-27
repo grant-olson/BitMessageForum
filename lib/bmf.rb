@@ -238,7 +238,14 @@ class BMF < Sinatra::Base
         ThreadStatus.instance.thread_visited(address, thread, Time.now.to_i)
       end
       
-      status = "Marked the following threads as read:"
+      status = "Marked the following threads as read."
+    when "mark_all_read"
+
+      folder.threads_for_address(address).each do |thread, thread_info|
+        ThreadStatus.instance.thread_visited(address, thread, Time.now.to_i)
+      end
+
+      status = "Marked all threads as read."
     else
       raise "Unknown Action #{update_action}"
     end

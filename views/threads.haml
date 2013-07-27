@@ -6,17 +6,26 @@
     = @addresses[@address]['label']
   - else
     = @address
-.thread
-  - @threads.each do |thread, messages|
-    - new = ThreadStatus.instance.new_messages?(@address, thread)
-    %div{:class => (new ? "new" : "old")}
-      %a{:href => "./#{CGI.escape(thread)}"}
-        &= thread
+%form{:method => :post, :name => :bulk_update , :action => "/#{params[:folder]}/thread/bulk_modify", :onsubmit => "if (document.forms['bulk_update']['update_action'].value == 'delete'){return confirm('Really delete selected threads?')}else{return true;};" }
+  Update selected items:
+  %select.small{:name => :update_action }
+    %option{:value => :noop}
+    %option{:value => :delete}
+      Delete Selected
+    %option{:value => :mark_read}
+      Mark Selected Read
+  %input.small_button{:type => :submit, :value => "Go!"}
+  %input{:type => :hidden, :name => :address, :value => @address}
+  .thread
+    - thread_no = 0
+    - @threads.each do |thread, messages|
+      - thread_no += 1
+      - new = ThreadStatus.instance.new_messages?(@address, thread)
+      %div{:class => (new ? "new" : "old")}
+        %input{:type => :checkbox, :name => "thread__#{thread_no}", :value=> thread}
+        %a{:href => "./#{CGI.escape(thread)}"}
+          &= thread
 
-      %span.small
-        \- Updated:
-        = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
-      %form.inline{:method => :post, :action => "/#{params[:folder]}/thread/delete", :onsubmit => "return confirm('Really delete whole thread?');"}
-        %input{:type => :hidden, :name => :address, :value => @address}
-        %input{:type => :hidden, :name => :thread, :value => thread}
-        %input.small_button{:type => :submit, :value => "Delete"}
+        %span.small
+          \- Updated:
+          = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime

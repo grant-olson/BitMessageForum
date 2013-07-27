@@ -193,19 +193,47 @@ class BMF < Sinatra::Base
     address = params[:address]
     thread = params[:thread]
 
-    messages = folder.thread_messages(address, thread)
+    delete_statuses = folder.delete_thread(address, thread)
 
-    if messages
-      messages = messages.map{ |x| x['msgid'] }
-
-      delete_statuses = messages.map { |msgid| XmlrpcClient.instance.trashMessage(msgid) + msgid }
-      
+    if !delete_statuses.empty?
       delete_status_lines = delete_statuses.map { |x| "<li>#{x}</li>"}.join
       haml ("Deleted:<ol>#{delete_status_lines}</ol>")
     else
       halt(500, haml("No messages found for this thread!"))
     end
     
+  end
+
+  post "/:folder/thread/bulk_modify", :provides => :html do
+    threads_to_update = params.select { |key, value| key =~ /^thread__/}.values
+    address = params[:address]
+    update_action = params[:update_action]
+
+    updates_list = threads_to_update.map{|t| "<li>#{CGI.escape_html(t)}</li>"}.join
+    updates_list = "<ul>" + updates_list + "</ul>"
+
+    case update_action
+    when "noop"
+      status =  "Noop.  Did nothing to:"
+    when "delete"
+      folder = Folder.new(params[:folder])
+      address = params[:address]
+      threads_to_update.each do |thread|
+        folder.delete_thread(address, thread)
+      end
+      
+      status = "Deleted the following threads:"
+    when "mark_read"
+      threads_to_update.each do |thread|
+        ThreadStatus.instance.thread_visited(address, thread, Time.now.to_i)
+      end
+      
+      status = "Marked the following threads as read:"
+    else
+      raise "Unknown Action #{update_action}"
+    end
+
+    haml("<div>#{status}#{updates_list}</div>")
   end
 
   run! if app_file == $0

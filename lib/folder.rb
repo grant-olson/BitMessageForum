@@ -39,5 +39,12 @@ class Folder
 
     msgs
   end
+
+  def delete_thread address, thread
+    msgs = thread_messages(address, thread)
+    return [] if msgs.nil?
+
+    msgs.map{ |msg| msg['msgid']}.map{ |msgid| XmlrpcClient.instance.trashMessage(msgid) + msgid }
+  end
   
 end

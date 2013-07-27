@@ -67,6 +67,34 @@ class BMF < Sinatra::Base
     haml :identities
   end
 
+  post "/identities/new/", :provides => :html do
+    if params[:label]
+      label = Base64.encode64(params[:label])
+      response = XmlrpcClient.instance.createRandomAddress label
+      if XmlrpcClient.is_error? response
+        halt(500, "Couldn't create address: #{response}")
+      else
+        haml("Created random address #{response} with label #{params[:label]}")
+      end
+    elsif params[:passphrase]
+      passphrase = Base64.encode64(params[:passphrase])
+      response = XmlrpcClient.instance.createDeterministicAddresses passphrase
+      if XmlrpcClient.is_error? response
+        halt(500, "Couldn't create address: #{response}")
+      else
+        addresses = JSON.parse(response)['addresses']
+        if addresses.empty?
+          haml("Address already exists")
+        else
+          haml("Created address #{addresses.join(', ')}")
+        end
+      end
+    else
+      raise "Bad submission"
+    end
+    
+  end
+  
   get "/settings/", :provides => :html do
     load_settings
     haml :settings

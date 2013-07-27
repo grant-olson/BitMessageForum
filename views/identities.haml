@@ -1,5 +1,23 @@
 %h2 Identities
 
+%h3 Create random address
+
+%div
+  %form{:method => :post, :action => "/identities/new/"}
+    Label:
+    %input{:type => :text, :name => :label, :size => 50}
+    %input{:type => :submit, :value => 'Create!' }
+
+%h3 Create deterministic address
+
+%div
+  %form{:method => :post, :action => "/identities/new/"}
+    Label:
+    %input{:type => :text, :name => :passphrase, :size => 50}
+    %input{:type => :submit, :value => 'Create!' }
+
+
+%h3 Current Identities
 %table
   %tr
     %th Label
@@ -9,3 +27,4 @@
       %tr
         %td= address_info["label"]
         %td= address
+

@@ -32,7 +32,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  haml
-  sinatra
-  sinatra-contrib
-  thin
+  haml (~> 4.0.3)
+  sinatra (~> 1.4.3)
+  sinatra-contrib (~> 1.4.0)
+  thin (~> 1.5.1)

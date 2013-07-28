@@ -37,14 +37,14 @@
         %p
           &= paragraph
 
-    - if @folder == "chans"
+    - if @folder.name == "chans"
       %form.button{:method => :get, :action => "/messages/compose/"}
         %input{:type => :hidden, :name => :to, :value => @address}
         %input{:type => :hidden, :name => :subject, :value => @thread}
         %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
         %input.small_button{:type => :submit, :value => "Reply Chan"}
     &nbsp;
-    - if @folder != "chans" || (@address != message['fromAddress'])
+    - if @folder.name != "chans" || (@address != message['fromAddress'])
       %form.button{:method => :get, :action => "/messages/compose/" }
         %input{:type => :hidden, :name => :to, :value => message['fromAddress']}
         %input{:type => :hidden, :name => :subject, :value => @thread}

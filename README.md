@@ -1,16 +1,12 @@
-     .----------------.  .----------------.  .----------------. 
-    | .--------------. || .--------------. || .--------------. |
-    | |   ______     | || | ____    ____ | || |  _________   | |
-    | |  |_   _ \    | || ||_   \  /   _|| || | |_   ___  |  | |
-    | |    | |_) |   | || |  |   \/   |  | || |   | |_  \_|  | |
-    | |    |  __'.   | || |  | |\  /| |  | || |   |  _|      | |
-    | |   _| |__) |  | || | _| |_\/_| |_ | || |  _| |_       | |
-    | |  |_______/   | || ||_____||_____|| || | |_____|      | |
-    | |              | || |              | || |              | |
-    | '--------------' || '--------------' || '--------------' |
-     '----------------'  '----------------'  '----------------' 
+<table>
+<tr>
+<td><a href='./screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a><br />View Channel</td>
+<td><a href='./screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a><br />Read Thread</td>
+<td><a href='./screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a><br />Post Message</td>
+</tr>
+</table>
 
-            Bit                Message             Forum
+# BMF
 
 BitMessageForum allows you to browse and post bitmessages in a
 forum-like view in the web browser of your choice.
@@ -25,16 +21,6 @@ Although it would be possible to use the software to mirror a channel
 via a web interface, this would break the self-destruct feature that
 removes bitmessages from the network after a few days. So please don't
 do that!
-
-## Screenshots
-
-<table>
-<tr>
-<td><a href='./screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a><br />View Channel</td>
-<td><a href='./screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a><br />Read Thread</td>
-<td><a href='./screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a><br />Post Message</td>
-</tr>
-</table>
 
 ## Installation
 

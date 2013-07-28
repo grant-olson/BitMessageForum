@@ -134,8 +134,14 @@ class BMF < Sinatra::Base
     from = params[:from]
     subject = Base64.encode64(params[:subject])
     message = Base64.encode64(params[:message])
+    broadcast = params[:broadcast]
 
-    res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
+    if broadcast
+      res = XmlrpcClient.instance.sendBroadcast(from, subject, message)
+    else
+      res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
+    end
+    
     if XmlrpcClient.is_error? res
       halt(500, haml(res))
     else

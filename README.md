@@ -28,9 +28,10 @@ do that!
 
 ## Screenshots
 
-<img src='./screenshots/threads.png' width=180 height=178 />
-<img src='./screenshots/compose.png' />
-<img src='./screenshots/messages.png' />
+<a href='./screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a>
+<a href='./screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a>
+<a href='./screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a>
+
 ## Installation
 
 ### Prerequisites

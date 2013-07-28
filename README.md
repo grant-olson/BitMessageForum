@@ -28,8 +28,9 @@ do that!
 
 ## Screenshots
 
-<img src='./screenshots/threads.png' />
-
+<img src='./screenshots/threads.png' width=180 height=178 />
+<img src='./screenshots/compose.png' />
+<img src='./screenshots/messages.png' />
 ## Installation
 
 ### Prerequisites

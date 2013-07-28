@@ -51,7 +51,7 @@ the `[bitmessagesettings]` section of keys.dat:
 
 #### Initial installation
 
-    git clone BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU
+    git clone https://github.com/grant-olson/BitMessageForum.git
     cd BitMessageForum
     bundle install
 

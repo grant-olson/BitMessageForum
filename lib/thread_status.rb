@@ -1,12 +1,42 @@
 require 'singleton'
+require 'base64'
 require_relative 'message_store.rb'
 
 class ThreadStatus
   include Singleton
 
+  STASH_FILE = File.expand_path("../../config/thread_status_stash", __FILE__)
+
   def initialize
     @thread_last_visited = {}
+
+    # Load stashed settings
+    if File.exists? STASH_FILE
+      stash = File.open(STASH_FILE).read
+      stash.split(";").each do |stash_line|
+        address, thread, update_time = stash_line.split(':')
+        thread = Base64.decode64(thread.gsub("\\n","\n"))
+        update_time = update_time.to_i
+        thread_visited(address,thread,update_time)
+      end
+    end
   end
+
+  def persist
+    updates = []
+    @thread_last_visited.each_pair do |address, threads|
+      threads.each_pair do |thread_name, update_time|
+        updates << "#{address}:#{Base64.encode64(thread_name).gsub("\n","\\n")}:#{update_time}"
+      end
+    end
+    
+    stash = updates.join(";")
+
+    File.open(STASH_FILE,"w") do |f|
+      f.write(stash)
+    end
+  end
+  
 
   def thread_last_visited(address, thread)
     if @thread_last_visited[address] && @thread_last_visited[address][thread]
@@ -23,6 +53,8 @@ class ThreadStatus
     if time > @thread_last_visited[address][thread]
       @thread_last_visited[address][thread] = time
     end
+
+    persist
   end
 
   def new_messages?(address, thread)

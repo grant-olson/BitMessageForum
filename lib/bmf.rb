@@ -135,7 +135,14 @@ class BMF < Sinatra::Base
     if XmlrpcClient.is_error? res
       halt(500, haml(res))
     else
-      haml "Sent.  Confirmation #{res}"
+      confirm_message = "Sent.  Confirmation #{res}"
+      if params[:goto] && params[:goto] != ""
+        cookies[:flash] = confirm_message
+        redirect params[:goto]
+      else
+        haml confirm_message
+      end
+      
     end
   end
 

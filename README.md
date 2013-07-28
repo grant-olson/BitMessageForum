@@ -1,8 +1,8 @@
 <table>
 <tr>
-<td><a href='./screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a><br />View Channel</td>
-<td><a href='./screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a><br />Read Thread</td>
-<td><a href='./screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a><br />Post Message</td>
+<td><a href='https://raw.github.com/grant-olson/BitMessageForum/master/screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a><br />View Channel</td>
+<td><a href='https://raw.github.com/grant-olson/BitMessageForum/master/screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a><br />Read Thread</td>
+<td><a href='https://raw.github.com/grant-olson/BitMessageForum/master/screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a><br />Post Message</td>
 </tr>
 </table>
 

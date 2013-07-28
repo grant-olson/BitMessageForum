@@ -7,10 +7,7 @@ class ThreadStatus
 
   STASH_FILE = File.expand_path("../../config/thread_status_stash", __FILE__)
 
-  def initialize
-    @thread_last_visited = {}
-
-    # Load stashed settings
+  def load_stash
     if File.exists? STASH_FILE
       stash = File.open(STASH_FILE).read
       stash.split(";").each do |stash_line|
@@ -20,6 +17,19 @@ class ThreadStatus
         thread_visited(address,thread,update_time)
       end
     end
+  rescue Exception => ex # Failure is not an option!
+    puts "@" * 80
+    puts "Error loading ThreadStatus stash."
+    puts "Ignoring so that the app is usable."
+    puts "Please report the following information to the project maintainers"
+    puts
+    puts "Exception: #{ex.message}"
+    puts ex.backtrace.join("\n")
+  end
+  
+  def initialize
+    @thread_last_visited = {}
+    load_stash
   end
 
   def persist

@@ -15,10 +15,16 @@
 BitMessageForum allows you to browse and post bitmessages in a
 forum-like view in the web browser of your choice.
 
-Although it is configured to run in your browser, it is designed to be
-a local application and not a true web application.  As such, it
-assumes that if you can talk to your bitmessage server, you have full
-rights.
+Although BMF is configured to run in your browser, it is designed to
+be a local application.  it assumes that if you can talk to your
+bitmessage server, you are fully authorized to read/send/delete any
+messages, create new identities, etc.
+
+It is **not** designed to be setup as a publically facing website.
+Although it would be possible to use the software to mirror a channel
+via a web interface, this would break the self-destruct feature that
+removes bitmessages from the network after a few days. So please don't
+do that!
 
 ## Installation
 
@@ -50,7 +56,9 @@ the `[bitmessagesettings]` section of keys.dat:
     bundle install
 
 If you are using different settings for the PyBitmessage server, you
-will need to change that in `config/settings.yml`.
+will need to change that on the [settings
+page](http://localhost:4567/settings/) or by manually editing
+`config/settings.yml`.
 
 #### Running BMF
 

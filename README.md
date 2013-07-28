@@ -26,6 +26,10 @@ via a web interface, this would break the self-destruct feature that
 removes bitmessages from the network after a few days. So please don't
 do that!
 
+## Screenshots
+
+<img src='./screenshots/threads.png' />
+
 ## Installation
 
 ### Prerequisites

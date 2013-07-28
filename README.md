@@ -28,9 +28,13 @@ do that!
 
 ## Screenshots
 
-<a href='./screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a>
-<a href='./screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a>
-<a href='./screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a>
+<table>
+<tr>
+<td><a href='./screenshots/threads.png'><img src='./screenshots/threads.png' width=180 height=178 /></a><br />View Channel</td>
+<td><a href='./screenshots/compose.png'><img src='./screenshots/compose.png' width=205 height=173 /></a><br />Post Message</td>
+<td><a href='./screenshots/messages.png'><img src='./screenshots/messages.png' width=180 height=178 /></a><br />Read Thread</td>
+</tr>
+</table>
 
 ## Installation
 

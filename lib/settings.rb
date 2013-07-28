@@ -5,7 +5,12 @@ require 'fileutils'
 class Settings
   include Singleton
 
-  VALID_SETTINGS = [:server_url, :sig, :default_send_address]
+  VALID_SETTINGS = [:server_url,
+                    :sig,
+                    :default_send_address,
+                    :server_interface,
+                    :server_port]
+
   SETTINGS_FILE = File.expand_path("../../config/settings.yml", __FILE__)
   SAMPLE_FILE = File.expand_path("../../config/settings.yml.sample", __FILE__)
 
@@ -34,9 +39,10 @@ class Settings
   end
 
   def method_missing(meth, *args)
-    setting = meth.to_s
-    if args ==[] and @settings.has_key? setting
-      return @settings[setting]
+    if args == [] and VALID_SETTINGS.include?(meth)
+      ret = @settings[meth.to_s]
+      ret = nil if ret == ""
+      return ret
     else
       super
     end

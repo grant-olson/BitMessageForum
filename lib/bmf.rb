@@ -18,6 +18,10 @@ class BMF < Sinatra::Base
   set :root, File.expand_path("../../", __FILE__)
   set :layout, :layout
 
+  settings = Settings.instance
+  set :bind, settings.server_interface if settings.server_interface
+  set :port, settings.server_port if settings.server_port
+
   configure :development do
     register Sinatra::Reloader
   end

@@ -6,6 +6,10 @@
     = @addresses[@address]['label']
   - else
     = @address
+
+  %form.inline{:method => :get, :action => "/messages/compose/"}
+    %input{:type => :hidden, :name => :to, :value => params[:folder] == 'lists' ? @threads.first[1].first['fromAddress']  : @address}
+    %input.small_button{:type => :submit, :value => (params[:folder] == "chans" ? "Start New Thread" : "Send Message") }
 %form{:method => :post, :name => :bulk_update , :action => "/#{params[:folder]}/thread/bulk_modify", :onsubmit => "if (document.forms['bulk_update']['update_action'].value == 'delete'){return confirm('Really delete selected threads?')}else{return true;};" }
   Update:
   %select.small{:name => :update_action }

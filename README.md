@@ -34,9 +34,9 @@ do that!
 
 The following software is required:
 
-* Ruby
-* bundler
-* PyBitmessage
+* [Ruby](http://www.ruby-lang.org/en/)
+* [bundler](http://bundler.io/)
+* [PyBitmessage](https://bitmessage.org/wiki/Main_Page)
 
 #### PyBitmessage API configuration
 
@@ -49,7 +49,7 @@ the `[bitmessagesettings]` section of keys.dat:
     apiusername = bmf
     apipassword = bmf
 
-#### Initial installation
+### Initial installation
 
     git clone https://github.com/grant-olson/BitMessageForum.git
     cd BitMessageForum
@@ -60,7 +60,7 @@ will need to change that on the [settings
 page](http://localhost:4567/settings/) or by manually editing
 `config/settings.yml`.
 
-#### Running BMF
+### Running BMF
 
     cd BitMessageForum
     ./bmf
@@ -68,6 +68,21 @@ page](http://localhost:4567/settings/) or by manually editing
 After that navigate to [http://localhost:4567/](http://localhost:4567/)
 
 Bam!
+
+### Running PyBitmessage as a daemon
+
+If you find yourself using BMF all the time and don't want to see the
+PyBitmessage UI, you can start PyBitmessage as a daemon.
+
+First, add the following to the `[bitmessagesettings]` section of `keys.dat`:
+
+    daemon = true
+
+Next, start PyBitmessage like so:
+
+    nohup python src/bitmessagemain.py &
+
+This will start up PyBitmessage in the background without the QT GUI.
 
 ## Contact
 

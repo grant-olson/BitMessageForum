@@ -90,6 +90,8 @@ Need help?  Ask on the bmf support channel.
     
     * Address: BM-2DBsnPXWVR7PbC5qMEYAdgtaSQnkr5X7ng 
 
+For announcements of new releases and security issues, subscribe to BM-2DABVRoCRtwKZLyVCBZ3n6PuC4n7a4zLsA
+
 Or send me a personal bitmessage: BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU 
 
 Email me:  kgo at grant-olson dot net.

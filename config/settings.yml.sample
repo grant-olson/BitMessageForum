@@ -1,3 +1,6 @@
 server_url: http://bmf:bmf@localhost:8442/
 sig:
 default_send_address:
+server_interface:
+server_port:
+allow_sanitized_html: yes

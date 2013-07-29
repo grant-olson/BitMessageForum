@@ -9,7 +9,8 @@ class Settings
                     :sig,
                     :default_send_address,
                     :server_interface,
-                    :server_port]
+                    :server_port,
+                    :display_sanitized_html]
 
   SETTINGS_FILE = File.expand_path("../../config/settings.yml", __FILE__)
   SAMPLE_FILE = File.expand_path("../../config/settings.yml.sample", __FILE__)

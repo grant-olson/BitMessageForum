@@ -1,3 +1,8 @@
+* We now allow sanitized HTML in messages.  No scripts and only local
+  images with <img src='data:...'>.  The new setting
+  'allow_sanitized_html' defaults to yes.  Existing users will need to
+  update this setting if they want to view html.  (Github Issue #11)
+
 0.1.0 - 2013-07-28
 ==================
 

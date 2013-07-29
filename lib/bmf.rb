@@ -11,8 +11,31 @@ require_relative 'message.rb'
 require_relative 'settings.rb'
 require_relative 'folder.rb'
 
+require 'sanitize'
+
 class BMF < Sinatra::Base
   helpers Sinatra::Cookies
+
+  helpers do
+
+    # If we've got some html, make it safe
+    def safe_text text
+      return text if !text.include?("<")
+
+
+      if Settings.instance.display_sanitized_html != 'yes'
+        CGI::escape_html(text)
+      else
+        local_images_only = Sanitize::Config::RELAXED.dup
+        local_images_only[:protocols]["img"]["src"] = ["data"]
+
+        Sanitize.clean(text, local_images_only)
+      end
+      
+    end
+    
+  end
+  
 
   set :server, 'thin'
   set :root, File.expand_path("../../", __FILE__)

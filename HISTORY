@@ -1,4 +1,7 @@
-* Show help/description text on Settings page.
+* You can add and delete subscriptions from the new subscriptions page.
+  (Github Issue #26)
+
+* We now show help/description text on Settings page.
 
 * We now allow sanitized HTML in messages.  No scripts and only local
   images with <img src='data:...'>.  The new setting

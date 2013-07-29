@@ -206,6 +206,29 @@ class BMF < Sinatra::Base
     end
   end
 
+  get "/subscriptions/", :provides => :html do
+    haml :subscriptions
+  end
+  
+  post "/subscriptions/create/", :provides => :html do
+    res = XmlrpcClient.instance.addSubscription params[:address], Base64.encode64(params[:label])
+    if XmlrpcClient.is_error? res
+      halt(500, haml("Error subscribing.  #{res}"))
+    else
+      haml("Subscribed.  #{res}")
+    end
+  end
+  
+  post "/subscriptions/delete/", :provides => :html do
+    res = XmlrpcClient.instance.deleteSubscription params[:address]
+    if XmlrpcClient.is_error? res
+      halt(500, haml("Error deleting subscrition.  #{res}"))
+    else
+      haml("Subscription Deleted.  #{res}")
+    end
+  end
+  
+
   get "/:folder/", :provides => :html do
     sync
 

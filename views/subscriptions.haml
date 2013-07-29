@@ -1,0 +1,35 @@
+%h1 Subscriptions
+
+%h2 Add New Subscription
+
+%form{:method => :post, :action => "/subscriptions/create/"}
+  %table
+    %tr
+      %th Label
+      %td
+        %input{:type => :text, :name => :label, :value => params[:label], :size => 50}
+    %tr
+      %th Address
+      %td
+        %input{:type => :text, :name => :address, :value => params[:address], :size => 50}
+    %tr
+      %th{:colspan => 2}
+        %input{:type => :submit, :value => "Add New Subscription"}
+
+%h2 Delete Subscription
+%form{:method => :post, :action => "/subscriptions/delete/", :onsubmit => "return confirm('Are you sure');"}
+  %table
+    %tr
+      %th Address
+      %td
+        %input{:type => :text, :name => :address, :size => 50}
+    %tr
+      %th{:colspan => 2}
+        %input{:type => :submit, :value => "Delete Subscription"}
+
+
+%h2 Current Subscriptions
+
+%p
+  %i
+    Sorry, the PyBitmessage API doesn't support listing of Subscriptions.  I'm currently writing a patch.

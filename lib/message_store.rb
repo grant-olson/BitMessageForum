@@ -97,19 +97,17 @@ class MessageStore
   end
 
   def update
-    processed_messages = 0
-    
     init_gc
 
     inbox_messages = JSON.parse(XmlrpcClient.instance.getAllInboxMessages)
-    processed_messages += process_messages(inbox_messages['inboxMessages'])
+    new_messages = process_messages(inbox_messages['inboxMessages'])
 
     sent_messages = JSON.parse(XmlrpcClient.instance.getAllSentMessages)
-    processed_messages += process_messages(sent_messages['sentMessages'], "sent")
+    process_messages(sent_messages['sentMessages'], "sent")
 
     do_gc
 
-    processed_messages
+    new_messages
   end
   
   def by_recipient sent_or_received=:nil

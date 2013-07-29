@@ -29,7 +29,7 @@ class BMF < Sinatra::Base
         local_images_only = Sanitize::Config::RELAXED.dup
         local_images_only[:protocols]["img"]["src"] = ["data"]
 
-        Sanitize.clean(text, local_images_only)
+        Sanitize.clean(text.force_encoding("UTF-8"), local_images_only)
       end
       
     end

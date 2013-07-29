@@ -5,12 +5,16 @@ require 'fileutils'
 class Settings
   include Singleton
 
-  VALID_SETTINGS = [:server_url,
-                    :sig,
-                    :default_send_address,
-                    :server_interface,
-                    :server_port,
-                    :display_sanitized_html]
+  SETTINGS_AND_DESCRIPTIONS = {
+    :server_url => "Url of the BitMessage server to interface with.",
+                    :sig => "Signature line to attach to messages.",
+                    :default_send_address => "Default FROM address for messages.",
+                    :server_interface => "Internet interface to listen on.  Set to 0.0.0.0 to open up BMF to the network.  WARNING!!! Anyone who can access your IP can read/post/delete/etc.",
+                    :server_port => "Internet port to listen on.",
+                    :display_sanitized_html => "Show sanitized HTML minus scripts, css, and any non-inline images."
+  }
+
+  VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys
 
   SETTINGS_FILE = File.expand_path("../../config/settings.yml", __FILE__)
   SAMPLE_FILE = File.expand_path("../../config/settings.yml.sample", __FILE__)

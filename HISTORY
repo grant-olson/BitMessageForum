@@ -1,3 +1,5 @@
+* Show help/description text on Settings page.
+
 * We now allow sanitized HTML in messages.  No scripts and only local
   images with <img src='data:...'>.  The new setting
   'allow_sanitized_html' defaults to yes.  Existing users will need to

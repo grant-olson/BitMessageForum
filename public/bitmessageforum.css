@@ -46,3 +46,5 @@ input.small_button, select.small{font-size:0.75em;font-weight:bold;}
 
 .clear{clear:both;margin:0;padding:0;}
 
+table, tr, th, td { border: 1pt solid black}
+th, td { font-size:80%;}

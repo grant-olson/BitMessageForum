@@ -27,8 +27,20 @@ class BMF < Sinatra::Base
   end
 
   def sync
+    @@last_sync ||= 0
+    now = Time.now.to_i
+
+    return if (@@last_sync + 60) > now # throttle requests 1 per minute
+
+
     @new_messages = MessageStore.instance.update
     AddressStore.instance.update
+
+    # Don't show '8 million new messages!' when server boots.
+    @new_messages = 0 if @@last_sync == 0
+    
+    @@last_sync = now
+
   rescue Errno::ECONNREFUSED => ex
     @halt_message = "Couldn't connect to PyBitmessage server.  Is it running with the API enabled? " 
     halt(500, haml(:couldnt_reach_pybitmessage))

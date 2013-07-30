@@ -1,3 +1,5 @@
+* We now prepend "Re: " to replies to be consistent with PyBitmessage.
+
 * You can now access threads with blank subjects.  Previously there
   wasn't a visible link to click on.  (Github Issue #2)
 

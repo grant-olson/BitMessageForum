@@ -40,14 +40,14 @@
     - if @folder.name == "chans"
       %form.button{:method => :get, :action => "/messages/compose/"}
         %input{:type => :hidden, :name => :to, :value => @address}
-        %input{:type => :hidden, :name => :subject, :value => @thread}
+        %input{:type => :hidden, :name => :subject, :value => "Re: " + @thread}
         %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
         %input.small_button{:type => :submit, :value => "Reply Chan"}
     &nbsp;
     - if @folder.name != "chans" || (@address != message['fromAddress'])
       %form.button{:method => :get, :action => "/messages/compose/" }
         %input{:type => :hidden, :name => :to, :value => message['fromAddress']}
-        %input{:type => :hidden, :name => :subject, :value => @thread}
+        %input{:type => :hidden, :name => :subject, :value => "Re: " + @thread}
         %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
         %input.small_button{:type => :submit, :value => "Reply"}
     %form.button{:method => :post, :action => "/messages/delete/", :onsubmit => "return confirm('Really delete?')"}

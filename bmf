@@ -17,8 +17,11 @@ puts "Doing initial sync before starting..."
 sync
 
 Thread.new do
+
   while(1) do
-    sleep(60)
+    sync_interval = Settings.instance.sync_interval || 60
+    puts "Background sync sleeping for #{sync_interval} seconds..."
+    sleep(sync_interval)
     begin
       puts "Initiating background sync..."
       sync

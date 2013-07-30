@@ -7,11 +7,12 @@ class Settings
 
   SETTINGS_AND_DESCRIPTIONS = {
     :server_url => "Url of the BitMessage server to interface with.",
-                    :sig => "Signature line to attach to messages.",
-                    :default_send_address => "Default FROM address for messages.",
-                    :server_interface => "Internet interface to listen on.  Set to 0.0.0.0 to open up BMF to the network.  WARNING!!! Anyone who can access your IP can read/post/delete/etc.",
-                    :server_port => "Internet port to listen on.",
-                    :display_sanitized_html => "Show sanitized HTML minus scripts, css, and any non-inline images."
+    :sig => "Signature line to attach to messages.",
+    :default_send_address => "Default FROM address for messages.",
+    :server_interface => "Internet interface to listen on.  Set to 0.0.0.0 to open up BMF to the network.  WARNING!!! Anyone who can access your IP can read/post/delete/etc.",
+    :server_port => "Internet port to listen on.",
+    :display_sanitized_html => "Show sanitized HTML minus scripts, css, and any non-inline images.",
+    :sync_interval => "Frequency to sync inbox with PyBitmessage, in seconds.  Default 60"
   }
 
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys

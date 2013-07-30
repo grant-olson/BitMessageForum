@@ -1,3 +1,6 @@
+* We send messages in a background thread so the app doesn't hang.
+  (Github Issue #34)
+
 * We now prepend "Re: " to replies to be consistent with PyBitmessage.
 
 * You can now access threads with blank subjects.  Previously there

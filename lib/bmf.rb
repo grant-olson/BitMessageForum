@@ -159,24 +159,32 @@ class BMF < Sinatra::Base
     message = Base64.encode64(params[:message])
     broadcast = params[:broadcast]
 
-    if broadcast
-      res = XmlrpcClient.instance.sendBroadcast(from, subject, message)
-    else
-      res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
+
+    res = "Sending message in background..."
+
+    Thread.new do
+      puts "Starting background send of message..."
+      if broadcast
+        res = XmlrpcClient.instance.sendBroadcast(from, subject, message)
+      else
+        res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
+      end
+
+      if XmlrpcClient.is_error? res
+        puts "BACKGROUND SEND FAILED! #{res}"
+      else
+        puts "Background send seemed to finish successfully"
+      end
     end
     
-    if XmlrpcClient.is_error? res
-      halt(500, haml(res))
+    confirm_message = "Sending in background..."
+    if params[:goto] && params[:goto] != ""
+      cookies[:flash] = confirm_message
+      redirect params[:goto]
     else
-      confirm_message = "Sent.  Confirmation #{res}"
-      if params[:goto] && params[:goto] != ""
-        cookies[:flash] = confirm_message
-        redirect params[:goto]
-      else
-        haml confirm_message
-      end
-      
+      haml confirm_message
     end
+      
   end
 
   post "/messages/delete/", :provides => :html do

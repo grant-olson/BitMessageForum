@@ -1,6 +1,8 @@
 require 'singleton'
 require 'base64'
 require 'json'
+require 'thread'
+
 require_relative 'xmlrpc_client.rb'
 
 class AddressStore
@@ -19,12 +21,18 @@ class AddressStore
 
   def update
     address_infos = JSON.parse(XmlrpcClient.instance.listAddresses)['addresses']
-    address_infos.each do |address_info|
-      address = address_info['address']
-      if !@addresses.has_key? address
-        @addresses[address] = address_info
-        log "Added #{address}."
+
+    lock = Mutex.new
+
+    lock.synchronize do
+      address_infos.each do |address_info|
+        address = address_info['address']
+        if !@addresses.has_key? address
+          @addresses[address] = address_info
+          log "Added #{address}."
+        end
       end
+      
     end
   end
 end

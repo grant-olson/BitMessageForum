@@ -1,6 +1,8 @@
 require 'singleton'
 require 'base64'
 require 'json'
+require 'thread'
+
 require_relative 'xmlrpc_client.rb'
 
 class MessageStore
@@ -12,6 +14,7 @@ class MessageStore
     @messages = {} # messages by msgid
     @address_last_updates = {}
     @thread_last_updates = {}
+    @new_messages = 0
     # update
   end
   
@@ -101,19 +104,37 @@ class MessageStore
   end
 
   def update
-    init_gc
 
     inbox_messages = JSON.parse(XmlrpcClient.instance.getAllInboxMessages)
-    new_messages = process_messages(inbox_messages['inboxMessages'])
-
     sent_messages = JSON.parse(XmlrpcClient.instance.getAllSentMessages)
-    process_messages(sent_messages['sentMessages'], "sent")
+    
+    new_messages = 0
 
-    do_gc
+    lock = Mutex.new
+    lock.synchronize do
+      init_gc
+
+      @new_messages += process_messages(inbox_messages['inboxMessages'])
+      process_messages(sent_messages['sentMessages'], "sent")
+
+      do_gc
+    end
 
     new_messages
   end
   
+  def pop_new_message_count
+    new = 0
+
+    Mutex.new.synchronize do
+      new += @new_messages
+      @new_messages = 0
+    end
+
+    new
+  end
+  
+
   def by_recipient sent_or_received=:nil
  
     #display messages

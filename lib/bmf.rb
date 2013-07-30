@@ -49,27 +49,15 @@ class BMF < Sinatra::Base
     register Sinatra::Reloader
   end
 
+
+  # 'sync' really updates new message count now that we're threaded
   def sync
     @@last_sync ||= 0
-    now = Time.now.to_i
 
-    return if (@@last_sync + 60) > now # throttle requests 1 per minute
-
-
-    @new_messages = MessageStore.instance.update
-    AddressStore.instance.update
-
-    # Don't show '8 million new messages!' when server boots.
+    @new_messages = MessageStore.instance.pop_new_message_count
     @new_messages = 0 if @@last_sync == 0
-    
-    @@last_sync = now
 
-  rescue Errno::ECONNREFUSED => ex
-    @halt_message = "Couldn't connect to PyBitmessage server.  Is it running with the API enabled? " 
-    halt(500, haml(:couldnt_reach_pybitmessage))
-  rescue JSON::ParserError => ex
-    @halt_message = "Couldn't sync.  It seems like PyBitmessage is running but refused access.  Do you have the correct info in config/settings.yml? "
-    halt(500, haml(:couldnt_reach_pybitmessage))
+    @@last_sync = 1
   end
 
 

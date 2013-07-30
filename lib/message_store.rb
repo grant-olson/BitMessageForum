@@ -44,8 +44,8 @@ class MessageStore
   end
 
   def add_message msgid, m
-    m["message"] = Base64.decode64(m["message"])
-    m["subject"] = Base64.decode64(m["subject"])
+    m["message"] = Base64.decode64(m["message"]).force_encoding("utf-8")
+    m["subject"] = Base64.decode64(m["subject"]).force_encoding("utf-8")
 
     m["subject"] = " " if m["subject"] == ""
     m["subject"] = "Re:  " if m["subject"] == "Re: "

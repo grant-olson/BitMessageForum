@@ -48,6 +48,8 @@ class MessageStore
     m["subject"] = Base64.decode64(m["subject"])
 
     m["subject"] = " " if m["subject"] == ""
+    m["subject"] = "Re:  " if m["subject"] == "Re: "
+
     messages[msgid] = m
 
     to_address = m["toAddress"]

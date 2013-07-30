@@ -1,3 +1,6 @@
+* You can now access threads with blank subjects.  Previously there
+  wasn't a visible link to click on.  (Github Issue #2)
+
 * You can add and delete subscriptions from the new subscriptions page.
   (Github Issue #26)
 

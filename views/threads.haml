@@ -30,7 +30,10 @@
       %div{:class => (new ? "new" : "old")}
         %input{:type => :checkbox, :name => "thread__#{thread_no}", :value=> thread}
         %a{:href => "./#{CGI.escape(thread)}"}
-          &= thread
+          - if thread == " "
+            &nbsp;
+          - else
+            &= thread
 
         %span.small
           &nbsp;

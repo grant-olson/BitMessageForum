@@ -25,14 +25,17 @@ class AddressStore
     lock = Mutex.new
 
     lock.synchronize do
+      new_addresses = 0
+
       address_infos.each do |address_info|
         address = address_info['address']
         if !@addresses.has_key? address
+          new_addresses += 1
           @addresses[address] = address_info
-          log "Added #{address}."
         end
       end
-      
+
+      log "Added #{new_addresses} addresses..." if new_addresses > 0
     end
   end
 end

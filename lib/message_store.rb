@@ -66,9 +66,6 @@ class MessageStore
       to_address += " " + hack_mailing_list_name
       m["toAddress"] = to_address
     end
-
-
-    log "Added new message #{msgid}."
   end
 
   def process_messages new_messages, source="inbox"
@@ -87,6 +84,8 @@ class MessageStore
       end
     end
 
+    log "Added #{processed_messages} messages..." if processed_messages > 0
+
     processed_messages
   end
 
@@ -95,12 +94,15 @@ class MessageStore
   end
 
   def do_gc
+    deleted_messages = 0
     messages.keys.each do |old_msgid|
       if !@new_msgids[old_msgid]
+        deleted_messages += 1
         messages.delete(old_msgid)
-        log "Deleted message #{old_msgid}."
       end
     end
+
+    log "Deleted #{deleted_messages}..." if deleted_messages > 0
   end
 
   def update

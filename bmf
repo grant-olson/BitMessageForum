@@ -19,7 +19,8 @@ sync
 Thread.new do
 
   while(1) do
-    sync_interval = Settings.instance.sync_interval || 60
+    sync_interval = Settings.instance.sync_interval.to_i
+    sync_interval = 60 if sync_interval == 0
     puts "Background sync sleeping for #{sync_interval} seconds..."
     sleep(sync_interval)
     begin

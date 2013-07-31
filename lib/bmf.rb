@@ -203,11 +203,21 @@ class BMF < Sinatra::Base
   end
 
   get "/subscriptions/", :provides => :html do
+
+    res = XmlrpcClient.instance.listSubscriptions
+
+    if XmlrpcClient.is_error? res
+      @subscriptions = []
+    else
+      @subscriptions = JSON.parse(res)['subscriptions']
+    end
+    
     haml :subscriptions
   end
   
   post "/subscriptions/create/", :provides => :html do
     res = XmlrpcClient.instance.addSubscription params[:address], Base64.encode64(params[:label])
+    
     if XmlrpcClient.is_error? res
       halt(500, haml("Error subscribing.  #{res}"))
     else

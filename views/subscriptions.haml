@@ -30,6 +30,18 @@
 
 %h2 Current Subscriptions
 
-%p
-  %i
-    Sorry, the PyBitmessage API doesn't support listing of Subscriptions.  I'm currently writing a patch.
+- if @subscriptions.empty?
+  %p
+    %i
+      You either don't have any subscriptions, or your version of PyBitmessage doesn't support the listSubscriptions API call.
+- else
+  %table
+    %tr
+      %th Label
+      %th Address
+    - @subscriptions.each do |subscription|
+    - next if !subscription['enabled']
+      %tr
+        %th= Base64.decode64(subscription['label']).force_encoding('utf-8')
+        %td= subscription['address']
+  

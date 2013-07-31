@@ -38,3 +38,4 @@ Thread.new do
   
 end
 
+BMF.run!

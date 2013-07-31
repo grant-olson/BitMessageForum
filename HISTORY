@@ -1,3 +1,8 @@
+* When PyBitmessage supports getAllXMessageIds, we do a two-pass
+  message collection that only grabs a full message if it's new, and
+  grabs the full messages one-at-a-time, to lighten the load on system
+  resources when you have a large inbox and/or large messages.
+
 * We now Highlight folders with new messages in the sidebar.
 
 * Thread-safe alerter so we can send alerts from background jobs to

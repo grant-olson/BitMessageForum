@@ -82,6 +82,12 @@ class MessageStore
     end
   end
 
+  def get_full_message mailbox, msgid
+    msg_json = XmlrpcClient.instance.send("get#{mailbox.capitalize}MessageByID", msgid)
+    JSON.parse(msg_json)["#{mailbox}Message"][0]
+  end
+  
+
   def process_messages new_messages, source="inbox"
     processed_messages = 0
 
@@ -92,9 +98,19 @@ class MessageStore
 
       if !@messages.has_key?(msgid)
         processed_messages += 1
-        m["_source"] = source
-        add_message msgid, m
-        update_times m
+
+        if m["message"] # cliend doesn't support getXMessageIds, so we already have everything
+          full_message = m
+        else
+          full_message = get_full_message(source, msgid)
+        end
+        
+
+        full_message["_source"] = source
+
+        add_message msgid, full_message
+
+        update_times full_message
       end
     end
 
@@ -119,10 +135,23 @@ class MessageStore
     log "Deleted #{deleted_messages}..." if deleted_messages > 0
   end
 
+  def get_all_message_ids mailbox
+    method = "getAll#{mailbox.capitalize}MessageIds"
+    msgids = XmlrpcClient.instance.send(method)
+    if XmlrpcClient.is_error?(msgids) && msgids.downcase.include?("invalid method")
+      log "PyBitmessage doesn't support #{method}.  Falling back to getAll#{mailbox.capitalize}Messages.  Using a version of Pybitmessage that supports #{method} will dramatically increase performance"
+      msgids = XmlrpcClient.instance.send("getAll#{mailbox.capitalize}Messages")
+      JSON.parse(msgids)["#{mailbox}Messages"]
+    else
+      JSON.parse(msgids)["#{mailbox}MessageIds"]
+    end
+  end
+  
+
   def update
 
-    inbox_messages = JSON.parse(XmlrpcClient.instance.getAllInboxMessages)
-    sent_messages = JSON.parse(XmlrpcClient.instance.getAllSentMessages)
+    inbox_messages = get_all_message_ids "inbox"
+    sent_messages = get_all_message_ids "sent"
     
     new_messages = 0
 
@@ -130,8 +159,8 @@ class MessageStore
     lock.synchronize do
       init_gc
 
-      new_messages += process_messages(inbox_messages['inboxMessages'])
-      process_messages(sent_messages['sentMessages'], "sent")
+      new_messages += process_messages(inbox_messages)
+      process_messages(sent_messages, "sent")
 
       do_gc
     end

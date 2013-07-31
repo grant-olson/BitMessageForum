@@ -8,7 +8,7 @@ require_relative 'xmlrpc_client.rb'
 class MessageStore
   include Singleton
 
-  attr_reader :messages, :address_last_updates, :thread_last_updates
+  
 
   def initialize
     @messages = {} # messages by msgid
@@ -21,15 +21,29 @@ class MessageStore
   def log x
     puts x
   end
+
+#  attr_reader :messages, :address_last_updates, :thread_last_updates
+
+  def messages
+    Mutex.new.synchronize { @messages.dup.freeze }
+  end
+  
+  def address_last_updates
+    Mutex.new.synchronize { @address_last_updates.dup.freeze }
+  end
+
+  def thread_last_updates
+    Mutex.new.synchronize { @thread_last_updates.dup.freeze }
+  end
     
   def update_times m
     received_time = Message.time(m)
     to_address = m["toAddress"]
 
     # update channel access time
-    address_last_updates[to_address] ||= 0
-    if address_last_updates[to_address] < received_time
-      address_last_updates[to_address] = received_time
+    @address_last_updates[to_address] ||= 0
+    if @address_last_updates[to_address] < received_time
+      @address_last_updates[to_address] = received_time
     end
 
     subject = m["subject"]
@@ -38,11 +52,11 @@ class MessageStore
     end
     
     # update thread access time
-    thread_last_updates[to_address] ||= {}
-    thread_last_updates[to_address][subject] ||= 0
+    @thread_last_updates[to_address] ||= {}
+    @thread_last_updates[to_address][subject] ||= 0
     
-    if thread_last_updates[to_address][subject] < received_time
-      thread_last_updates[to_address][subject] = received_time
+    if @thread_last_updates[to_address][subject] < received_time
+      @thread_last_updates[to_address][subject] = received_time
     end
   end
 
@@ -53,7 +67,7 @@ class MessageStore
     m["subject"] = " " if m["subject"] == ""
     m["subject"] = "Re:  " if m["subject"] == "Re: "
 
-    messages[msgid] = m
+    @messages[msgid] = m
 
     to_address = m["toAddress"]
 
@@ -95,10 +109,10 @@ class MessageStore
 
   def do_gc
     deleted_messages = 0
-    messages.keys.each do |old_msgid|
+    @messages.keys.each do |old_msgid|
       if !@new_msgids[old_msgid]
         deleted_messages += 1
-        messages.delete(old_msgid)
+        @messages.delete(old_msgid)
       end
     end
 
@@ -143,7 +157,7 @@ class MessageStore
 
     by_recipient = {}
 
-    messages.each do |id, m|
+    @messages.each do |id, m|
       if sent_or_received
         next if sent_or_received == :sent && !Message.sent?(m)
         next if sent_or_received == :received && !Message.received?(m)

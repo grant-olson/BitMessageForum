@@ -8,7 +8,11 @@ require_relative 'xmlrpc_client.rb'
 class AddressStore
   include Singleton
 
-  attr_reader :addresses
+#  attr_reader :addresses
+
+  def addresses
+    Mutex.new.synchronize { @addresses.dup.freeze }
+  end
 
   def initialize
     @addresses = {}

@@ -19,6 +19,7 @@ class XmlrpcClient
   end
 
   def self.is_error? response_string
+    return true if response_string =~ /^Invalid Method:/
     response_string =~ /^API Error /
   end
 end

@@ -9,6 +9,14 @@ class Folder
     @messages = MessageStore.instance.send(folder_name)
   end
 
+  def new_messages?
+    @messages.each_pair do |address, threads|
+      return true if ThreadStatus.instance.new_messages_for_address?(address, threads.keys)
+    end
+
+    return false
+  end
+  
   def messages opts={}
     msgs = @messages
     

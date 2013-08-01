@@ -1,3 +1,5 @@
+* We now Highlight folders with new messages in the sidebar.
+
 * Thread-safe alerter so we can send alerts from background jobs to
   main thread and eventually the user.  (Github Issue #35)
 

@@ -59,18 +59,18 @@
     .container
       .body
         - if Alert.instance.peek_new_messages != 0
-          .new_messages
+          .alert.alert-success
             = Alert.instance.pop_new_messages
             new messages!
 
         - if !Alert.instance.peek.empty?
-          .flash
+          .alert.alert-success
             %ul
               - Alert.instance.pop.each do |alert|
                 %li= alert
 
         - if cookies[:flash] && cookies[:flash] != ""
-          .flash
+          .alert.alert-success
             = cookies[:flash]
             - cookies.delete(:flash)
         = yield

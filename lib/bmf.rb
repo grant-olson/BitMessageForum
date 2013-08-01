@@ -50,19 +50,6 @@ class BMF < Sinatra::Base
   end
 
 
-  # 'sync' really updates new message count now that we're threaded
-  def sync
-    @@last_sync ||= 0
-
-    @new_messages = MessageStore.instance.pop_new_message_count
-    @new_messages = 0 if @@last_sync == 0
-
-    @@last_sync = 1
-  end
-
-
-
-
   get "/", :provides => :html do
     haml :home
   end
@@ -128,8 +115,6 @@ class BMF < Sinatra::Base
   end
 
   get "/messages/compose/", :provides => :html do
-    sync #need address book if this is the first page we hit
-
     @to = params[:to]
     @from = params[:from]
     @subject = params[:subject]
@@ -163,23 +148,26 @@ class BMF < Sinatra::Base
     res = "Sending message in background..."
 
     Thread.new do
-      puts "Starting background send of message..."
-      if broadcast
-        res = XmlrpcClient.instance.sendBroadcast(from, subject, message)
-      else
-        res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
-      end
+      begin
+        if broadcast
+          res = XmlrpcClient.instance.sendBroadcast(from, subject, message)
+        else
+          res = XmlrpcClient.instance.sendMessage(to, from, subject, message)
+        end
 
-      if XmlrpcClient.is_error? res
-        puts "BACKGROUND SEND FAILED! #{res}"
-      else
-        puts "Background send seemed to finish successfully"
+        if XmlrpcClient.is_error? res
+          Alert.instance << "BACKGROUND SEND FAILED! #{res}"
+        else
+          Alert.instance << "Background send seemed to finish successfully"
+        end
+      rescue Exception => ex
+        Alert.instance << "BACKGROUND SEND FAILED! #{ex.message}"
       end
     end
     
     confirm_message = "Sending in background..."
     if params[:goto] && params[:goto] != ""
-      cookies[:flash] = confirm_message
+      Alert.instance << confirm_message
       redirect params[:goto]
     else
       haml confirm_message
@@ -236,8 +224,6 @@ class BMF < Sinatra::Base
   
 
   get "/:folder/", :provides => :html do
-    sync
-
     folder = Folder.new(params[:folder])
     @messages = folder.messages(:sort => :new)
     @addresses = AddressStore.instance.addresses
@@ -245,8 +231,6 @@ class BMF < Sinatra::Base
   end
 
   get "/:folder/:address/", :provides => :html do
-    sync
-    
     @addresses = AddressStore.instance.addresses
     folder = Folder.new(params[:folder])
     @address = params[:address]
@@ -258,8 +242,6 @@ class BMF < Sinatra::Base
   end
 
   get "/:folder/:address/:thread", :provides => :html do
-    sync
-
     @folder = Folder.new(params[:folder])
     
     @address = params[:address]

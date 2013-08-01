@@ -1,39 +1,47 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-
-require_relative "lib/bmf.rb"
 require 'thread'
 
+require_relative "lib/bmf.rb"
+require_relative "lib/alert.rb"
+
+def puts_and_alert msg
+  puts msg
+  Alert.instance << msg
+end
+
 def sync
-  @new_messages = MessageStore.instance.update
+  new_messages = MessageStore.instance.update
+  Alert.instance.add_new_messages(new_messages)
   AddressStore.instance.update
 
-  rescue Errno::ECONNREFUSED => ex
-    puts "Couldn't connect to PyBitmessage server.  Is it running with the API enabled? " 
-  rescue JSON::ParserError => ex
-    puts "Couldn't sync.  It seems like PyBitmessage is running but refused access.  Do you have the correct info in config/settings.yml? "
+rescue Errno::ECONNREFUSED => ex
+  puts_and_alert "Background sync.  Couldn't connect to PyBitmessage server.  Is it running with the API enabled? " 
+rescue JSON::ParserError => ex
+  puts_and_alert "Couldn't background sync.  It seems like PyBitmessage is running but refused access.  Do you have the correct info in config/settings.yml? "
+rescue Exception => ex
+  puts_and_alert "Background Sync failed with #{ex.message}"
 end
 
 puts "Doing initial sync before starting..."
 sync
+Alert.instance.pop_new_messages # don't show new message alert on bood.
 
 Thread.new do
 
   while(1) do
     sync_interval = Settings.instance.sync_interval.to_i
     sync_interval = 60 if sync_interval == 0
-    puts "Background sync sleeping for #{sync_interval} seconds..."
     sleep(sync_interval)
     begin
-      puts "Initiating background sync..."
       sync
     rescue Exception => ex
-      puts "Background sync faild with #{ex.message}"
+      msg = "Background sync faild with #{ex.message}"
+      Alert.instance << msg
+      puts msg
       puts ex.backtrace.join("\n")
     end
-
-    puts "Finished background sync"
   end
   
 end

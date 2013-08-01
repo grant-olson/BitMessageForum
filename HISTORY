@@ -1,3 +1,6 @@
+* Thread-safe alerter so we can send alerts from background jobs to
+  main thread and eventually the user.  (Github Issue #35)
+
 * We send messages in a background thread so the app doesn't hang.
   (Github Issue #34)
 

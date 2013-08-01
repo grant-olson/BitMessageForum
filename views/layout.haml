@@ -40,10 +40,18 @@
           Settings
 
   .content
-    - if @new_messages && @new_messages > 0
+
+    - if Alert.instance.peek_new_messages != 0
       .new_messages
-        = @new_messages
+        = Alert.instance.pop_new_messages
         new messages!
+
+    - if !Alert.instance.peek.empty?
+      .flash
+        %ul
+          - Alert.instance.pop.each do |alert|
+            %li= alert
+	
 
     - if cookies[:flash] && cookies[:flash] != ""
       .flash

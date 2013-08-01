@@ -130,7 +130,7 @@ class MessageStore
     lock.synchronize do
       init_gc
 
-      @new_messages += process_messages(inbox_messages['inboxMessages'])
+      new_messages += process_messages(inbox_messages['inboxMessages'])
       process_messages(sent_messages['sentMessages'], "sent")
 
       do_gc

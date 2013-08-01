@@ -1,3 +1,5 @@
+* Made site look good with Bootstrap (medoix) (Github Issue #4)
+
 * We now Highlight folders with new messages in the sidebar.
 
 * Thread-safe alerter so we can send alerts from background jobs to

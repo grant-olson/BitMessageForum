@@ -29,16 +29,12 @@
     - if new
       %span{:class => "label label-success"}New!
     - body = message['message']
-    - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
-    - body.each do |paragraph|
-      - if paragraph == "------------------------------------------------------"
-        %small
-          %i
-            [Hiding Quoted Text]
-        - break
-      - else
-        %p
-          = safe_text(paragraph)
+    - body = body.split("------------------------------------------------------").map { |line| line.strip}.select{|line| line != ""}
+    = safe_text body.first
+    - if body[1..-1] != []
+      %small
+        %i
+          [Hiding Quoted Text]
 
     - if @folder.name == "chans"
       %form.button.btn{:method => :get, :action => "/messages/compose/"}

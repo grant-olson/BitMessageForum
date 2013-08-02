@@ -21,7 +21,7 @@
       - else
         = message['fromAddress']
 
-      %span.small
+      %small
         (#{Message.sent_or_received(message)}
         = Time.at(message_time).to_datetime
         )
@@ -32,8 +32,8 @@
     - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
     - body.each do |paragraph|
       - if paragraph == "------------------------------------------------------"
-        %p
-          %i.small
+        %small
+          %i
             [Hiding Quoted Text]
         - break
       - else

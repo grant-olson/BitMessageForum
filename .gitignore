@@ -1,3 +1,5 @@
 *~
 config/settings.yml
 config/thread_status_stash
+lib/bmf/config/settings.yml
+lib/bmf/config/thread_status_stash

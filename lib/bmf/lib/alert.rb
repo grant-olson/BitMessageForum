@@ -1,7 +1,7 @@
 require 'singleton'
 require 'thread'
 
-class Alert
+class BMF::Alert
   include Singleton
 
   def initialize

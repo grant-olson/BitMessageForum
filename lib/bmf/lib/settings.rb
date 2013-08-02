@@ -2,7 +2,7 @@ require "singleton"
 require 'yaml'
 require 'fileutils'
 
-class Settings
+class BMF::Settings
   include Singleton
 
   SETTINGS_AND_DESCRIPTIONS = {

@@ -9,7 +9,7 @@
     - @settings.each_pair do |key, value|
       %tr
         %th= key
-        %td= Settings::SETTINGS_AND_DESCRIPTIONS[key]
+        %td= BMF::Settings::SETTINGS_AND_DESCRIPTIONS[key]
         %td
           %input{:type => :text, :name => key, :value => value, :size => 50}
 

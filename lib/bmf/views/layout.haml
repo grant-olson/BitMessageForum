@@ -43,22 +43,22 @@
             %li
               %a{:href => "/inbox/"}
                 Inbox
-                - if Folder.new('inbox').new_messages?
+                - if BMF::Folder.new('inbox').new_messages?
                   %span{:style => "color:green;"} ✓ 
             %li
               %a{:href => "/lists/"}
                 Lists
-                - if Folder.new('lists').new_messages?
+                - if BMF::Folder.new('lists').new_messages?
                   %span{:style => "color:green;"} ✓ 
             %li
               %a{:href => "/chans/"}
                 Chans
-                - if Folder.new('chans').new_messages?
+                - if BMF::Folder.new('chans').new_messages?
                   %span{:style => "color:green;"} ✓ 
             %li
               %a{:href => "/sent/"}
                 Sent
-                - if Folder.new('sent').new_messages?
+                - if BMF::Folder.new('sent').new_messages?
                   %span{:style => "color:green;"} ✓ 
             %li
               %a{:href => "/identities/"} Identities
@@ -70,15 +70,15 @@
         / /.nav-collapse
     .container
       .body
-        - if Alert.instance.peek_new_messages != 0
+        - if BMF::Alert.instance.peek_new_messages != 0
           .alert.alert-success
-            = Alert.instance.pop_new_messages
+            = BMF::Alert.instance.pop_new_messages
             new messages!
 
-        - if !Alert.instance.peek.empty?
+        - if !BMF::Alert.instance.peek.empty?
           .alert.alert-success
             %ul
-              - Alert.instance.pop.each do |alert|
+              - BMF::Alert.instance.pop.each do |alert|
                 %li= alert
 
         - if cookies[:flash] && cookies[:flash] != ""

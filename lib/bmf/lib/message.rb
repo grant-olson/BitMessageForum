@@ -1,4 +1,4 @@
-module Message
+module BMF::Message
   def self.time(m)
     time = m['receivedTime']
     time = m['lastActionTime'] if time.nil?

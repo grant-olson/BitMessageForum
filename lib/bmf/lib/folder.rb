@@ -1,4 +1,7 @@
-class Folder
+require_relative "message_store.rb"
+require_relative "thread_status.rb"
+
+class BMF::Folder
   VALID_FOLDERS = %w{chans inbox sent lists}
 
   attr_reader :name
@@ -6,12 +9,12 @@ class Folder
   def initialize folder_name
     raise "Bad folder #{folder_name}" if !VALID_FOLDERS.include?(folder_name)
     @name = folder_name
-    @messages = MessageStore.instance.send(folder_name)
+    @messages = BMF::MessageStore.instance.send(folder_name)
   end
 
   def new_messages?
     @messages.each_pair do |address, threads|
-      return true if ThreadStatus.instance.new_messages_for_address?(address, threads.keys)
+      return true if BMF::ThreadStatus.instance.new_messages_for_address?(address, threads.keys)
     end
 
     return false
@@ -21,7 +24,7 @@ class Folder
     msgs = @messages
     
     if opts[:sort] == :new
-      msgs = msgs.sort{ |a,b| MessageStore.instance.address_last_updates[a[0]] <=> MessageStore.instance.address_last_updates[b[0]] }.reverse
+      msgs = msgs.sort{ |a,b| BMF::MessageStore.instance.address_last_updates[a[0]] <=> BMF::MessageStore.instance.address_last_updates[b[0]] }.reverse
     end
 
     msgs
@@ -31,7 +34,7 @@ class Folder
     threads = @messages[address]
 
     if threads && opts[:sort] == :new
-      threads = threads.sort{ |a,b| MessageStore.instance.thread_last_updates[address][a[0]] <=> MessageStore.instance.thread_last_updates[address][b[0]] }.reverse
+      threads = threads.sort{ |a,b| BMF::MessageStore.instance.thread_last_updates[address][a[0]] <=> BMF::MessageStore.instance.thread_last_updates[address][b[0]] }.reverse
     end
 
     threads
@@ -46,7 +49,7 @@ class Folder
     msgs = [] if msgs.nil?
 
     if opts[:sort] == :old
-      msgs = msgs.sort { |a,b| Message.time(a) <=> Message.time(b) }
+      msgs = msgs.sort { |a,b| BMF::Message.time(a) <=> BMF::Message.time(b) }
     end
 
     msgs
@@ -56,7 +59,7 @@ class Folder
     msgs = thread_messages(address, thread)
     return [] if msgs.nil?
 
-    msgs.map{ |msg| msg['msgid']}.map{ |msgid| XmlrpcClient.instance.trashMessage(msgid) + msgid }
+    msgs.map{ |msg| msg['msgid']}.map{ |msgid| BMF::XmlrpcClient.instance.trashMessage(msgid) + msgid }
   end
   
 end

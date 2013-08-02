@@ -5,7 +5,7 @@ require 'thread'
 
 require_relative 'xmlrpc_client.rb'
 
-class AddressStore
+class BMF::AddressStore
   include Singleton
 
 #  attr_reader :addresses
@@ -24,7 +24,7 @@ class AddressStore
   end
 
   def update
-    address_infos = JSON.parse(XmlrpcClient.instance.listAddresses)['addresses']
+    address_infos = JSON.parse(BMF::XmlrpcClient.instance.listAddresses)['addresses']
 
     lock = Mutex.new
 

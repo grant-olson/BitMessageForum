@@ -1,3 +1,5 @@
+* Made site look good with Bootstrap (medoix) (Github Issue #4)
+
 * When PyBitmessage supports getAllXMessageIds, we do a two-pass
   message collection that only grabs a full message if it's new, and
   grabs the full messages one-at-a-time, to lighten the load on system

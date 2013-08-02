@@ -4,21 +4,23 @@
 
 %div
   %form{:method => :post, :action => "/identities/new/"}
-    Label:
-    %input{:type => :text, :name => :label, :size => 50}
-    %input{:type => :submit, :value => 'Create!' }
+    %label
+      Label:
+      %input.form-control{:type => :text, :name => :label, :size => 50}
+    %input.btn{:type => :submit, :value => 'Create!' }
 
 %h3 Create deterministic address
 
 %div
   %form{:method => :post, :action => "/identities/new/"}
-    Label:
-    %input{:type => :text, :name => :passphrase, :size => 50}
-    %input{:type => :submit, :value => 'Create!' }
+    %label
+      Label:
+      %input.form-control{:type => :text, :name => :passphrase, :size => 50}
+    %input.btn{:type => :submit, :value => 'Create!' }
 
 
 %h3 Current Identities
-%table
+%table.table.table-striped
   %tr
     %th Label
     %th Address

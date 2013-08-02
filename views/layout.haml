@@ -1,78 +1,103 @@
-%html
-  %title
-    BMF - BitMessageForum
-  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/bitmessageforum.css'}
-%body
-  %h1
-    %a{:href => "/"}
-      BMF
-    \ - BitMessageForum
-  %p
-    Navigating BitMessage since 2013!
-  .nav
-    %ul
-      %li
-        %a{:href => "/messages/compose/"}
-          Compose
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title BMF - BitMessageForum
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "", :name => "author"}/
+    / HTML5 shim, for IE6-8 support of HTML elements
+    /[if lt IE 9]
+      <script src="/js/html5.js"></script>
+    / styles
+    %link{:href => "/css/bootstrap.min.css", :rel => "stylesheet"}/
+    :css
+      body {
+        padding-top: 50px;
+      }
+      .body
+        padding: 40px 15px;
+        text-align: center;
+      }
+    / fav and touch icons
+    %link{:href => "/images/favicon.ico", :rel => "shortcut icon"}/
+    %link{:href => "/images/apple-touch-icon.png", :rel => "apple-touch-icon"}/
+    %link{:href => "/images/apple-touch-icon-57x57.png", :rel => "apple-touch-icon", :sizes => "57x57"}/
+    %link{:href => "/images/apple-touch-icon-72x72.png", :rel => "apple-touch-icon", :sizes => "72x72"}/
+    %link{:href => "/images/apple-touch-icon-114x114.png", :rel => "apple-touch-icon", :sizes => "114x114"}/
+    %link{:href => "/images/apple-touch-icon-144x144.png", :rel => "apple-touch-icon", :sizes => "144x144"}/
 
-    %ul
-      %li{:class => Folder.new('inbox').new_messages? ? :new : :old }
-        %a{:href => "/inbox/"}
-          Inbox
-      %li{:class => Folder.new('lists').new_messages? ? :new : :old }
-        %a{:href => "/lists/"}
-          Lists
-      %li{:class => Folder.new('chans').new_messages? ? :new : :old }
-        %a{:href => "/chans/"}
-          Chans
-      %li{:class => Folder.new('sent').new_messages? ? :new : :old }
-        %a{:href => "/sent/"}
-          Sent Mail
+  %body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .container
+        %button.navbar-toggle{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        %a.navbar-brand{:href => "#"} BMF
+        .nav-collapse.collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{:href => "/"} Home
+            %li
+              %a{:href => "/messages/compose/"} Compose
+            %li
+              %a{:href => "/inbox/"} Inbox
+            %li
+              %a{:href => "/lists/"} Lists
+            %li
+              %a{:href => "/chans/"} Chans
+            %li
+              %a{:href => "/sent/"} Sent
+            %li
+              %a{:href => "/identities/"} Identities
+            %li
+              %a{:href => "/subscriptions/"} Subscriptions
+            %li
+              %a{:href => "/settings/"} Settings
 
-    Edit
-    %ul
-      %li
-        %a{:href => "/identities/"}
-          Identities
-      %li
-        %a{:href => "/subscriptions/"}
-          Subscriptions
-      %li
-        %a{:href => "/settings/"}
-          Settings
+        / /.nav-collapse
+    .container
+      .body
+        - if Alert.instance.peek_new_messages != 0
+          .alert.alert-success
+            = Alert.instance.pop_new_messages
+            new messages!
 
-  .content
+        - if !Alert.instance.peek.empty?
+          .alert.alert-success
+            %ul
+              - Alert.instance.pop.each do |alert|
+                %li= alert
 
-    - if Alert.instance.peek_new_messages != 0
-      .new_messages
-        = Alert.instance.pop_new_messages
-        new messages!
+        - if cookies[:flash] && cookies[:flash] != ""
+          .alert.alert-success
+            = cookies[:flash]
+            - cookies.delete(:flash)
+        = yield
 
-    - if !Alert.instance.peek.empty?
-      .flash
-        %ul
-          - Alert.instance.pop.each do |alert|
-            %li= alert
-	
+      / /body
+      %hr
+      .footer
+        BMF Chan: bmf_support BM-2DBsnPXWVR7PbC5qMEYAdgtaSQnkr5X7ng
+        %br
+        Release/Security Notifications Only - Subscribe to
+        %a{:href => "/subscriptions/?label=BMF+Notifications&address=BM-2DABVRoCRtwKZLyVCBZ3n6PuC4n7a4zLsA"}
+          BM-2DABVRoCRtwKZLyVCBZ3n6PuC4n7a4zLsA
+        %br
+        Author's Address -
+        %a{:href => "/messages/compose/?to=BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU"}
+          BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU
+        %br
+        Software Copyright 2013 - BSD Licensed - <a href='https://github.com/grant-olson/BitMessageForum'>Fork Me @ Github</a> -
+        %a{:href => "https://github.com/grant-olson/BitMessageForum/issues" } Bug Tracker
+        %br
+        Donate 1JVWWSy6jaHDQJ8EmXeFjNTFuMY96k2jb1
 
-    - if cookies[:flash] && cookies[:flash] != ""
-      .flash
-        = cookies[:flash]
-        - cookies.delete(:flash)
-    = yield
+    / /container
 
-  .footer
-    BMF Chan: bmf_support BM-2DBsnPXWVR7PbC5qMEYAdgtaSQnkr5X7ng
-    %br
-    Release/Security Notifications Only - Subscribe to
-    %a{:href => "/subscriptions/?label=BMF+Notifications&address=BM-2DABVRoCRtwKZLyVCBZ3n6PuC4n7a4zLsA"}
-      BM-2DABVRoCRtwKZLyVCBZ3n6PuC4n7a4zLsA
-    %br
-    Author's Address -
-    %a{:href => "/messages/compose/?to=BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU"}
-      BM-2DAxhHpd2Sez4oQmZu5sEAMJbnNp3yDFCU
-    %br
-    Software Copyright 2013 - BSD Licensed - <a href='https://github.com/grant-olson/BitMessageForum'>Fork Me @ Github</a> - 
-    %a{:href => "https://github.com/grant-olson/BitMessageForum/issues" } Bug Tracker
-    %br
-    Donate 1JVWWSy6jaHDQJ8EmXeFjNTFuMY96k2jb1
+    /
+      Javascript
+      \==================================================
+    / Placed at the end of the document so the pages load faster
+    %script{:src => "/js/bootstrap.min.js"}
+    %script{:src => "/js/jquery-1.10.1.min.js"}

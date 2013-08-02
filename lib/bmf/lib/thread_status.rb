@@ -5,7 +5,7 @@ require_relative 'message_store.rb'
 class BMF::ThreadStatus
   include Singleton
 
-  STASH_FILE = File.expand_path("../../config/thread_status_stash", __FILE__)
+  STASH_FILE = File.expand_path("../../../../config/thread_status_stash", __FILE__)
 
   def load_stash
     if File.exists? STASH_FILE

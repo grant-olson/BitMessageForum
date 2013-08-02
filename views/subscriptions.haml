@@ -3,18 +3,12 @@
 %h2 Add New Subscription
 
 %form{:method => :post, :action => "/subscriptions/create/"}
-  %table
-    %tr
-      %th Label
-      %td
-        %input{:type => :text, :name => :label, :value => params[:label], :size => 50}
-    %tr
-      %th Address
-      %td
-        %input{:type => :text, :name => :address, :value => params[:address], :size => 50}
-    %tr
-      %th{:colspan => 2}
-        %input{:type => :submit, :value => "Add New Subscription"}
+  %label Label
+  %input.form-control{:type => :text, :name => :label, :value => params[:label], :size => 50}
+  %label Address
+  %input.form-control{:type => :text, :name => :address, :value => params[:address], :size => 50}
+
+  %input.btn{:type => :submit, :value => "Add New Subscription"}
 
 %h2 Delete Subscription
 %form{:method => :post, :action => "/subscriptions/delete/", :onsubmit => "return confirm('Are you sure');"}
@@ -22,10 +16,10 @@
     %tr
       %th Address
       %td
-        %input{:type => :text, :name => :address, :size => 50}
+        %input.form-control{:type => :text, :name => :address, :size => 50}
     %tr
       %th{:colspan => 2}
-        %input{:type => :submit, :value => "Delete Subscription"}
+        %input.btn{:type => :submit, :value => "Delete Subscription"}
 
 
 %h2 Current Subscriptions
@@ -35,7 +29,7 @@
     %i
       You either don't have any subscriptions, or your version of PyBitmessage doesn't support the listSubscriptions API call.
 - else
-  %table
+  %table.table.table-striped
     %tr
       %th Label
       %th Address
@@ -44,4 +38,3 @@
       %tr
         %th= Base64.decode64(subscription['label']).force_encoding('utf-8')
         %td= subscription['address']
-  

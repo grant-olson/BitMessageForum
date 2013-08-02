@@ -3,16 +3,21 @@
 .recipient
   - @messages.each do |user, threads|
     - new = ThreadStatus.instance.new_messages_for_address?(user, threads.map {|x| x[0]})
-    %div{:class => (new ? "new" : "old") }
+    %div{:class => (new ? "alert alert-success" : "alert") }
       %a{:href => "./#{user}/"}
         - if @addresses.has_key? user
           = @addresses[user]['label']
         - else
           = user
-      %span.small
-        &nbsp;
+
+      %br
+      %small 
         Updated:
-        = Time.at(MessageStore.instance.address_last_updates[user]).to_datetime
+        =Time.at(MessageStore.instance.address_last_updates[user]).to_datetime
+
+      &nbsp;
+      %br
+      %br
       %form.inline{:method => :get, :action => "/messages/compose/"}
         %input{:type => :hidden, :name => :to, :value => user}
-        %input.small_button{:type => :submit, :value => "Send Message"}
+        %input.btn.btn-small{:type => :submit, :value => "Send Message"}

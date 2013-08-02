@@ -14,7 +14,7 @@
 
     - message_time = Message.time(message)
     - new = message_time > @thread_last_visited
-    %div{:class => (new ? "new" : "old")}
+    %div
       %b From: 
       - if @addresses.has_key? message['fromAddress']
         = @addresses[message['fromAddress']]['label']
@@ -25,6 +25,9 @@
         (#{Message.sent_or_received(message)}
         = Time.at(message_time).to_datetime
         )
+
+    - if new
+      %span{:class => "label label-success"}New!
     - body = message['message']
     - body = body.split("\n").map { |line| line.strip}.select{|line| line != ""}
     - body.each do |paragraph|

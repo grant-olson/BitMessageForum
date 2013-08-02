@@ -20,11 +20,12 @@ class BMF < Sinatra::Base
 
     # If we've got some html, make it safe
     def safe_text text
-      return text if !text.include?("<")
-
+      if !text.include?("<")
+        return "<blockquote>" + text.gsub("\n","<br />\n") + "</blockquote>"
+      end
 
       if Settings.instance.display_sanitized_html != 'yes'
-        CGI::escape_html(text)
+        "<blockquote>" + CGI::escape_html(text).gsub("\n", "<br />\n")  + "</blockqoute>"
       else
         local_images_only = Sanitize::Config::RELAXED.dup
         local_images_only[:protocols]["img"]["src"] = ["data"]
@@ -60,6 +61,10 @@ class BMF < Sinatra::Base
     Settings::VALID_SETTINGS.each do |key|
       @settings[key] = Settings.instance.send(key)
     end
+  end
+
+  get "/json/new_messages/", :provides => :json do
+    {:new_messages => Alert.instance.peek_new_messages}.to_json
   end
   
   get "/identities/", :provides => :html do

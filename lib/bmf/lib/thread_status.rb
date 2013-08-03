@@ -8,15 +8,35 @@ class BMF::ThreadStatus
 
   STASH_FILE = BMF::Settings.fully_qualified_filename("thread_status_stash")
 
+  def initialize
+    @thread_last_visited = {}
+    load_stash
+  end
+
+  def serialize_stash
+    updates = []
+    @thread_last_visited.each_pair do |address, threads|
+      threads.each_pair do |thread_name, update_time|
+        updates << "#{address}:#{Base64.encode64(thread_name).gsub("\n","\\n")}:#{update_time}"
+      end
+    end
+    
+    updates.join(";")
+  end
+  
+  def deserialize_stash serialized_stash
+    serialized_stash.split(";").each do |stash_line|
+      address, thread, update_time = stash_line.split(':')
+      thread = Base64.decode64(thread.gsub("\\n","\n"))
+      update_time = update_time.to_i
+      thread_visited(address,thread,update_time)
+    end
+  end
+
   def load_stash
     if File.exists? STASH_FILE
       stash = File.open(STASH_FILE).read
-      stash.split(";").each do |stash_line|
-        address, thread, update_time = stash_line.split(':')
-        thread = Base64.decode64(thread.gsub("\\n","\n"))
-        update_time = update_time.to_i
-        thread_visited(address,thread,update_time)
-      end
+      deserialize_stash stash
     end
   rescue Exception => ex # Failure is not an option!
     puts "@" * 80
@@ -28,23 +48,9 @@ class BMF::ThreadStatus
     puts ex.backtrace.join("\n")
   end
   
-  def initialize
-    @thread_last_visited = {}
-    load_stash
-  end
-
   def persist
-    updates = []
-    @thread_last_visited.each_pair do |address, threads|
-      threads.each_pair do |thread_name, update_time|
-        updates << "#{address}:#{Base64.encode64(thread_name).gsub("\n","\\n")}:#{update_time}"
-      end
-    end
-    
-    stash = updates.join(";")
-
     File.open(STASH_FILE,"w",0600) do |f|
-      f.write(stash)
+      f.write(serialize_stash)
     end
   end
   

@@ -11,12 +11,8 @@
     / styles
     %link{:href => "/css/bootstrap.min.css", :rel => "stylesheet"}/
     :css
-      body {
-        padding-top: 50px;
-      }
-      .body
-        padding: 40px 15px;
-        text-align: center;
+      .body {
+        padding-top: 70px;
       }
     / fav and touch icons
     %link{:href => "/images/favicon.ico", :rel => "shortcut icon"}/
@@ -33,11 +29,9 @@
           %span.icon-bar
           %span.icon-bar
           %span.icon-bar
-        %a.navbar-brand{:href => "#"} BMF
+        %a.navbar-brand{:href => "/"} BMF
         .nav-collapse.collapse
           %ul.nav.navbar-nav
-            %li.active
-              %a{:href => "/"} Home
             %li
               %a{:href => "/messages/compose/"} Compose
             %li
@@ -72,17 +66,20 @@
       .body
         - if BMF::Alert.instance.peek_new_messages != 0
           .alert.alert-success
+            %button.close{:'data-dismiss' => "alert"} &times;
             = BMF::Alert.instance.pop_new_messages
             new messages!
 
         - if !BMF::Alert.instance.peek.empty?
           .alert.alert-success
+            %button.close{:'data-dismiss' => "alert"} &times;
             %ul
               - BMF::Alert.instance.pop.each do |alert|
                 %li= alert
 
         - if cookies[:flash] && cookies[:flash] != ""
           .alert.alert-success
+            %button.close{:'data-dismiss' => "alert"} &times;
             = cookies[:flash]
             - cookies.delete(:flash)
         = yield
@@ -111,5 +108,6 @@
       Javascript
       \==================================================
     / Placed at the end of the document so the pages load faster
-    %script{:src => "/js/bootstrap.min.js"}
     %script{:src => "/js/jquery-1.10.1.min.js"}
+    %script{:src => "/js/bootstrap.min.js"}
+    %script{:src => "/js/messagePoll.js"}

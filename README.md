@@ -47,23 +47,24 @@ the `[bitmessagesettings]` section of keys.dat:
 
 ### Initial installation
 
-    git clone https://github.com/grant-olson/BitMessageForum.git
-    cd BitMessageForum
-    bundle install
+    gem install bmf
+
+### Running the software
+
+    bmf
 
 If you are using different settings for the PyBitmessage server, you
 will need to change that on the [settings
 page](http://localhost:4567/settings/) or by manually editing
 `config/settings.yml`.
 
-### Running BMF
+### Developers. Run from the source:
 
+    git clone https://github.com/grant-olson/BitMessageForum.git
     cd BitMessageForum
-    ./bmf
-
-After that navigate to [http://localhost:4567/](http://localhost:4567/)
-
-Bam!
+    gem install bundler
+    bundle install
+    ./bmf-dev
 
 ### Running PyBitmessage as a daemon
 

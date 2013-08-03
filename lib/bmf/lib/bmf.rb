@@ -50,7 +50,17 @@ class BMF::BMF < Sinatra::Base
     register Sinatra::Reloader
   end
 
-
+  if (settings.user && settings.user != "")
+    if (settings.password && settings.password != "")
+      puts "Requiring http basic authentication..."
+      use Rack::Auth::Basic, "Current BMF settings require authentication" do |username, password|
+        username == settings.user and password == settings.password
+      end
+    else
+      puts "You specified a username but no password! Refusing to use http basic authentication..."
+    end
+  end
+  
   get "/", :provides => :html do
     haml :home
   end

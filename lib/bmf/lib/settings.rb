@@ -14,7 +14,9 @@ class BMF::Settings
     :display_sanitized_html => "Show sanitized HTML minus scripts, css, and any non-inline images.",
     :sync_interval => "Frequency to sync inbox with PyBitmessage, in seconds.  Default 60",
     :user => "username for http basic authentication.  (You should be using https in conjunction with this!)",
-    :password => "password for http basic authentication.  (You should be using https in conjunction with this!)"
+    :password => "password for http basic authentication.  (You should be using https in conjunction with this!)",
+    :https_server_key_file => "file for https key",
+    :https_server_certificate_file => "file for https certificate"
   }
 
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys

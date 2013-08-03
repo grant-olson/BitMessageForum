@@ -47,4 +47,22 @@ Thread.new do
   
 end
 
-BMF::BMF.run!
+BMF::BMF.run! do |server|
+  settings = BMF::Settings.instance
+
+  if (settings.https_server_key_file && settings.https_server_key_file != "") &&
+      (settings.https_server_certificate_file && settings.https_server_certificate_file != "")
+
+    puts "Requiring https..."
+    ssl_options = {
+      :cert_chain_file => settings.https_server_certificate_file,
+      :private_key_file => settings.https_server_key_file,
+      :verify_peer => false
+    }
+    server.ssl = true
+    server.ssl_options = ssl_options
+  else
+    puts "NOT requiring https.  Traffic is unencrypted..."
+  end
+end
+

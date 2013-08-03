@@ -46,8 +46,8 @@ module BMF
       
     end
 
-    BMF::BMF.run! do |server|
-      settings = BMF::Settings.instance
+    BMF.run! do |server|
+      settings = Settings.instance
 
       if (settings.https_server_key_file && settings.https_server_key_file != "") &&
           (settings.https_server_certificate_file && settings.https_server_certificate_file != "")

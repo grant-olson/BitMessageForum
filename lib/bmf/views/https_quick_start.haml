@@ -1,0 +1,71 @@
+%h1 Https Quick-Start
+
+%p 
+  <b>Warning!</b> BMF has direct access PyBitmessage.  Because of
+  this, by default it can only be accessed from the machine it's
+  running on.  If you choose to open it up to the world, and you've
+  misconfigured things, someone else will be able to read your
+  messages!  Do not blindly assume the following instructions are
+  accurate and safe.
+
+%p 
+  I would recommend remote access via a VPN or ssh port forwarding.
+  However that probably won't work on a mobile device.
+
+%p
+  If you want to ignore the warnings and open up BMF to the world, then:
+
+%h2 1. Generate a key and certificate for https
+
+%pre
+  openssl req -new -nodes -keyout bmf.key -out bmf.csr -newkey rsa:2048
+  openssl x509 -req -days 365 -in bmf.csr -signkey bmf.key -out bmf.crt
+
+%p Accept all defaults when generating the csr if you want.
+
+%p <b>Warning!</b>  Key file is <b>unencrypted</b>.
+
+%h2 2. Enable https in BMF
+
+%ul
+
+  %li Go to the <a href='/settings/'>settings page</a>.
+
+  %li Add key and certificate file information with the full path.
+
+  %li Save settings.
+
+  %li Restart your server.
+
+  %li You should now need to navigate https://localhost:4567.
+
+%p <b>Warning!</b> You'll get a nasty self-signed certificate warning in the browser.  Self-signed certificates are lame.
+
+%h2 3. Enable basic authentication
+
+%ul
+
+  %li Go to the <a href='/settings/'>settings page</a>.
+
+  %li Set user and password.
+
+  %li Save settings.
+
+  %li Restart your server.  It should now prompt for a username and password.
+
+%p <b>Warning!</b>  If you enable authentication without using https, credentials are transmitted in clear-text.
+
+%h2 4. Open network interface
+
+%ul
+
+  %li Go to the <a href='/settings/'>settings page</a>.
+
+  %li Set the server_interface to '0.0.0.0'.
+
+  %li Save settings.
+
+  %li Restart your server.  You can now access BMF via the network.
+
+%p <b>Warning!</b> So can anyone else.  Did you setup a password?  Are you running https?
+

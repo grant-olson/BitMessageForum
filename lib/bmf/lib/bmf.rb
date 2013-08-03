@@ -73,6 +73,14 @@ class BMF::BMF < Sinatra::Base
     end
   end
 
+  get "/configuring-pybitmessage/", :provides => :html do
+    haml :couldnt_reach_pybitmessage
+  end
+
+  get "/https-quick-start/", :provides => :html do
+    haml :https_quick_start
+  end
+
   get "/json/new_messages/", :provides => :json do
     {:new_messages => BMF::Alert.instance.peek_new_messages}.to_json
   end

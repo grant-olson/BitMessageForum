@@ -58,8 +58,19 @@ class BMF::Folder
   def delete_thread address, thread
     msgs = thread_messages(address, thread)
     return [] if msgs.nil?
+   
+    alerts = []
 
-    msgs.map{ |msg| msg['msgid']}.map{ |msgid| BMF::XmlrpcClient.instance.trashMessage(msgid) + msgid }
+    msgs.each do |msg|
+      msgid = msg['msgid']
+      if msg['_source'] == 'sent'
+        alerts << (BMF::XmlrpcClient.instance.trashSentMessage(msgid) + msgid)
+      else
+        alerts << (BMF::XmlrpcClient.instance.trashMessage(msgid) + msgid)
+      end
+    end
+    
+    alerts
   end
   
 end

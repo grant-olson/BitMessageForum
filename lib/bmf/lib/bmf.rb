@@ -182,17 +182,24 @@ class BMF::BMF < Sinatra::Base
 
   post "/messages/delete/", :provides => :html do
     msgid = params[:msgid]
-    res = BMF::XmlrpcClient.instance.trashMessage msgid
+
+    res = BMF::XmlrpcClient.instance.trashSentMessage(msgid)
     if BMF::XmlrpcClient.is_error? res
       halt(500, haml("Delete failed.  #{res}"))
-    else
-      if request.referrer and request.referrer != ""
-        cookies[:flash] = res
-        redirect request.referrer
-      else
-        haml("#{res} [#{msgid}]")
-      end
     end
+    
+    res = BMF::XmlrpcClient.instance.trashMessage(msgid)
+    if BMF::XmlrpcClient.is_error? res
+      halt(500, haml("Delete failed.  #{res}"))
+    end
+
+    if request.referrer and request.referrer != ""
+      cookies[:flash] = res
+      redirect request.referrer
+    else
+      haml("#{res} [#{msgid}]")
+    end
+
   end
 
   get "/subscriptions/", :provides => :html do

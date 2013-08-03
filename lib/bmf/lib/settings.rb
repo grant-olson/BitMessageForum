@@ -17,8 +17,8 @@ class BMF::Settings
 
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys
 
-  SETTINGS_FILE = File.expand_path("../../config/settings.yml", __FILE__)
-  SAMPLE_FILE = File.expand_path("../../config/settings.yml.sample", __FILE__)
+  SETTINGS_FILE = File.expand_path("../../../../config/settings.yml", __FILE__)
+  SAMPLE_FILE = File.expand_path("../../../../config/settings.yml.sample", __FILE__)
 
   def initialize
 

@@ -5,7 +5,7 @@ require 'thread'
 
 require_relative 'xmlrpc_client.rb'
 
-class MessageStore
+class BMF::MessageStore
   include Singleton
 
   
@@ -37,7 +37,7 @@ class MessageStore
   end
     
   def update_times m
-    received_time = Message.time(m)
+    received_time = BMF::Message.time(m)
     to_address = m["toAddress"]
 
     # update channel access time
@@ -83,7 +83,7 @@ class MessageStore
   end
 
   def get_full_message mailbox, msgid
-    msg_json = XmlrpcClient.instance.send("get#{mailbox.capitalize}MessageByID", msgid)
+    msg_json = BMF::XmlrpcClient.instance.send("get#{mailbox.capitalize}MessageByID", msgid)
     JSON.parse(msg_json)["#{mailbox}Message"][0]
   end
   
@@ -137,10 +137,10 @@ class MessageStore
 
   def get_all_message_ids mailbox
     method = "getAll#{mailbox.capitalize}MessageIds"
-    msgids = XmlrpcClient.instance.send(method)
-    if XmlrpcClient.is_error?(msgids) && msgids.downcase.include?("invalid method")
+    msgids = BMF::XmlrpcClient.instance.send(method)
+    if BMF::XmlrpcClient.is_error?(msgids) && msgids.downcase.include?("invalid method")
       log "PyBitmessage doesn't support #{method}.  Falling back to getAll#{mailbox.capitalize}Messages.  Using a version of Pybitmessage that supports #{method} will dramatically increase performance"
-      msgids = XmlrpcClient.instance.send("getAll#{mailbox.capitalize}Messages")
+      msgids = BMF::XmlrpcClient.instance.send("getAll#{mailbox.capitalize}Messages")
       JSON.parse(msgids)["#{mailbox}Messages"]
     else
       JSON.parse(msgids)["#{mailbox}MessageIds"]
@@ -188,8 +188,8 @@ class MessageStore
 
     @messages.each do |id, m|
       if sent_or_received
-        next if sent_or_received == :sent && !Message.sent?(m)
-        next if sent_or_received == :received && !Message.received?(m)
+        next if sent_or_received == :sent && !BMF::Message.sent?(m)
+        next if sent_or_received == :received && !BMF::Message.received?(m)
       end
       
       toAddress = m["toAddress"]
@@ -209,8 +209,8 @@ class MessageStore
 
   def inbox
     by_recipient(:received).select do |toAddress, messages|
-      label = if AddressStore.instance.addresses.has_key? toAddress
-                AddressStore.instance.addresses[toAddress]['label']
+      label = if BMF::AddressStore.instance.addresses.has_key? toAddress
+                BMF::AddressStore.instance.addresses[toAddress]['label']
               else
                 ""
               end
@@ -220,8 +220,8 @@ class MessageStore
 
   def sent
     by_recipient(:sent).select do |toAddress, messages|
-      label = if AddressStore.instance.addresses.has_key? toAddress
-                AddressStore.instance.addresses[toAddress]['label']
+      label = if BMF::AddressStore.instance.addresses.has_key? toAddress
+                BMF::AddressStore.instance.addresses[toAddress]['label']
               else
                 ""
               end
@@ -237,8 +237,8 @@ class MessageStore
 
   def chans
     by_recipient.select do |toAddress, messages|
-      label = if AddressStore.instance.addresses.has_key? toAddress
-                AddressStore.instance.addresses[toAddress]['label']
+      label = if BMF::AddressStore.instance.addresses.has_key? toAddress
+                BMF::AddressStore.instance.addresses[toAddress]['label']
               else
                 ""
               end

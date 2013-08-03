@@ -4,17 +4,18 @@ require 'bundler/setup'
 require 'thread'
 
 require_relative "lib/bmf.rb"
-require_relative "lib/alert.rb"
+require_relative "lib/bmf/lib/bmf.rb"
+require_relative "lib/bmf/lib/alert.rb"
 
 def puts_and_alert msg
   puts msg
-  Alert.instance << msg
+  BMF::Alert.instance << msg
 end
 
 def sync
-  new_messages = MessageStore.instance.update
-  Alert.instance.add_new_messages(new_messages)
-  AddressStore.instance.update
+  new_messages = BMF::MessageStore.instance.update
+  BMF::Alert.instance.add_new_messages(new_messages)
+  BMF::AddressStore.instance.update
 
 rescue Errno::ECONNREFUSED => ex
   puts_and_alert "Background sync.  Couldn't connect to PyBitmessage server.  Is it running with the API enabled? " 
@@ -26,19 +27,19 @@ end
 
 puts "Doing initial sync before starting..."
 sync
-Alert.instance.pop_new_messages # don't show new message alert on bood.
+BMF::Alert.instance.pop_new_messages # don't show new message alert on bood.
 
 Thread.new do
 
   while(1) do
-    sync_interval = Settings.instance.sync_interval.to_i
+    sync_interval = BMF::Settings.instance.sync_interval.to_i
     sync_interval = 60 if sync_interval == 0
     sleep(sync_interval)
     begin
       sync
     rescue Exception => ex
       msg = "Background sync faild with #{ex.message}"
-      Alert.instance << msg
+      BMF::Alert.instance << msg
       puts msg
       puts ex.backtrace.join("\n")
     end
@@ -46,4 +47,22 @@ Thread.new do
   
 end
 
-BMF.run!
+BMF::BMF.run! do |server|
+  settings = BMF::Settings.instance
+
+  if (settings.https_server_key_file && settings.https_server_key_file != "") &&
+      (settings.https_server_certificate_file && settings.https_server_certificate_file != "")
+
+    puts "Requiring https..."
+    ssl_options = {
+      :cert_chain_file => settings.https_server_certificate_file,
+      :private_key_file => settings.https_server_key_file,
+      :verify_peer => false
+    }
+    server.ssl = true
+    server.ssl_options = ssl_options
+  else
+    puts "NOT requiring https.  Traffic is unencrypted..."
+  end
+end
+

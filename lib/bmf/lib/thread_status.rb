@@ -2,10 +2,10 @@ require 'singleton'
 require 'base64'
 require_relative 'message_store.rb'
 
-class ThreadStatus
+class BMF::ThreadStatus
   include Singleton
 
-  STASH_FILE = File.expand_path("../../config/thread_status_stash", __FILE__)
+  STASH_FILE = File.expand_path("../../../../config/thread_status_stash", __FILE__)
 
   def load_stash
     if File.exists? STASH_FILE
@@ -74,7 +74,7 @@ class ThreadStatus
       last_visited_time = 0
     end
     
-    last_message_time = MessageStore.instance.thread_last_updates[address][thread]
+    last_message_time = BMF::MessageStore.instance.thread_last_updates[address][thread]
 
     raise thread.inspect if last_message_time.nil?
 

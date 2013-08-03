@@ -26,7 +26,7 @@
     - thread_no = 0
     - @threads.each do |thread, messages|
       - thread_no += 1
-      - new = ThreadStatus.instance.new_messages?(@address, thread)
+      - new = BMF::ThreadStatus.instance.new_messages?(@address, thread)
       %div
         %input{:type => :checkbox, :name => "thread__#{thread_no}", :value=> thread}
         %a{:href => "./#{CGI.escape(thread)}"}
@@ -37,7 +37,7 @@
 
         %small
           Updated:
-          = Time.at(MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
+          = Time.at(BMF::MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
 
         - if new
           %span{:class => "label label-success"}New!

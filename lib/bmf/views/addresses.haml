@@ -2,7 +2,7 @@
   = params[:folder]
 .recipient
   - @messages.each do |user, threads|
-    - new = ThreadStatus.instance.new_messages_for_address?(user, threads.map {|x| x[0]})
+    - new = BMF::ThreadStatus.instance.new_messages_for_address?(user, threads.map {|x| x[0]})
     %div{:class => (new ? "alert alert-success" : "alert") }
       %a{:href => "./#{user}/"}
         - if @addresses.has_key? user
@@ -13,7 +13,7 @@
       %br
       %small 
         Updated:
-        =Time.at(MessageStore.instance.address_last_updates[user]).to_datetime
+        =Time.at(BMF::MessageStore.instance.address_last_updates[user]).to_datetime
 
       &nbsp;
       %br

@@ -2,7 +2,7 @@ require "singleton"
 require 'yaml'
 require 'fileutils'
 
-class Settings
+class BMF::Settings
   include Singleton
 
   SETTINGS_AND_DESCRIPTIONS = {
@@ -12,13 +12,17 @@ class Settings
     :server_interface => "Internet interface to listen on.  Set to 0.0.0.0 to open up BMF to the network.  WARNING!!! Anyone who can access your IP can read/post/delete/etc.",
     :server_port => "Internet port to listen on.",
     :display_sanitized_html => "Show sanitized HTML minus scripts, css, and any non-inline images.",
-    :sync_interval => "Frequency to sync inbox with PyBitmessage, in seconds.  Default 60"
+    :sync_interval => "Frequency to sync inbox with PyBitmessage, in seconds.  Default 60",
+    :user => "username for http basic authentication.  (You should be using https in conjunction with this!)",
+    :password => "password for http basic authentication.  (You should be using https in conjunction with this!)",
+    :https_server_key_file => "file for https key",
+    :https_server_certificate_file => "file for https certificate"
   }
 
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys
 
-  SETTINGS_FILE = File.expand_path("../../config/settings.yml", __FILE__)
-  SAMPLE_FILE = File.expand_path("../../config/settings.yml.sample", __FILE__)
+  SETTINGS_FILE = File.expand_path("../../../../config/settings.yml", __FILE__)
+  SAMPLE_FILE = File.expand_path("../../../../config/settings.yml.sample", __FILE__)
 
   def initialize
 
@@ -35,7 +39,7 @@ class Settings
     raise "Bad setting #{key}.  Allowed settings #{VALID_SETTINGS.inspect}" if !VALID_SETTINGS.include?(key.to_sym)
     @settings[key] = value
 
-    XmlrpcClient.instance.initialize_client if key.to_sym == :server_url
+    BMF::XmlrpcClient.instance.initialize_client if key.to_sym == :server_url
   end
 
   def persist

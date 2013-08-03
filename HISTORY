@@ -1,3 +1,6 @@
+* Optional https and optional http basic authentication for safe(r)
+  remote access.  (Github Isuse #29)
+
 * Made site look good with Bootstrap (medoix) (Github Issue #4)
 
 * When PyBitmessage supports getAllXMessageIds, we do a two-pass

@@ -12,7 +12,7 @@
 - @messages.each do |message|
   %div{:class => (message['_source'] == 'sent' ? "alert alert-success" : "alert")}
 
-    - message_time = Message.time(message)
+    - message_time = BMF::Message.time(message)
     - new = message_time > @thread_last_visited
     %div
       %b From: 
@@ -22,7 +22,7 @@
         = message['fromAddress']
 
       %small
-        (#{Message.sent_or_received(message)}
+        (#{BMF::Message.sent_or_received(message)}
         = Time.at(message_time).to_datetime
         )
 

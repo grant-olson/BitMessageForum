@@ -19,20 +19,33 @@ class BMF::Settings
     :https_server_certificate_file => "file for https certificate"
   }
 
+  DEFAULT_SETTINGS = {"server_url" => 'http://bmf:bmf@localhost:8442/', "display_sanitized_html" => 'no' }
+
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys
 
-  SETTINGS_FILE = File.expand_path("../../../../config/settings.yml", __FILE__)
-  SAMPLE_FILE = File.expand_path("../../../../config/settings.yml.sample", __FILE__)
+  SETTING_DIR = ".bitmessageforum"
+  SETTINGS_FILE = "settings.yml"
 
+  def self.fully_qualified_filename filename
+    home_dir = ENV["HOME"] || ENV["HOMEPATH"]
+    File.join(home_dir, SETTING_DIR, filename)
+  end
+  
   def initialize
+    home_dir = ENV["HOME"] || ENV["HOMEPATH"]
+    
+    setting_dir = File.join(home_dir, SETTING_DIR)
+    Dir.mkdir(setting_dir, 0700) if !File.directory? setting_dir
 
-    if !File.exists? SETTINGS_FILE
-      puts "No settings.  Copying sample file into place."
-      FileUtils.copy SAMPLE_FILE, SETTINGS_FILE
-      File.chmod 0600, SETTINGS_FILE
+    settings_filename = BMF::Settings.fully_qualified_filename(SETTINGS_FILE)
+
+    if !File.exists? (settings_filename)
+      puts "No existing settings.  Copying defaults into place."
+      @settings = DEFAULT_SETTINGS
+      persist
     end
 
-    @settings = YAML.load_file(SETTINGS_FILE)
+    @settings = YAML.load_file(settings_filename)
   end
   
   def update(key, value)
@@ -43,7 +56,7 @@ class BMF::Settings
   end
 
   def persist
-    File.open(SETTINGS_FILE,'w') do |out|
+    File.open(BMF::Settings.fully_qualified_filename(SETTINGS_FILE),'w',0600) do |out|
       out.write(@settings.to_yaml)
     end
   end

@@ -1,11 +1,12 @@
 require 'singleton'
 require 'base64'
 require_relative 'message_store.rb'
+require_relative 'settings.rb'
 
 class BMF::ThreadStatus
   include Singleton
 
-  STASH_FILE = File.expand_path("../../../../config/thread_status_stash", __FILE__)
+  STASH_FILE = BMF::Settings.fully_qualified_filename("thread_status_stash")
 
   def load_stash
     if File.exists? STASH_FILE
@@ -42,7 +43,7 @@ class BMF::ThreadStatus
     
     stash = updates.join(";")
 
-    File.open(STASH_FILE,"w") do |f|
+    File.open(STASH_FILE,"w",0600) do |f|
       f.write(stash)
     end
   end

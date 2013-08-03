@@ -1,3 +1,8 @@
+* Configuration files have been moved to $HOME/.bitmessageforum so a
+  system-installed bmf gem will be able to write changes.  Existing
+  users may wish to copy thier files from BitMessageForum/config to
+  keep their settings.
+
 * Optional https and optional http basic authentication for safe(r)
   remote access.  (Github Isuse #29)
 

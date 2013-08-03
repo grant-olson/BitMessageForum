@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require_relative 'lib/bmf.rb'
+
+BMF.boot

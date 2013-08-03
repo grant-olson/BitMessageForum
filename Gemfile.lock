@@ -1,3 +1,13 @@
+PATH
+  remote: .
+  specs:
+    bmf (0.2.0)
+      haml (~> 4.0.3)
+      sanitize
+      sinatra (~> 1.4.3)
+      sinatra-contrib (~> 1.4.0)
+      thin (~> 1.5.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -37,8 +47,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  haml (~> 4.0.3)
-  sanitize
-  sinatra (~> 1.4.3)
-  sinatra-contrib (~> 1.4.0)
-  thin (~> 1.5.1)
+  bmf!

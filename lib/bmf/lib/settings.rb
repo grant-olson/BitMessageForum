@@ -35,7 +35,7 @@ class BMF::Settings
     raise "Bad setting #{key}.  Allowed settings #{VALID_SETTINGS.inspect}" if !VALID_SETTINGS.include?(key.to_sym)
     @settings[key] = value
 
-    XmlrpcClient.instance.initialize_client if key.to_sym == :server_url
+    BMF::XmlrpcClient.instance.initialize_client if key.to_sym == :server_url
   end
 
   def persist

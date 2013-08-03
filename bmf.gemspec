@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency "sinatra-contrib", "~> 1.4.0"
   s.add_dependency "haml", "~> 4.0.3"
   s.add_dependency "sanitize"
-
+  s.add_dependency "rdiscount"
 end

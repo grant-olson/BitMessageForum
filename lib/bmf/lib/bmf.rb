@@ -3,6 +3,7 @@ require 'sinatra/reloader'
 require 'sinatra/cookies'
 
 require 'haml'
+require 'rdiscount'
 
 require_relative 'message_store.rb'
 require_relative 'address_store.rb'
@@ -18,20 +19,30 @@ class BMF::BMF < Sinatra::Base
 
   helpers do
 
+    def safe_html html
+      local_images_only = Sanitize::Config::RELAXED.dup
+      local_images_only[:protocols]["img"]["src"] = ["data"]
+
+      Sanitize.clean(html.force_encoding("UTF-8"), local_images_only)
+    end
+    
     # If we've got some html, make it safe
     def safe_text text
-      if !text.include?("<")
+      markdown_content_type = "# Content-Type: text/markdown"
+      starts_with_markdown = text.strip.start_with? markdown_content_type
+      if !text.include?("<") && !starts_with_markdown
         return "<blockquote>" + text.gsub("\n","<br />\n") + "</blockquote>"
       end
 
       if BMF::Settings.instance.display_sanitized_html != 'yes'
-        "<blockquote>" + CGI::escape_html(text).gsub("\n", "<br />\n")  + "</blockqoute>"
-      else
-        local_images_only = Sanitize::Config::RELAXED.dup
-        local_images_only[:protocols]["img"]["src"] = ["data"]
-
-        Sanitize.clean(text.force_encoding("UTF-8"), local_images_only)
+        return "<blockquote>" + CGI::escape_html(text).gsub("\n", "<br />\n")  + "</blockqoute>"
       end
+
+      if text.strip.start_with? markdown_content_type
+        text = RDiscount.new(text.sub(markdown_content_type, "")).to_html
+      end
+
+      safe_html(text)
       
     end
     

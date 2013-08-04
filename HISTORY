@@ -1,3 +1,5 @@
+* Ajax'y alert when you have new mail.  (Github issue #13)
+
 * Markdown formatting.  After enabling html display, if a message
   starts with '# Content-Type: text/markdown' then we will display
   sanitized formatted html instead.  (Github Issue #38)

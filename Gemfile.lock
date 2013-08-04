@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    bmf (0.2.0)
+    bmf (0.2.1)
       haml (~> 4.0.3)
-      rdiscount
-      sanitize
+      rdiscount (~> 2.1.6)
+      sanitize (~> 2.0.6)
       sinatra (~> 1.4.3)
       sinatra-contrib (~> 1.4.0)
       thin (~> 1.5.1)

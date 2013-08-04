@@ -30,7 +30,6 @@ do that!
 The following software is required:
 
 * [Ruby](http://www.ruby-lang.org/en/)
-* [bundler](http://bundler.io/)
 * [PyBitmessage](https://bitmessage.org/wiki/Main_Page)
 
 #### PyBitmessage API configuration

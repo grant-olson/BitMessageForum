@@ -30,7 +30,7 @@ do that!
 The following software is required:
 
 * [Ruby](http://www.ruby-lang.org/en/)
-* Ruby development toolchain.  `apt-get install ruby-dev` on Debian-based platforms.
+* Ruby development toolchain.  `apt-get install ruby-dev build-essential` on Debian-based platforms.
 * [PyBitmessage](https://bitmessage.org/wiki/Main_Page)
 
 #### PyBitmessage API configuration
@@ -79,7 +79,7 @@ can install ruby and bundler system-wide:
 
 On Debian based systems:
 
-    sudo apt-get install ruby-dev
+    sudo apt-get install ruby-dev build-essential
     sudo gem install bundler
 
 ### Cloning the source and configuring

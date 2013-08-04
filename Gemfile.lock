@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bmf (0.2.1)
+    bmf (0.2.2)
       haml (~> 4.0.3)
       rdiscount (~> 2.1.6)
       sanitize (~> 2.0.6)

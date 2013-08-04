@@ -2,6 +2,7 @@
 %html{:lang => "en"}
   %head
     %meta{:charset => "utf-8"}/
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1"}/
     %title BMF - BitMessageForum
     %meta{:content => "", :name => "description"}/
     %meta{:content => "", :name => "author"}/
@@ -11,12 +12,8 @@
     / styles
     %link{:href => "/css/bootstrap.min.css", :rel => "stylesheet"}/
     :css
-      body {
-        padding-top: 50px;
-      }
-      .body
-        padding: 40px 15px;
-        text-align: center;
+      .body {
+        padding-top: 70px;
       }
     / fav and touch icons
     %link{:href => "/images/favicon.ico", :rel => "shortcut icon"}/
@@ -29,60 +26,75 @@
   %body
     .navbar.navbar-inverse.navbar-fixed-top
       .container
-        %button.navbar-toggle{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
+        %button.navbar-toggle{"data-target" => ".navbar-responsive-collapse", "data-toggle" => "collapse"}
           %span.icon-bar
           %span.icon-bar
           %span.icon-bar
-        %a.navbar-brand{:href => "#"} BMF
-        .nav-collapse.collapse
+        %a.navbar-brand{:href => "/"} BMF
+        .nav-collapse.collapse.navbar-responsive-collapse
           %ul.nav.navbar-nav
-            %li.active
-              %a{:href => "/"} Home
             %li
               %a{:href => "/messages/compose/"} Compose
-            %li
-              %a{:href => "/inbox/"}
-                Inbox
-                - if BMF::Folder.new('inbox').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/lists/"}
-                Lists
-                - if BMF::Folder.new('lists').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/chans/"}
-                Chans
-                - if BMF::Folder.new('chans').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/sent/"}
-                Sent
-                - if BMF::Folder.new('sent').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/identities/"} Identities
-            %li
-              %a{:href => "/subscriptions/"} Subscriptions
-            %li
-              %a{:href => "/settings/"} Settings
+            %li.dropdown
+              %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
+                Messages
+                - if BMF::Folder.new("inbox").new_messages? | BMF::Folder.new("lists").new_messages? | BMF::Folder.new("chans").new_messages?
+                  %span.label.label-success New!
+                %b.caret
+              %ul.dropdown-menu
+                %li
+                  %a{:href => "/inbox/"}
+                    Inbox
+                    - if BMF::Folder.new('inbox').new_messages?
+                      %span.label.label-success New!
+                %li
+                  %a{:href => "/lists/"}
+                    Lists
+                    - if BMF::Folder.new('lists').new_messages?
+                      %span.label.label-success New!
+                %li
+                  %a{:href => "/chans/"}
+                    Chans
+                    - if BMF::Folder.new('chans').new_messages?
+                      %span.label.label-success New!
+                %li
+                  %a{:href => "/sent/"}
+                    Sent
+                    - if BMF::Folder.new('sent').new_messages?
+                      %span.label.label-success New!
+            %li.dropdown
+              %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
+                Settings
+                %b.caret
+              %ul.dropdown-menu
+                %li
+                  %a{:href => "/identities/"} Identities
+                %li
+                  %a{:href => "/subscriptions/"} Subscriptions
+                %li
+                  %a{:href => "/settings/"} Site Settings
 
         / /.nav-collapse
     .container
       .body
+        %div{:id => "messages"}
+
         - if BMF::Alert.instance.peek_new_messages != 0
-          .alert.alert-success
+          .alert.alert-success{:id => "message"}
+            %button.close{:'data-dismiss' => "alert"} &times;
             = BMF::Alert.instance.pop_new_messages
             new messages!
 
         - if !BMF::Alert.instance.peek.empty?
-          .alert.alert-success
+          .alert.alert-success{:id => "message"}
+            %button.close{:'data-dismiss' => "alert"} &times;
             %ul
               - BMF::Alert.instance.pop.each do |alert|
                 %li= alert
 
         - if cookies[:flash] && cookies[:flash] != ""
-          .alert.alert-success
+          .alert.alert-success{:id => "message"}
+            %button.close{:'data-dismiss' => "alert"} &times;
             = cookies[:flash]
             - cookies.delete(:flash)
         = yield
@@ -111,5 +123,6 @@
       Javascript
       \==================================================
     / Placed at the end of the document so the pages load faster
-    %script{:src => "/js/bootstrap.min.js"}
     %script{:src => "/js/jquery-1.10.1.min.js"}
+    %script{:src => "/js/bootstrap.min.js"}
+    %script{:src => "/js/messagePoll.js"}

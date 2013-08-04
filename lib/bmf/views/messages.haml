@@ -10,7 +10,7 @@
   \-
   &= @thread
 - @messages.each do |message|
-  %div{:class => (message['_source'] == 'sent' ? "message sent" : "message")}
+  %div{:class => (message['_source'] == 'sent' ? "alert alert-success" : "alert")}
 
     - message_time = BMF::Message.time(message)
     - new = message_time > @thread_last_visited
@@ -37,7 +37,7 @@
           [Hiding Quoted Text]
 
     - if @folder.name == "chans"
-      %form.button{:method => :get, :action => "/messages/compose/"}
+      %form.button.btn{:method => :get, :action => "/messages/compose/"}
         %input{:type => :hidden, :name => :to, :value => @address}
         %input{:type => :hidden, :name => :subject, :value => "Re: " + @thread}
         %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}

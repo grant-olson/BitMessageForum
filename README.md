@@ -46,7 +46,7 @@ the `[bitmessagesettings]` section of keys.dat:
 
 ### Initial installation
 
-    gem install bmf
+    sudo gem install bmf
 
 ### Running the software
 

@@ -1,3 +1,6 @@
+0.2.0 - 2013-08-04
+==================
+
 * Configuration files have been moved to $HOME/.bitmessageforum so a
   system-installed bmf gem will be able to write changes.  Existing
   users may wish to copy thier files from BitMessageForum/config to

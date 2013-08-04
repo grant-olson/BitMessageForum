@@ -30,6 +30,7 @@ do that!
 The following software is required:
 
 * [Ruby](http://www.ruby-lang.org/en/)
+* Ruby development toolchain.  `apt-get install ruby-dev` on Debian-based platforms.
 * [PyBitmessage](https://bitmessage.org/wiki/Main_Page)
 
 #### PyBitmessage API configuration

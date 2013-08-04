@@ -76,6 +76,12 @@
         / /.nav-collapse
     .container
       .body
+        %div{:id => "messages"}
+        
+        .alert.alert-success{:id => "notification", :style => "display:none"}
+          %span{:id => "notification_msg"}
+          %button.close{:id => "hidemsg"} &times;
+
         - if BMF::Alert.instance.peek_new_messages != 0
           .alert.alert-success
             %button.close{:'data-dismiss' => "alert"} &times;

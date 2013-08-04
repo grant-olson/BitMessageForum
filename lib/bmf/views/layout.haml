@@ -34,26 +34,33 @@
           %ul.nav.navbar-nav
             %li
               %a{:href => "/messages/compose/"} Compose
-            %li
-              %a{:href => "/inbox/"}
-                Inbox
-                - if BMF::Folder.new('inbox').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/lists/"}
-                Lists
-                - if BMF::Folder.new('lists').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/chans/"}
-                Chans
-                - if BMF::Folder.new('chans').new_messages?
-                  %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/sent/"}
-                Sent
-                - if BMF::Folder.new('sent').new_messages?
-                  %span{:style => "color:green;"} ✓ 
+            %li.dropdown
+              %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
+                Messages
+                - if BMF::Folder.new("inbox").new_messages? | BMF::Folder.new("lists").new_messages? | BMF::Folder.new("chans").new_messages?
+                  %span.label.label-success New!
+                %b.caret
+              %ul.dropdown-menu
+                %li
+                  %a{:href => "/inbox/"}
+                    Inbox
+                    - if BMF::Folder.new('inbox').new_messages?
+                      %span.label.label-success New!
+                %li
+                  %a{:href => "/lists/"}
+                    Lists
+                    - if BMF::Folder.new('lists').new_messages?
+                      %span.label.label-success New!
+                %li
+                  %a{:href => "/chans/"}
+                    Chans
+                    - if BMF::Folder.new('chans').new_messages?
+                      %span.label.label-success New!
+                %li
+                  %a{:href => "/sent/"}
+                    Sent
+                    - if BMF::Folder.new('sent').new_messages?
+                      %span.label.label-success New!
             %li.dropdown
               %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
                 Settings

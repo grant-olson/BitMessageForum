@@ -59,10 +59,35 @@ page](http://localhost:4567/settings/) or by manually editing
 
 ### Developers. Run from the source:
 
+### Prerequisites
+
+* a ruby installation capable of building binary extensions. 
+
+* bundler.
+
+Most ruby developers use a tool like [rvm](https://rvm.io/) or
+[chruby](https://github.com/postmodern/chruby) to maintain per-user
+and per-project versions of ruby.  This prevents you installing dozens
+(or possibly hundreds) of ruby gems with arbitrary code system-wide.
+It is recommended that you use one of these tools.  After that,
+install bundler in the local gemset:
+
+    gem install bundler
+
+If you just want to get things up and running quickly, you
+can install ruby and bundler system-wide:
+
+On Debian based systems:
+
+    sudo apt-get install ruby-dev
+    sudo gem install bundler
+
+### Cloning the source and configuring
+
     git clone https://github.com/grant-olson/BitMessageForum.git
     cd BitMessageForum
     gem install bundler
-    bundle install
+    bundle install # will need sudo if using system ruby
     ./bmf-dev
 
 ### Running PyBitmessage as a daemon

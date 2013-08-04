@@ -59,10 +59,11 @@ page](http://localhost:4567/settings/) or by manually editing
 
 ### Developers. Run from the source:
 
+    sudo apt-get install ruby-dev
+    sudo gem install bundler
     git clone https://github.com/grant-olson/BitMessageForum.git
     cd BitMessageForum
-    gem install bundler
-    bundle install
+    sudo bundle install
     ./bmf-dev
 
 ### Running PyBitmessage as a daemon

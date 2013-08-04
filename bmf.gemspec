@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'bmf'
-  s.version     = '0.2.0'
+  s.version     = '0.2.1'
   s.date        = '2013-08-04'
   s.summary     = "BitMessageForum!"
   s.description = "Browse bitmessages in a forum-like environment."

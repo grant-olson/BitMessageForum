@@ -2,7 +2,6 @@
 
 ENV['RACK_ENV'] ||= "production"
 
-require 'bundler/setup'
 require 'bmf'
 
 BMF.boot

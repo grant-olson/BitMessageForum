@@ -1,3 +1,9 @@
+0.2.1 - 2013-08-04
+==================
+
+* Removed bundler setup.  Bundler shouldn't be a dependency for binary
+  builds.
+
 0.2.0 - 2013-08-04
 ==================
 

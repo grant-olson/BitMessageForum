@@ -19,7 +19,7 @@ class BMF::Settings
     :https_server_certificate_file => "file for https certificate"
   }
 
-  DEFAULT_SETTINGS = {"server_url" => 'http://bmf:bmf@localhost:8442/', "display_sanitized_html" => 'no' }
+  DEFAULT_SETTINGS = {"server_url" => 'http://bmf:bmf@localhost:8442/', "display_sanitized_html" => 'no', 'server_interface' => "localhost" }
 
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys
 

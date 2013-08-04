@@ -25,12 +25,12 @@
   %body
     .navbar.navbar-inverse.navbar-fixed-top
       .container
-        %button.navbar-toggle{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
+        %button.navbar-toggle{"data-target" => ".navbar-responsive-collapse", "data-toggle" => "collapse"}
           %span.icon-bar
           %span.icon-bar
           %span.icon-bar
         %a.navbar-brand{:href => "/"} BMF
-        .nav-collapse.collapse
+        .nav-collapse.collapse.navbar-responsive-collapse
           %ul.nav.navbar-nav
             %li
               %a{:href => "/messages/compose/"} Compose

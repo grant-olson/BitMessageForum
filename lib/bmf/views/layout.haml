@@ -54,12 +54,17 @@
                 Sent
                 - if BMF::Folder.new('sent').new_messages?
                   %span{:style => "color:green;"} ✓ 
-            %li
-              %a{:href => "/identities/"} Identities
-            %li
-              %a{:href => "/subscriptions/"} Subscriptions
-            %li
-              %a{:href => "/settings/"} Settings
+            %li.dropdown
+              %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
+                Settings
+                %b.caret
+              %ul.dropdown-menu
+                %li
+                  %a{:href => "/identities/"} Identities
+                %li
+                  %a{:href => "/subscriptions/"} Subscriptions
+                %li
+                  %a{:href => "/settings/"} Site Settings
 
         / /.nav-collapse
     .container

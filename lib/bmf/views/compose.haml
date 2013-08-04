@@ -7,12 +7,12 @@
       %th
         To:
       %td 
-        %input{:type => :text, :name => :to, :size => 50, :value => @to}
+        %input.form-control{:type => :text, :name => :to, :size => 50, :value => @to}
     %tr
       %th
         From:
       %td
-        %select{:name => :from}
+        %select.form-control{:name => :from}
           - BMF::AddressStore.instance.addresses.each do |addr, addr_info|
             - next if !addr_info['enabled']
             %option{:value => addr, :selected => (addr == @from)}
@@ -24,14 +24,15 @@
       %th
         Subject
       %td
-        %input{:type => :text, :name => :subject, :size => 50, :value => @subject}
+        %input.form-control{:type => :text, :name => :subject, :size => 50, :value => @subject}
 
     %tr
       %th
         Message
       %td
-        %textarea{:name => :message, :cols => 80, :rows => 30 }= @message
+        %textarea.form-control{:name => :message, :cols => 80, :rows => 30 }= @message
 
     %tr
-      %th{:colspan => 2}
-        %input{:type => :submit, :value => :send}
+      %th
+      %th
+        %input.btn.btn-default{:type => :submit, :value => :send}

@@ -1,25 +1,4 @@
-%h2 Identities
-
-%h3 Create random address
-
-%div
-  %form{:method => :post, :action => "/identities/new/"}
-    %label
-      Label:
-      %input.form-control{:type => :text, :name => :label, :size => 50}
-    %input.btn{:type => :submit, :value => 'Create!' }
-
-%h3 Create deterministic address
-
-%div
-  %form{:method => :post, :action => "/identities/new/"}
-    %label
-      Label:
-      %input.form-control{:type => :text, :name => :passphrase, :size => 50}
-    %input.btn{:type => :submit, :value => 'Create!' }
-
-
-%h3 Current Identities
+%h2 Current Identities
 %table.table.table-striped
   %tr
     %th Label
@@ -30,3 +9,25 @@
         %th= address_info["label"]
         %td= address
 
+%hr
+%h2 Create Identities
+.row
+  .col-lg-6
+    %h4 Create random address
+
+    %div
+      %form{:method => :post, :action => "/identities/new/"}
+        %label
+          Label:
+          %input.form-control{:type => :text, :name => :label, :size => 50}
+        %input.btn{:type => :submit, :value => 'Create!' }
+
+  .col-lg-6
+    %h4 Create deterministic address
+
+    %div
+      %form{:method => :post, :action => "/identities/new/"}
+        %label
+          Label:
+          %input.form-control{:type => :text, :name => :passphrase, :size => 50}
+        %input.btn{:type => :submit, :value => 'Create!' }

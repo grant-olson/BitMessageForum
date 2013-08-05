@@ -1,27 +1,3 @@
-%h1 Subscriptions
-
-%h2 Add New Subscription
-
-%form{:method => :post, :action => "/subscriptions/create/"}
-  %label Label
-  %input.form-control{:type => :text, :name => :label, :value => params[:label], :size => 50}
-  %label Address
-  %input.form-control{:type => :text, :name => :address, :value => params[:address], :size => 50}
-
-  %input.btn{:type => :submit, :value => "Add New Subscription"}
-
-%h2 Delete Subscription
-%form{:method => :post, :action => "/subscriptions/delete/", :onsubmit => "return confirm('Are you sure');"}
-  %table
-    %tr
-      %th Address
-      %td
-        %input.form-control{:type => :text, :name => :address, :size => 50}
-    %tr
-      %th{:colspan => 2}
-        %input.btn{:type => :submit, :value => "Delete Subscription"}
-
-
 %h2 Current Subscriptions
 
 - if @subscriptions.empty?
@@ -38,3 +14,24 @@
       %tr
         %th= Base64.decode64(subscription['label']).force_encoding('utf-8')
         %td= subscription['address']
+
+%h2 Manage Subscription
+
+.row
+  .col-lg-6
+    %h4 Add New Subscription
+    %form{:method => :post, :action => "/subscriptions/create/"}
+      %label Label
+      %input.form-control{:type => :text, :name => :label, :value => params[:label], :size => 50}
+      %label Address
+      %input.form-control{:type => :text, :name => :address, :value => params[:address], :size => 50}
+      %br
+      %input.btn-small.btn-default{:type => :submit, :value => "Add New Subscription"}
+
+  .col-lg-6
+    %h4 Delete Subscription
+    %form{:method => :post, :action => "/subscriptions/delete/", :onsubmit => "return confirm('Are you sure');"}
+      %label Address
+      %input.form-control{:type => :text, :name => :address, :size => 50}
+      %br
+      %input.btn-small.btn-default{:type => :submit, :value => "Delete Subscription"}

@@ -10,7 +10,7 @@
   \-
   &= @thread
 - @messages.each do |message|
-  %div{:class => (message['_source'] == 'sent' ? "alert alert-success" : "alert")}
+  %div{:class => (message['_source'] == 'sent' ? "alert alert-info" : "alert")}
 
     - message_time = BMF::Message.time(message)
     - new = message_time > @thread_last_visited

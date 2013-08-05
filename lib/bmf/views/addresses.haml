@@ -12,12 +12,12 @@
 
       %br
       %small 
-        Updated:
+        %b Updated:
         =Time.at(BMF::MessageStore.instance.address_last_updates[user]).to_datetime
 
       &nbsp;
       %br
       %br
-      %form.inline{:method => :get, :action => "/messages/compose/"}
+      %form{:method => :get, :action => "/messages/compose/"}
         %input{:type => :hidden, :name => :to, :value => user}
-        %input.btn.btn-small{:type => :submit, :value => "Send Message"}
+        %button.btn-small.btn-default{:type => :submit} Send Message

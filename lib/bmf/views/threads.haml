@@ -16,12 +16,14 @@
   %br
   %input{:type => :hidden, :name => :address, :value => @address}
   .alert
+    .checkbox
+      %input{:type => "checkbox", :name => "select-all", :id => "select-all"} Select All
     - thread_no = 0
     - @threads.each do |thread, messages|
       - thread_no += 1
       - new = BMF::ThreadStatus.instance.new_messages?(@address, thread)
       %div
-        %input{:type => :checkbox, :name => "thread__#{thread_no}", :value=> thread}
+        %input{:type => :checkbox, :name => "thread__#{thread_no}", :value => thread, :id => "thread"}
         %a{:href => "./#{CGI.escape(thread)}"}
           - if thread == " "
             &nbsp;

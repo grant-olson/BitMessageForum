@@ -28,6 +28,8 @@ class BMF::BMF < Sinatra::Base
     
     # If we've got some html, make it safe
     def safe_text text
+      return "" if text.nil?
+      
       markdown_content_type = "# Content-Type: text/markdown"
       starts_with_markdown = text.strip.start_with? markdown_content_type
       if !text.include?("<") && !starts_with_markdown

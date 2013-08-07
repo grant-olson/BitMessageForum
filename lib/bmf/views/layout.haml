@@ -60,8 +60,6 @@
                 %li
                   %a{:href => "/sent/"}
                     Sent
-                    - if BMF::Folder.new('sent').new_messages?
-                      %span.label.label-success New!
             %li.dropdown
               %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
                 Settings

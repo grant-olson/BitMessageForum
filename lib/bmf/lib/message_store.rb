@@ -36,6 +36,15 @@ class BMF::MessageStore
     Mutex.new.synchronize { @thread_last_updates.dup.freeze }
   end
     
+  def strip_RE subject
+    while ["Re: ", "RE: "].include?(subject[0..3])
+      subject = subject[4..-1]
+    end
+    subject = " " if subject == ""
+    subject
+  end
+                                     
+
   def update_times m
     received_time = BMF::Message.time(m)
     to_address = m["toAddress"]
@@ -46,10 +55,7 @@ class BMF::MessageStore
       @address_last_updates[to_address] = received_time
     end
 
-    subject = m["subject"]
-    if subject[0..3] == "Re: "
-      subject = subject[4..-1]
-    end
+    subject = strip_RE(m["subject"])
     
     # update thread access time
     @thread_last_updates[to_address] ||= {}
@@ -60,7 +66,7 @@ class BMF::MessageStore
     end
   end
 
-  def add_message msgid, m
+  def add_message msgid,m
     m["message"] = Base64.decode64(m["message"]).force_encoding("utf-8")
     m["subject"] = Base64.decode64(m["subject"]).force_encoding("utf-8")
 
@@ -194,10 +200,7 @@ class BMF::MessageStore
       
       toAddress = m["toAddress"]
 
-      subject = m["subject"]
-      if subject[0..3] == "Re: "
-        subject = subject[4..-1]
-      end
+      subject = strip_RE(m["subject"])
       
       by_recipient[toAddress] = {} if !by_recipient[toAddress]
       by_recipient[toAddress][subject] = [] if !by_recipient[toAddress][subject]

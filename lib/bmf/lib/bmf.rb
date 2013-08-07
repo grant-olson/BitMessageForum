@@ -11,6 +11,7 @@ require_relative 'thread_status.rb'
 require_relative 'message.rb'
 require_relative 'settings.rb'
 require_relative 'folder.rb'
+require_relative 'threaded_messages.rb'
 
 require 'sanitize'
 
@@ -293,6 +294,12 @@ class BMF::BMF < Sinatra::Base
     @messages = @folder.thread_messages(@address, @thread, :sort => :old)
 
     halt(404, haml("Couldn't find any messages for thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if @messages.nil?
+
+    @threaded_messages = BMF::MessageThread.new
+
+    @messages.each do |msg|
+      @threaded_messages.insert msg
+    end
 
     @addresses = BMF::AddressStore.instance.addresses
 

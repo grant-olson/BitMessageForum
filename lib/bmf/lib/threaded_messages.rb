@@ -11,7 +11,7 @@ class BMF::ThreadedMessage
   end
 
   def get_best_match new_message
-    return nil if !new_message.message['message'].include?(self.message['message'])
+    return nil if !x_includes_y(new_message, self)
 
     good_child = @children.map{ |c| c.get_best_match(new_message)}.compact
     if !good_child.empty?
@@ -50,14 +50,28 @@ class BMF::ThreadedMessage
   end
 
   def message_text
-    quoted_text = self.parent ? self.parent.message['message'] : nil
+    quoted_text = self.parent ? self.parent.message['message'].strip : nil
     
-    new_text = (quoted_text && !quoted_text.empty?) ? message['message'].sub(quoted_text,"") : message['message']
+    new_text = (quoted_text && !quoted_text.empty?) ? message['message'].strip.sub(quoted_text,"") : message['message'].strip
 
     [new_text, quoted_text]
   end
   
+  def x_includes_y x,y
+    x.message['message'].strip.include?(y.message['message'].strip)
+  end
+  
+  def suspected_orphan new_message
+    if x_includes_y self, new_message
+      puts "SUSPECTED ORPHAN"
+      puts self.inspect
+      puts new_message.inspect
+      puts self.parent.inspect
+      return self
+    end
 
+    return @children.detect { |c| c.suspected_orphan(new_message) }
+  end
 end
 
 class BMF::MessageThread
@@ -68,6 +82,12 @@ class BMF::MessageThread
 
   def insert message
     msg = BMF::ThreadedMessage.new(message)
+
+    @children.each do |c|
+      c.suspected_orphan(msg)
+    end
+    
+    
     match = @children.map { |child| child.get_best_match(msg) }.compact.first
 
     if match.nil?

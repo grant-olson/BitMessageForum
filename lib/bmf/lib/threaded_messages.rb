@@ -83,7 +83,7 @@ class BMF::MessageThread
   def insert message
     msg = BMF::ThreadedMessage.new(message)
 
-    puts msg.message['message'].inspect
+    # puts msg.message['message'].inspect
 
     @children.each do |c|
       c.suspected_orphan(msg)

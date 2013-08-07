@@ -73,6 +73,11 @@ class BMF::MessageStore
     m["subject"] = " " if m["subject"] == ""
     m["subject"] = "Re:  " if m["subject"] == "Re: "
 
+    if m["message"].include?("\r")
+      m["message"] = m["message"].gsub("\r\n","\n").gsub("\n\r","\n")
+    end
+    
+
     @messages[msgid] = m
 
     to_address = m["toAddress"]

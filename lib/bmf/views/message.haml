@@ -51,10 +51,11 @@
             %input{:type => :hidden, :name => :subject, :value => "Re: " + @thread}
             %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
             %button.btn-small.btn-success{:type => :submit} Reply User
-        %th
-          %form{:method => :post, :action => "/messages/delete/", :onsubmit => "return confirm('Really delete?')"}
-            %input{:type => :hidden, :name => :msgid, :value => message['msgid']}
-            %button.btn-small.btn-danger{:type => :submit} Delete
+      %th
+        %form{:method => :post, :action => "/messages/delete/", :onsubmit => "return confirm('Really delete?')"}
+          %input{:type => :hidden, :name => :msgid, :value => message['msgid']}
+          %button.btn-small.btn-danger{:type => :submit} Delete
+
   .clear
 
   - @message.children.each do |msg|

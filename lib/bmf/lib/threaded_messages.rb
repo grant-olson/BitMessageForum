@@ -48,6 +48,14 @@ class BMF::ThreadedMessage
 
     puts "</pre></blockquote>"
   end
+
+  def message_text
+    quoted_text = self.parent ? self.parent.message['message'] : nil
+    
+    new_text = (quoted_text && !quoted_text.empty?) ? message['message'].sub(quoted_text,"") : message['message']
+
+    [new_text, quoted_text]
+  end
   
 
 end

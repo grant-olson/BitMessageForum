@@ -20,9 +20,18 @@
 
   - if new
     %span{:class => "label label-success"}New!
-  - body = message['message']
-  - body = body.split("------------------------------------------------------").map { |line| line.strip}.select{|line| line != ""}
+  - new_text, quoted_text = @message.message_text
+  - body = new_text.split("------------------------------------------------------").map { |line| line.strip}.select{|line| line != ""}
   = safe_text body.first
+  - body[1..-1].each do |next_section|
+    %hr
+    = safe_text next_section
+
+  - if quoted_text
+    %small
+      %i
+        [Hiding Quoted Text]
+        %br
 
   %table
     %tr

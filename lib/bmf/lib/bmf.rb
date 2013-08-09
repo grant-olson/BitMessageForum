@@ -343,12 +343,15 @@ class BMF::BMF < Sinatra::Base
     when "noop"
       status =  "Noop.  Did nothing to:"
     when "delete"
-      address = params[:address]
-      threads_to_update.each do |thread|
-        folder.delete_thread(address, thread)
+      status = "Background deleting the following threads:"
+
+      Thread.new do
+        address = params[:address]
+        threads_to_update.each do |thread|
+          folder.delete_thread(address, thread)
+        end
       end
       
-      status = "Deleted the following threads:"
     when "mark_read"
       threads_to_update.each do |thread|
         BMF::ThreadStatus.instance.thread_visited(address, thread, Time.now.to_i)

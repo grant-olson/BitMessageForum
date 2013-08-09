@@ -1,3 +1,6 @@
+* Run bulk delete in background thread.  It can take some time.
+  (Github issue #37)
+
 * Better inline html detection to eliminate false positives.  (Github
   issue #55)
 

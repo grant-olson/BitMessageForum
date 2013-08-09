@@ -57,6 +57,20 @@ will need to change that on the [settings
 page](http://localhost:4567/settings/) or by manually editing
 `config/settings.yml`.
 
+### Verifying the software
+
+The gem is signed with
+[rubygems-openpgp](https://github.com/grant-olson/rubygems-openpgp).
+Assuming you have rubygems-openpgp configured, you can verify the
+software:
+
+    gem fetch bmf
+    gem verify bmf
+    gem install bmf
+
+More details are available at the [rubygems-openpgp project
+page](https://github.com/grant-olson/rubygems-openpgp).
+
 ### Developers. Run from the source:
 
 ### Prerequisites
@@ -89,6 +103,16 @@ On Debian based systems:
     gem install bundler
     bundle install # will need sudo if using system ruby
     ./bmf-dev
+
+### Verifying the source
+
+All stable releases are tagged in git and signed by my OpenPGP key
+listed below.  To verify a particular release and run that code:
+
+    master-blaster:BitMessageForum grant$ git verify-tag 0.2.2
+    gpg: Signature made Sun Aug  4 17:59:35 2013 EDT using RSA key ID A18A54D6
+    gpg: Good signature from "Grant T. Olson (Personal email) <kgo at grant-olson dot net>"
+    master-blaster:BitMessageForum grant$ git checkout 0.2.2
 
 ### Running PyBitmessage as a daemon
 

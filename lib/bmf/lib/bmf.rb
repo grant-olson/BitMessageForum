@@ -336,8 +336,12 @@ class BMF::BMF < Sinatra::Base
     update_action = params[:update_action]
     threads_to_update = params.select { |key, value| key =~ /^thread__/}.values
 
-    updates_list = threads_to_update.map{|t| "<li>#{CGI.escape_html(t)}</li>"}.join
+    
+    updates_list = threads_to_update[0..2].map{|t| "<li>#{CGI.escape_html(t)}</li>"}.join
+    updates_list += "<li>(And #{threads_to_update[3..-1].length} more...)</li>" if !threads_to_update[3..-1].empty?
     updates_list = "<ul>" + updates_list + "</ul>"
+
+    
 
     case update_action
     when "noop"

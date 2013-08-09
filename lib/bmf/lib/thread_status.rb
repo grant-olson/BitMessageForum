@@ -27,7 +27,7 @@ class BMF::ThreadStatus
   def deserialize_stash serialized_stash
     serialized_stash.split(";").each do |stash_line|
       address, thread, update_time = stash_line.split(':')
-      thread = Base64.decode64(thread.gsub("\\n","\n"))
+      thread = Base64.decode64(thread.gsub("\\n","\n")).force_encoding("utf-8")
       update_time = update_time.to_i
       thread_visited(address,thread,update_time)
     end

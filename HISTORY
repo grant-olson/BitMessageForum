@@ -1,3 +1,6 @@
+* Fixed issue where unicode in subject prevented us from saving the
+  new thread status properly.  (Github Issue #51)
+
 0.2.2 - 2013-08-04
 ==================
 

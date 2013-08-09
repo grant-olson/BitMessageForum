@@ -1,7 +1,7 @@
 require 'singleton'
-require 'base64'
 require_relative 'message_store.rb'
 require_relative 'settings.rb'
+require 'digest/sha2'
 
 class BMF::ThreadStatus
   include Singleton
@@ -13,11 +13,15 @@ class BMF::ThreadStatus
     load_stash
   end
 
+  def hash_thread thread
+    Digest::SHA256.new.update(Digest::SHA256.new.update(thread).to_s).to_s
+  end
+
   def serialize_stash
     updates = []
     @thread_last_visited.each_pair do |address, threads|
       threads.each_pair do |thread_name, update_time|
-        updates << "#{address}:#{Base64.encode64(thread_name).gsub("\n","\\n")}:#{update_time}"
+        updates << "#{address}:#{thread_name}:#{update_time}"
       end
     end
     
@@ -27,9 +31,9 @@ class BMF::ThreadStatus
   def deserialize_stash serialized_stash
     serialized_stash.split(";").each do |stash_line|
       address, thread, update_time = stash_line.split(':')
-      thread = Base64.decode64(thread.gsub("\\n","\n")).force_encoding("utf-8")
+      next if thread.length != 64 # old unhashed format
       update_time = update_time.to_i
-      thread_visited(address,thread,update_time)
+      hashed_thread_visited(address,thread,update_time)
     end
   end
 
@@ -56,6 +60,7 @@ class BMF::ThreadStatus
   
 
   def thread_last_visited(address, thread)
+    thread = hash_thread(thread)
     if @thread_last_visited[address] && @thread_last_visited[address][thread]
       @thread_last_visited[address][thread]
     else
@@ -63,7 +68,7 @@ class BMF::ThreadStatus
     end
   end
   
-  def thread_visited(address, thread, time)
+  def hashed_thread_visited(address, thread, time)
     @thread_last_visited[address] ||= {}
     @thread_last_visited[address][thread] ||= 0
 
@@ -71,12 +76,20 @@ class BMF::ThreadStatus
       @thread_last_visited[address][thread] = time
     end
 
+  end
+  
+
+  def thread_visited(address, thread, time)
+    thread = hash_thread(thread)
+    hashed_thread_visited(address, thread, time)
     persist
   end
 
   def new_messages?(address, thread)
-    if @thread_last_visited[address] && @thread_last_visited[address][thread]
-      last_visited_time = @thread_last_visited[address][thread]
+    hashed_thread = hash_thread(thread)
+
+    if @thread_last_visited[address] && @thread_last_visited[address][hashed_thread]
+      last_visited_time = @thread_last_visited[address][hashed_thread]
     else
       last_visited_time = 0
     end

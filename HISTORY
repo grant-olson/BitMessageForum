@@ -1,3 +1,7 @@
+* We now hash subject lines when recording last accessed time so the
+  subject text isn't readible.  This will cause existing users to lose
+  their view history.  (Github issue #48)
+
 * We don't care if sent messages are new or not.  (Github issue #52)
 
 * Fixed issue where unicode in subject prevented us from saving the

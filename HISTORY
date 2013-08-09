@@ -1,3 +1,6 @@
+* Better inline html detection to eliminate false positives.  (Github
+  issue #55)
+
 * You can now send a message to multiple recipients by separating the
   addresses with semi-colons.  (Github issue #40)
 

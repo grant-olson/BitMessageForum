@@ -32,7 +32,7 @@ class BMF::BMF < Sinatra::Base
       
       markdown_content_type = "# Content-Type: text/markdown"
       starts_with_markdown = text.strip.start_with? markdown_content_type
-      if !text.include?("<") && !starts_with_markdown
+      if (not /<(a |img |ol|ul|li|h[1-6]|p|div|span)[^<]*>/.match(text)) && !starts_with_markdown
         return "<blockquote>" + text.gsub("\n","<br />\n") + "</blockquote>"
       end
 

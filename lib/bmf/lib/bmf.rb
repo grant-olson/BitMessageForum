@@ -173,6 +173,15 @@ class BMF::BMF < Sinatra::Base
     haml :compose
   end
 
+  def check_send res
+    if BMF::XmlrpcClient.is_error? res
+      BMF::Alert.instance << "BACKGROUND SEND FAILED! #{res}"
+    else
+      BMF::Alert.instance << "Background send seemed to finish successfully"
+    end
+  end
+  
+
   post "/messages/send/", :provides => :html do
     to = params[:to]
     from = params[:from]
@@ -182,20 +191,21 @@ class BMF::BMF < Sinatra::Base
 
 
     res = "Sending message in background..."
-
+    
     Thread.new do
       begin
         if broadcast
           res = BMF::XmlrpcClient.instance.sendBroadcast(from, subject, message)
+          check_send res
         else
-          res = BMF::XmlrpcClient.instance.sendMessage(to, from, subject, message)
+
+          to.split(";").each do |to_address|
+            to_address = to_address.strip
+            res = BMF::XmlrpcClient.instance.sendMessage(to_address, from, subject, message)
+            check_send res
+          end
         end
 
-        if BMF::XmlrpcClient.is_error? res
-          BMF::Alert.instance << "BACKGROUND SEND FAILED! #{res}"
-        else
-          BMF::Alert.instance << "Background send seemed to finish successfully"
-        end
       rescue Exception => ex
         BMF::Alert.instance << "BACKGROUND SEND FAILED! #{ex.message}"
       end

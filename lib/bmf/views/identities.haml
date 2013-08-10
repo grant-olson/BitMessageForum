@@ -19,7 +19,7 @@
       %form{:method => :post, :action => "/identities/new/"}
         %label
           Label:
-          %input.form-control{:type => :text, :name => :label, :size => 50}
+          %input.form-control.input-small{:type => :text, :name => :label, :size => 50}
         %input.btn-small.btn-default{:type => :submit, :value => 'Create!' }
 
   .col-lg-6
@@ -29,5 +29,5 @@
       %form{:method => :post, :action => "/identities/new/"}
         %label
           Password:
-          %input.form-control{:type => :text, :name => :passphrase, :size => 50}
+          %input.form-control.input-small{:type => :text, :name => :passphrase, :size => 50}
         %input.btn-small.btn-default{:type => :submit, :value => 'Create!' }

@@ -5,14 +5,14 @@
     = @flash
 
 %form{:method => :post, :action => "/settings/update"}
-  %table
+  %table.table.table-striped
     - @settings.each_pair do |key, value|
       %tr
         %th= key
         %td= BMF::Settings::SETTINGS_AND_DESCRIPTIONS[key]
         %td
-          %input{:type => :text, :name => key, :value => value, :size => 50}
+          %input.form-control.input-small{:type => :text, :name => key, :value => value, :size => 50}
 
     %tr
       %th{:colspan => 3}
-        %input{:type => :submit}
+        %button.btn.btn-small.btn-default{:type => :submit} Save Settings

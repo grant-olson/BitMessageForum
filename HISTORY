@@ -1,8 +1,7 @@
-<<<<<<< HEAD
 * Replaced blank subjects with (No Subject) in threads and messages. (Github issue #54)
 
 * Fixed deterministic text label to Password instead of Label. (Github issue #56)
-=======
+
 * Run bulk delete in background thread.  It can take some time.
   (Github issue #37)
 
@@ -15,7 +14,6 @@
 * We now hash subject lines when recording last accessed time so the
   subject text isn't readible.  This will cause existing users to lose
   their view history.  (Github issue #48)
->>>>>>> 353ce22883f9c274cb882fb8d7cd4202b6f3d0cb
 
 * We don't care if sent messages are new or not.  (Github issue #52)
 

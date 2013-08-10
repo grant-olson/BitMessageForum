@@ -32,7 +32,7 @@ class BMF::BMF < Sinatra::Base
       
       markdown_content_type = "# Content-Type: text/markdown"
       starts_with_markdown = text.strip.start_with? markdown_content_type
-      if !text.include?("<") && !starts_with_markdown
+      if (not /<(a |img |ol|ul|li|h[1-6]|p|div|span)[^<]*>/.match(text)) && !starts_with_markdown
         return "<blockquote>" + text.gsub("\n","<br />\n") + "</blockquote>"
       end
 
@@ -173,6 +173,15 @@ class BMF::BMF < Sinatra::Base
     haml :compose
   end
 
+  def check_send res
+    if BMF::XmlrpcClient.is_error? res
+      BMF::Alert.instance << "BACKGROUND SEND FAILED! #{res}"
+    else
+      BMF::Alert.instance << "Background send seemed to finish successfully"
+    end
+  end
+  
+
   post "/messages/send/", :provides => :html do
     to = params[:to]
     from = params[:from]
@@ -182,20 +191,21 @@ class BMF::BMF < Sinatra::Base
 
 
     res = "Sending message in background..."
-
+    
     Thread.new do
       begin
         if broadcast
           res = BMF::XmlrpcClient.instance.sendBroadcast(from, subject, message)
+          check_send res
         else
-          res = BMF::XmlrpcClient.instance.sendMessage(to, from, subject, message)
+
+          to.split(";").each do |to_address|
+            to_address = to_address.strip
+            res = BMF::XmlrpcClient.instance.sendMessage(to_address, from, subject, message)
+            check_send res
+          end
         end
 
-        if BMF::XmlrpcClient.is_error? res
-          BMF::Alert.instance << "BACKGROUND SEND FAILED! #{res}"
-        else
-          BMF::Alert.instance << "Background send seemed to finish successfully"
-        end
       rescue Exception => ex
         BMF::Alert.instance << "BACKGROUND SEND FAILED! #{ex.message}"
       end
@@ -326,19 +336,26 @@ class BMF::BMF < Sinatra::Base
     update_action = params[:update_action]
     threads_to_update = params.select { |key, value| key =~ /^thread__/}.values
 
-    updates_list = threads_to_update.map{|t| "<li>#{CGI.escape_html(t)}</li>"}.join
+    
+    updates_list = threads_to_update[0..2].map{|t| "<li>#{CGI.escape_html(t)}</li>"}.join
+    updates_list += "<li>(And #{threads_to_update[3..-1].length} more...)</li>" if !(threads_to_update[3..-1].nil? || threads_to_update[3..-1].empty?)
     updates_list = "<ul>" + updates_list + "</ul>"
+
+    
 
     case update_action
     when "noop"
       status =  "Noop.  Did nothing to:"
     when "delete"
-      address = params[:address]
-      threads_to_update.each do |thread|
-        folder.delete_thread(address, thread)
+      status = "Background deleting the following threads:"
+
+      Thread.new do
+        address = params[:address]
+        threads_to_update.each do |thread|
+          folder.delete_thread(address, thread)
+        end
       end
       
-      status = "Deleted the following threads:"
     when "mark_read"
       threads_to_update.each do |thread|
         BMF::ThreadStatus.instance.thread_visited(address, thread, Time.now.to_i)

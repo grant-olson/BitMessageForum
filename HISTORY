@@ -1,3 +1,7 @@
+* Replaced blank subjects with (No Subject) in threads and messages. (Github issue #54)
+
+* Fixed deterministic text label to Password instead of Label. (Github issue #56)
+
 * We don't care if sent messages are new or not.  (Github issue #52)
 
 * Fixed issue where unicode in subject prevented us from saving the

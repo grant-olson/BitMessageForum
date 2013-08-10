@@ -41,6 +41,15 @@ class BMF::ThreadStatus
     if File.exists? STASH_FILE
       stash = File.open(STASH_FILE).read
       deserialize_stash stash
+    else
+      puts "No thread stash file.  Must be a new install.  Marking all threads as read..."
+      BMF::MessageStore.instance.thread_last_updates.each_pair do |address, threads|
+        threads.each_pair do |thread, time|
+          thread_visited(address,thread,time,:persist => false)
+        end
+        
+      end
+      persist
     end
   rescue Exception => ex # Failure is not an option!
     puts "@" * 80
@@ -79,10 +88,13 @@ class BMF::ThreadStatus
   end
   
 
-  def thread_visited(address, thread, time)
+  def thread_visited(address, thread, time, opts={})
+    opts[:persist] = true if opts[:persist].nil?
+    
     thread = hash_thread(thread)
     hashed_thread_visited(address, thread, time)
-    persist
+    
+    persist if opts[:persist]
   end
 
   def new_messages?(address, thread)

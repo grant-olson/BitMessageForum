@@ -1,3 +1,6 @@
+* Mark all threads as read on initial install so user doesn't have to.
+  (Github issue #47)
+
 * Replaced blank subjects with (No Subject) in threads and messages. (Github issue #54)
 
 * Fixed deterministic text label to Password instead of Label. (Github issue #56)

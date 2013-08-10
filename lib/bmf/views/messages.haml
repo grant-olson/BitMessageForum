@@ -8,7 +8,10 @@
     - else
       = @address
   \-
-  &= @thread
+  - if @thread == " "
+    (No Subject)
+  - else
+    &= @thread
 - @messages.each do |message|
   %div{:class => (message['_source'] == 'sent' ? "alert alert-info" : "alert")}
 

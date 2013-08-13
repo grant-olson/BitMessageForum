@@ -24,13 +24,13 @@
       %th
         Subject
       %td
-        %input.form-control{:type => :text, :name => :subject, :size => 50, :value => @subject}
+        %input.form-control{:type => :text, :name => :subject, :size => 50, :value => @subject, :spellcheck => 'true'}
 
     %tr
       %th
         Message
       %td
-        %textarea.form-control{:name => :message, :cols => 80, :rows => 30 }= @message
+        %textarea.form-control{:name => :message, :cols => 80, :rows => 30, :spellcheck => 'true' }= @message
 
     %tr
       %th

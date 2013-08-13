@@ -1,3 +1,5 @@
+* Enable spellchecking on message compose.
+
 * Mark all threads as read on initial install so user doesn't have to.
   (Github issue #47)
 

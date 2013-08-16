@@ -150,6 +150,11 @@ class BMF::BMF < Sinatra::Base
     haml :settings
   end
 
+  post "/settings/mark_all_read", :provides => :html do
+    BMF::ThreadStatus.instance.mark_all_read
+    redirect "/settings/"
+  end
+
   get "/messages/compose/", :provides => :html do
     @to = params[:to]
     @from = params[:from]

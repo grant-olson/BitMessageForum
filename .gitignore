@@ -2,3 +2,5 @@
 config/settings.yml
 config/thread_status_stash
 *.gem
+.ruby-version
+.ruby-gemset

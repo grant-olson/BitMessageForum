@@ -1,7 +1,8 @@
 %h1 Edit Settings
 
 - if @flash
-  .new_messages
+  .alert.alert-success
+    %button.close{:'data-dismiss' => "alert"} &times;
     = @flash
 
 %form{:method => :post, :action => "/settings/update"}
@@ -13,9 +14,7 @@
         %td
           %input.form-control.input-small{:type => :text, :name => key, :value => value, :size => 50}
 
-    %tr
-      %th{:colspan => 3}
-        %button.btn.btn-small.btn-default{:type => :submit} Save Settings
+  %button.btn.btn-small.btn-default{:type => :submit} Save Settings
 
 %form{:method => :post, :action => "/settings/mark_all_read"}
-  %button.btn.btn-small.btn-default{:type => :submit} Mark All Messages Read
+  %button.btn.btn-small.btn-danger{:type => :submit} Mark All Messages Read

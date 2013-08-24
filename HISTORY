@@ -1,3 +1,6 @@
+* If your API supports listAddressbook, we'll map address book entries 
+  to human-readible names where appropriate.
+
 * "Mark all messages read" button on settings page.  (Github issue #58)
 
 * Enable spellchecking on message compose.

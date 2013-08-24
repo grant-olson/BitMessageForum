@@ -44,7 +44,7 @@ class BMF::AddressStore
       new_addresses = 0
 
       address_infos.each do |address_info|
-        if address_info[-1] == "\n" # Probably base64
+        if address_info['label'][-1] == "\n" # Probably base64
           address_info['label'] = Base64.decode64(address_info['label'])
         end
         

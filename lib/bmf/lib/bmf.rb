@@ -94,6 +94,19 @@ class BMF::BMF < Sinatra::Base
     haml :https_quick_start
   end
 
+  get "/json/search_addresses/", :provides => :json do
+    ss = params['search_string'].downcase
+
+    matches = []
+    BMF::AddressStore.instance.addresses.each_pair do |address, address_info|
+      if address.downcase.include?(ss) || address_info['label'].downcase.include?(ss)
+        matches << {:label => address_info['label'], :address => address }
+      end
+    end
+
+    { :matching_addresses => matches}.to_json
+  end
+
   get "/json/new_messages/", :provides => :json do
     {:new_messages => BMF::Alert.instance.peek_new_messages}.to_json
   end

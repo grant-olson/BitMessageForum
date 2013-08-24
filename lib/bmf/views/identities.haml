@@ -1,13 +1,5 @@
 %h2 Current Identities
-%table.table.table-striped
-  %tr
-    %th Label
-    %th Address
-  - @addresses.each_pair do |address, address_info|
-    - if address_info['enabled']
-      %tr
-        %th= address_info["label"]
-        %td= address
+= haml(:address_list)
 
 %hr
 %h2 Create Identities

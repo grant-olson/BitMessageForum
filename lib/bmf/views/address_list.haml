@@ -1,0 +1,12 @@
+%table.table.table-striped
+  %tr
+    %th Label
+    %th Address
+  - @addresses.each_pair do |address, address_info|
+    %tr
+      %th
+        - if address_info['_source'] == 'addresses'
+          %a{:href => "/messages/compose/?from=#{address}" }= address_info["label"]
+        - else
+          %a{:href => "/messages/compose/?to=#{address}" }= address_info["label"]
+      %td= address

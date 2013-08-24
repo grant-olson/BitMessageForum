@@ -1,3 +1,5 @@
+* Added an address book page.  Requires listAddressbook API support.
+
 * Added /json/search_addresses/?search_string=foo to support #19.
 
 * If your API supports listAddressbook, we'll map address book entries 

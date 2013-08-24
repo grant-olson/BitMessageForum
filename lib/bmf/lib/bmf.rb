@@ -111,10 +111,15 @@ class BMF::BMF < Sinatra::Base
     {:new_messages => BMF::Alert.instance.peek_new_messages}.to_json
   end
   
+  get "/addressbook/", :provides => :html do
+    BMF::AddressStore.instance.update
+    @addresses = BMF::AddressStore.instance.address_book
+    haml :addressbook
+  end
+
   get "/identities/", :provides => :html do
     BMF::AddressStore.instance.update
-    @addresses = BMF::AddressStore.instance.addresses
-
+    @addresses = BMF::AddressStore.instance.identities
     haml :identities
   end
 

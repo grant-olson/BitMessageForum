@@ -1,0 +1,6 @@
+%h2 Address Book
+
+- if @addresses.length == 0
+  %h3 You either have an empty address book, or are using an API version that doesn't support address lookup.
+
+= haml(:address_list)

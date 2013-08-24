@@ -14,6 +14,14 @@ class BMF::AddressStore
     Mutex.new.synchronize { @addresses.dup.freeze }
   end
 
+  def identities
+    addresses.select { |key, value| value['_source'] == 'addresses' && value['enabled'] }
+  end
+  
+  def address_book
+    addresses.select { |key, value| value['_source'] == 'addressbook' }
+  end
+  
   def initialize
     @addresses = {}
     # update
@@ -36,6 +44,7 @@ class BMF::AddressStore
       return
     end
     
+    source = method.to_s[4..-1].downcase
     address_infos = JSON.parse(address_text)['addresses']
 
     lock = Mutex.new
@@ -44,6 +53,8 @@ class BMF::AddressStore
       new_addresses = 0
 
       address_infos.each do |address_info|
+        address_info['_source'] = source
+
         if address_info['label'][-1] == "\n" # Probably base64
           address_info['label'] = Base64.decode64(address_info['label'])
         end

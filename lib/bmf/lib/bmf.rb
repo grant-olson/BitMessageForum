@@ -267,15 +267,7 @@ class BMF::BMF < Sinatra::Base
   end
 
   get "/subscriptions/", :provides => :html do
-
-    res = BMF::XmlrpcClient.instance.listSubscriptions
-
-    if BMF::XmlrpcClient.is_error? res
-      @subscriptions = []
-    else
-      @subscriptions = JSON.parse(res)['subscriptions']
-    end
-    
+    @addresses = BMF::AddressStore.instance.subscriptions
     haml :subscriptions
   end
   

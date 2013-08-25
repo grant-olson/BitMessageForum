@@ -18,6 +18,11 @@ class BMF::AddressStore
     addresses.select { |key, value| value['_source'] == 'addresses' && value['enabled'] }
   end
   
+  def subscriptions
+    addresses.select { |key, value| value['_source'] == 'subscriptions' && value['enabled'] }
+  end
+  
+
   def address_book
     addresses.select { |key, value| value['_source'] == 'addressbook' }
   end
@@ -45,7 +50,8 @@ class BMF::AddressStore
     end
     
     source = method.to_s[4..-1].downcase
-    address_infos = JSON.parse(address_text)['addresses']
+    address_field = method == :listSubscriptions ? "subscriptions" : "addresses"
+    address_infos = JSON.parse(address_text)[address_field]
 
     lock = Mutex.new
 
@@ -71,6 +77,6 @@ class BMF::AddressStore
   end
 
   def update
-    [:listAddresses, :listAddressbook].each { |m| update_address_list(m) }
+    [:listAddresses, :listSubscriptions, :listAddressbook].each { |m| update_address_list(m) }
   end
 end

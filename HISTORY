@@ -1,3 +1,5 @@
+* Store subscriptions in AddressStore and link on subscription page.
+
 * Added an address book page.  Requires listAddressbook API support.
 
 * Added /json/search_addresses/?search_string=foo to support #19.

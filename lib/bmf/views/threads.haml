@@ -7,45 +7,45 @@
   - else
     = @address
 
-.row
-  .col-lg-6
-    %form{:method => :get, :action => "/messages/compose/"}
-      %input{:type => :hidden, :name => :to, :value => params[:folder] == 'lists' ? @threads.first[1].first['fromAddress']  : @address}
-      %input.btn-small.btn-success{:type => :submit, :value => (params[:folder] == "chans" ? "Start New Thread" : "Send Message") }
+%form{:method => :get, :action => "/messages/compose/"}
+  %input{:type => :hidden, :name => :to, :value => params[:folder] == 'lists' ? @threads.first[1].first['fromAddress']  : @address}
+  %input.btn-small.btn-success{:type => :submit, :value => (params[:folder] == "chans" ? "Start New Thread" : "Send Message") }
 
-  .col-lg-6
-    %form.form-inline.pull-right{:method => :post, :name => :bulk_update , :action => "/#{params[:folder]}/thread/bulk_modify", :onsubmit => "if (document.forms['bulk_update']['update_action'].value == 'delete'){return confirm('Really delete selected threads?')}else{return true;};" }
+%form.form-inline{:method => :post, :name => :bulk_update , :action => "/#{params[:folder]}/thread/bulk_modify", :onsubmit => "if (document.forms['bulk_update']['update_action'].value == 'delete'){return confirm('Really delete selected threads?')}else{return true;};" }
+  %br
+  %input{:type => :hidden, :name => :address, :value => @address}
+  %input.btn-small.btn-danger{:type => :submit, :value => "Go!"}
+  %select.form-control.input-small{:name => :update_action, :style => "width: 200px" }
+    %option{:value => :noop}
+    %option{:value => :delete}
+      Delete Selected
+    %option{:value => :mark_read}
+      Mark Selected Read
+    %option{:value => :mark_all_read}
+      Mark All Read
+  
+  %br
+  %br
+  .alert
+    .div
+      .checkbox
+        %input{:type => "checkbox", :name => "select-all", :id => "select-all"} Select All
 
-      %select.form-control.input-small{:name => :update_action, :style => "width: 200px" }
-        %option{:value => :noop}
-        %option{:value => :delete}
-          Delete Selected
-        %option{:value => :mark_read}
-          Mark Selected Read
-        %option{:value => :mark_all_read}
-          Mark All Read
-      %input.btn-small.btn-danger{:type => :submit, :value => "Go!"}
+      - thread_no = 0
+      - @threads.each do |thread, messages|
+        - thread_no += 1
+        - new = BMF::ThreadStatus.instance.new_messages?(@address, thread)
+        %div
+          %input{:type => :checkbox, :name => "thread__#{thread_no}", :value => thread, :id => "thread"}
+          %a{:href => "./#{CGI.escape(thread)}"}
+            - if thread == " "
+              (No Subject)
+            - else
+              &= thread
 
-%br
-%input{:type => :hidden, :name => :address, :value => @address}
-.alert
-  .checkbox
-    %input{:type => "checkbox", :name => "select-all", :id => "select-all"} Select All
-  - thread_no = 0
-  - @threads.each do |thread, messages|
-    - thread_no += 1
-    - new = BMF::ThreadStatus.instance.new_messages?(@address, thread)
-    %div
-      %input{:type => :checkbox, :name => "thread__#{thread_no}", :value => thread, :id => "thread"}
-      %a{:href => "./#{CGI.escape(thread)}"}
-        - if thread == " "
-          (No Subject)
-        - else
-          &= thread
+          %small
+            Updated:
+            = Time.at(BMF::MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
 
-      %small
-        Updated:
-        = Time.at(BMF::MessageStore.instance.thread_last_updates[@address][thread]).to_datetime
-
-      - if new
-        %span{:class => "label label-success"}New!
+          - if new
+            %span{:class => "label label-success"}New!

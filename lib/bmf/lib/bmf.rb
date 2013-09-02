@@ -158,7 +158,18 @@ class BMF::BMF < Sinatra::Base
   end
 
   get "/json/new_messages/", :provides => :json do
-    {:new_messages => BMF::Alert.instance.peek_new_messages}.to_json
+    new_message_count = BMF::Alert.instance.peek_new_messages
+
+    new_folders = []
+    if new_message_count > 0
+      ["inbox", "chans", "lists"].each do |folder|
+        if BMF::Folder.new(folder).new_messages?
+          new_folders << folder
+        end
+      end
+    end
+    
+    {:new_messages => new_message_count, :new_folders => new_folders}.to_json
   end
   
   get "/addressbook/", :provides => :html do
@@ -325,6 +336,7 @@ class BMF::BMF < Sinatra::Base
   end
 
   get "/subscriptions/", :provides => :html do
+
     @addresses = BMF::AddressStore.instance.subscriptions
     haml :subscriptions
   end

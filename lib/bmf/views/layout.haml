@@ -80,10 +80,7 @@
         %div{:id => "messages"}
 
         - if BMF::Alert.instance.peek_new_messages != 0
-          .alert.alert-success{:id => "message"}
-            %button.close{:'data-dismiss' => "alert"} &times;
-            = BMF::Alert.instance.pop_new_messages
-            new messages!
+          - BMF::Alert.instance.pop_new_messages
 
         - if !BMF::Alert.instance.peek.empty?
           .alert.alert-success{:id => "message"}

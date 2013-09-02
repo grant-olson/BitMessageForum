@@ -1,7 +1,7 @@
 %form{:method => :post, :action => "/messages/send/"}
 
-  - if request.referrer
-    %input{:type => :hidden, :name => :goto, :value => request.referrer}
+  - if @goto
+    %input{:type => :hidden, :name => :goto, :value => @goto}
   %table
     %tr
       %th

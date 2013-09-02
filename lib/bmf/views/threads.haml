@@ -37,7 +37,7 @@
         - new = BMF::ThreadStatus.instance.new_messages?(@address, thread)
         %div
           %input{:type => :checkbox, :name => "thread__#{thread_no}", :value => thread, :id => "thread"}
-          %a{:href => "./#{CGI.escape(thread)}"}
+          %a{:href => "./#{full_escape(thread)}"}
             - if thread == " "
               (No Subject)
             - else

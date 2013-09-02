@@ -2,6 +2,8 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/cookies'
 
+require 'erb'
+
 require 'haml'
 require 'rdiscount'
 
@@ -47,7 +49,19 @@ class BMF::BMF < Sinatra::Base
       safe_html(text)
       
     end
-    
+
+    # Customizable escape.  CGI.escape doesn't always do what we want.
+    # We also need to escape the first period so we can have a subject
+    # of '.'
+    def full_escape str
+      str = ERB::Util.url_encode(str)
+
+      if str[0] && str[0] == "."
+        str = "%2E" + str[1..-1]
+      end
+
+      str
+    end
   end
   
 

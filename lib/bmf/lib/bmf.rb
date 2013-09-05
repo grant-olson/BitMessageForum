@@ -360,6 +360,25 @@ class BMF::BMF < Sinatra::Base
     end
   end
   
+  post "/addressbook/create/", :provides => :html do
+    res = BMF::XmlrpcClient.instance.addAddressBook params[:address], Base64.encode64(params[:label])
+    
+    if BMF::XmlrpcClient.is_error? res
+      halt(500, haml("Error adding entry.  #{res}"))
+    else
+      haml("added Entry.  #{res}")
+    end
+  end
+  
+  post "/addressbook/delete/", :provides => :html do
+    res = BMF::XmlrpcClient.instance.deleteAddressBook params[:address]
+    if BMF::XmlrpcClient.is_error? res
+      halt(500, haml("Error deleting address book entry.  #{res}"))
+    else
+      haml("Address Book Entry Deleted.  #{res}")
+    end
+  end
+  
 
   get "/:folder/", :provides => :html do
     folder = BMF::Folder.new(params[:folder])

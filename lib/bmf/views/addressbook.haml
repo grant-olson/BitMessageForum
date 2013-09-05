@@ -4,3 +4,24 @@
   %h3 You either have an empty address book, or are using an API version that doesn't support address lookup.
 
 = haml(:address_list)
+
+%h2 Manage Address Book
+
+.row
+  .col-lg-6
+    %h4 Add New Entry
+    %form{:method => :post, :action => "/addressbook/create/"}
+      %label Label
+      %input.form-control.input-small{:type => :text, :name => :label, :value => params[:label], :size => 50}
+      %label Address
+      %input.form-control.input-small{:type => :text, :name => :address, :value => params[:address], :size => 50}
+      %br
+      %input.btn-small.btn-default{:type => :submit, :value => "Add New Entry"}
+
+  .col-lg-6
+    %h4 Delete Entry
+    %form{:method => :post, :action => "/addressbook/delete/", :onsubmit => "return confirm('Are you sure');"}
+      %label Address
+      %input.form-control.input-small{:type => :text, :name => :address, :size => 50}
+      %br
+      %input.btn-small.btn-default{:type => :submit, :value => "Delete Entry"}

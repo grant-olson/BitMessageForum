@@ -1,3 +1,5 @@
+* Allow adding and deleting to address book if API supports it.
+
 * use listSubscriptions for names of lists instead of old hack.  #3.
 
 * Verify address in compose window before sending message to API.  #60.

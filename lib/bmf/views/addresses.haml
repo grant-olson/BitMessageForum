@@ -7,14 +7,15 @@
       .row
         .col-lg-10
           %a{:href => "./#{user}/"}
-            - if @addresses.has_key? user
-              = @addresses[user]['label']
+            - address_minus_broadcast = user.sub(/^\[Broadcast subscribers\] /, '')
+            - if @addresses.has_key? address_minus_broadcast
+              = @addresses[address_minus_broadcast]['label']
             - else
               = user
           %br
           %small
             %b Updated:
-            =Time.at(BMF::MessageStore.instance.address_last_updates[user]).to_datetime
+            =Time.at(BMF::MessageStore.instance.address_last_updates[user] || 0).to_datetime
 
         .col-lg-2.text-right
           %form{:method => :get, :action => "/messages/compose/"}

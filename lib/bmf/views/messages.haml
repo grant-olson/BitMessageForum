@@ -3,8 +3,9 @@
     = params[:folder]
   >
   %a{:href => "./" }
-    - if @addresses.has_key? @address
-      = @addresses[@address]['label']
+    - address_minus_broadcast = @address.sub(/^\[Broadcast subscribers\] /, '')
+    - if @addresses.has_key? address_minus_broadcast
+      = @addresses[address_minus_broadcast]['label']
     - else
       = @address
   \-

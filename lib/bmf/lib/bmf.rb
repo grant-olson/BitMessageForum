@@ -276,7 +276,7 @@ class BMF::BMF < Sinatra::Base
     message = Base64.encode64(params[:message])
     broadcast = params[:broadcast]
 
-    if !verify_address(to)
+    if !verify_address(to) && !broadcast
       BMF::Alert.instance << "Unable to verify address #{to}..."
       init_compose
       haml :compose

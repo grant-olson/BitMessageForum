@@ -237,12 +237,16 @@ class BMF::MessageStore
 
   def chans
     by_recipient.select do |toAddress, messages|
-      label = if BMF::AddressStore.instance.addresses.has_key? toAddress
-                BMF::AddressStore.instance.addresses[toAddress]['label']
-              else
-                ""
-              end
-      label.include?("[chan]")
+      address = BMF::AddressStore.instance.addresses[toAddress]
+      if address
+        if address['chan']
+          true
+        else # wait a while for new chan code to propagate
+          address['label'].include?("[chan]")
+        end
+      else
+        false
+      end
     end
   end
   

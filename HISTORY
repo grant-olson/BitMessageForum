@@ -1,3 +1,5 @@
+* Add [save] link to save address to address book.
+
 * Allow adding and deleting to address book if API supports it.
 
 * use listSubscriptions for names of lists instead of old hack.  #3.

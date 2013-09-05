@@ -24,6 +24,9 @@
         = @addresses[message['fromAddress']]['label']
       - else
         = message['fromAddress']
+        %small
+          %a{:href => "/addressbook/?address=#{message['fromAddress']}"}
+            [save]
 
       %br
       %b Date/Time:

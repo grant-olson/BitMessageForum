@@ -9,62 +9,10 @@
     - else
       = @address
   \-
-  - if @thread == " "
+  - if @subject == " "
     (No Subject)
   - else
-    &= @thread
+    &= @subject
 - @messages.each do |message|
-  %div{:class => (message['_source'] == 'sent' ? "alert alert-info" : "alert")}
-
-    - message_time = BMF::Message.time(message)
-    - new = message_time > @thread_last_visited
-    %div
-      %b From: 
-      - if @addresses.has_key? message['fromAddress']
-        = @addresses[message['fromAddress']]['label']
-      - else
-        = message['fromAddress']
-        %small
-          %a{:href => "/addressbook/?address=#{message['fromAddress']}"}
-            [save]
-
-      %br
-      %b Date/Time:
-      %small
-        (#{BMF::Message.sent_or_received(message)}
-        = Time.at(message_time).to_datetime
-        )
-
-    - if new
-      %span{:class => "label label-success"}New!
-    - body = message['message']
-    - body = body.split("------------------------------------------------------").map { |line| line.strip}.select{|line| line != ""}
-    = safe_text body.first
-    - if body[1..-1] != []
-      %small
-        %i
-          [Hiding Quoted Text]
-          %br
-          %br
-
-    %table
-      %tr
-        - if @folder.name == "chans"
-          %th
-            %form{:method => :get, :action => "/messages/compose/"}
-              %input{:type => :hidden, :name => :to, :value => @address}
-              %input{:type => :hidden, :name => :subject, :value => "Re: " + @thread}
-              %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
-              %button.btn-small.btn-default{:type => :submit} Reply Chan
-        - if @folder.name != "chans" || (@address != message['fromAddress'])
-          %th
-            %form{:method => :get, :action => "/messages/compose/" }
-              %input{:type => :hidden, :name => :to, :value => message['fromAddress']}
-              %input{:type => :hidden, :name => :subject, :value => "Re: " + @thread}
-              %input{:type => :hidden, :name => :reply_to, :value => message['msgid']}
-              %button.btn-small.btn-success{:type => :submit} Reply User
-        %th
-          %form{:method => :post, :action => "/messages/delete/", :onsubmit => "return confirm('Really delete?')"}
-            %input{:type => :hidden, :name => :msgid, :value => message['msgid']}
-            %button.btn-small.btn-danger{:type => :submit} Delete
-    .clear
+  - @message = message
+  = haml(:message)

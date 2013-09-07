@@ -335,6 +335,19 @@ class BMF::BMF < Sinatra::Base
 
   end
 
+  get "/messages/:msgid/", :provides => :html do
+    @message = BMF::MessageStore.instance.messages[params[:msgid]]
+    @subject = @message['subject']
+    @subject = @subject[4..-1] if @subject[0..3] == "Re: "
+
+    @addresses = BMF::AddressStore.instance.addresses
+    @address = @message['toAddress']
+
+    @show_quoted_text = true
+    
+    haml(:message)
+  end
+  
   get "/subscriptions/", :provides => :html do
 
     @addresses = BMF::AddressStore.instance.subscriptions
@@ -398,21 +411,21 @@ class BMF::BMF < Sinatra::Base
     haml :threads
   end
 
-  get "/:folder/:address/:thread", :provides => :html do
+  get "/:folder/:address/:subject", :provides => :html do
     @folder = BMF::Folder.new(params[:folder])
     
     @address = params[:address]
 
-    @thread = CGI.unescape(params[:thread])
-    @messages = @folder.thread_messages(@address, @thread, :sort => :old)
+    @subject = CGI.unescape(params[:subject])
+    @messages = @folder.thread_messages(@address, @subject, :sort => :old)
 
-    halt(404, haml("Couldn't find any messages for thread #{params[:thread].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if @messages.nil?
+    halt(404, haml("Couldn't find any messages for thread #{params[:subject].inspect} for address #{params[:address].inspect}.  Maybe you trashed the messages.")) if @messages.nil?
 
     @addresses = BMF::AddressStore.instance.addresses
 
     # Get the last time we visited thread, and update to now
-    @thread_last_visited = BMF::ThreadStatus.instance.thread_last_visited(@address,@thread)
-    BMF::ThreadStatus.instance.thread_visited(@address, @thread, BMF::Message.time(@messages.last)) if @messages.last
+    @thread_last_visited = BMF::ThreadStatus.instance.thread_last_visited(@address,@subject)
+    BMF::ThreadStatus.instance.thread_visited(@address, @subject, BMF::Message.time(@messages.last)) if @messages.last
 
     haml :messages
   end

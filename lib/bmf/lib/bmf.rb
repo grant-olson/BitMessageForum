@@ -361,7 +361,7 @@ class BMF::BMF < Sinatra::Base
   end
   
   post "/addressbook/create/", :provides => :html do
-    res = BMF::XmlrpcClient.instance.addAddressBook params[:address], Base64.encode64(params[:label])
+    res = BMF::XmlrpcClient.instance.addAddressBookEntry params[:address], Base64.encode64(params[:label])
     
     if BMF::XmlrpcClient.is_error? res
       halt(500, haml("Error adding entry.  #{res}"))
@@ -371,7 +371,7 @@ class BMF::BMF < Sinatra::Base
   end
   
   post "/addressbook/delete/", :provides => :html do
-    res = BMF::XmlrpcClient.instance.deleteAddressBook params[:address]
+    res = BMF::XmlrpcClient.instance.deleteAddressBookEntry params[:address]
     if BMF::XmlrpcClient.is_error? res
       halt(500, haml("Error deleting address book entry.  #{res}"))
     else

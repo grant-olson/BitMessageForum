@@ -50,6 +50,8 @@ class BMF::AddressStore
     end
     
     source = method.to_s[4..-1].downcase
+    source = 'addressbook' if source == 'addressbookentries'
+
     address_field = method == :listSubscriptions ? "subscriptions" : "addresses"
     address_infos = JSON.parse(address_text)[address_field]
 
@@ -77,6 +79,6 @@ class BMF::AddressStore
   end
 
   def update
-    [:listAddresses, :listSubscriptions, :listAddressbook].each { |m| update_address_list(m) }
+    [:listAddresses, :listSubscriptions, :listAddressBookEntries].each { |m| update_address_list(m) }
   end
 end

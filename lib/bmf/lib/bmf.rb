@@ -276,39 +276,44 @@ class BMF::BMF < Sinatra::Base
     message = Base64.encode64(params[:message])
     broadcast = params[:broadcast]
 
-    if !verify_address(to) && !broadcast
-      BMF::Alert.instance << "Unable to verify address #{to}..."
-      init_compose
-      haml :compose
-    else
-      res = "Sending message in background..."
-      
-      Thread.new do
-        begin
-          if broadcast
-            res = BMF::XmlrpcClient.instance.sendBroadcast(from, subject, message)
-            check_send res
-          else
-
-            to.split(";").each do |to_address|
-              to_address = to_address.strip
-              res = BMF::XmlrpcClient.instance.sendMessage(to_address, from, subject, message)
-              check_send res
-            end
-          end
-
-        rescue Exception => ex
-          BMF::Alert.instance << "BACKGROUND SEND FAILED! #{ex.message}"
+    if !broadcast
+      to.split(";").each do |single_address|
+        single_address = single_address.strip
+        if !verify_address(single_address)
+          BMF::Alert.instance << "Unable to verify address #{single_address}..."
+          init_compose
+          halt haml(:compose)
         end
       end
+    end
     
-      confirm_message = "Sending in background..."
-      if params[:goto] && params[:goto] != ""
-        BMF::Alert.instance << confirm_message
-        redirect params[:goto]
-      else
-        haml confirm_message
+    res = "Sending message in background..."
+    
+    Thread.new do
+      begin
+        if broadcast
+          res = BMF::XmlrpcClient.instance.sendBroadcast(from, subject, message)
+          check_send res
+        else
+
+          to.split(";").each do |to_address|
+            to_address = to_address.strip
+            res = BMF::XmlrpcClient.instance.sendMessage(to_address, from, subject, message)
+            check_send res
+          end
+        end
+
+      rescue Exception => ex
+        BMF::Alert.instance << "BACKGROUND SEND FAILED! #{ex.message}"
       end
+    end
+    
+    confirm_message = "Sending in background..."
+    if params[:goto] && params[:goto] != ""
+      BMF::Alert.instance << confirm_message
+      redirect params[:goto]
+    else
+      haml confirm_message
     end
       
   end

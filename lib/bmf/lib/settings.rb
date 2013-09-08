@@ -16,7 +16,8 @@ class BMF::Settings
     :user => "username for http basic authentication.  (You should be using https in conjunction with this!)",
     :password => "password for http basic authentication.  (You should be using https in conjunction with this!)",
     :https_server_key_file => "file for https key",
-    :https_server_certificate_file => "file for https certificate"
+    :https_server_certificate_file => "file for https certificate",
+    :mark_inbox_read => "Mark the message as read in PyBitmessage when it's retreived.  (Set to 1 to enable)"
   }
 
   DEFAULT_SETTINGS = {"server_url" => 'http://bmf:bmf@localhost:8442/', "display_sanitized_html" => 'no', 'server_interface' => "localhost" }

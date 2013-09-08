@@ -86,7 +86,12 @@ class BMF::MessageStore
   end
 
   def get_full_message mailbox, msgid
-    msg_json = BMF::XmlrpcClient.instance.send("get#{mailbox.capitalize}MessageByID", msgid)
+    if mailbox == "inbox" && BMF::Settings.instance.mark_inbox_read == "1"
+      msg_json = BMF::XmlrpcClient.instance.send("get#{mailbox.capitalize}MessageByID", msgid, true)
+    else
+      msg_json = BMF::XmlrpcClient.instance.send("get#{mailbox.capitalize}MessageByID", msgid)
+    end
+    
     JSON.parse(msg_json)["#{mailbox}Message"][0]
   end
   

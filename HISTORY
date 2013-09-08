@@ -1,3 +1,5 @@
+* Allow optional marking of messages as read in PyBitmessage.
+
 * Allow users to view full message with all quotes.
 
 * Add [save] link to save address to address book.

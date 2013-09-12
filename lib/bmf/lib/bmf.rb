@@ -90,6 +90,7 @@ class BMF::BMF < Sinatra::Base
     # We also need to escape the first period so we can have a subject
     # of '.'
     def full_escape str
+      str = str.gsub("+","%2B")
       str = ERB::Util.url_encode(str)
 
       if str[0] && str[0] == "."

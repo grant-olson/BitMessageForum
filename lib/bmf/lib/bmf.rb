@@ -173,17 +173,17 @@ class BMF::BMF < Sinatra::Base
     {:new_messages => new_message_count, :new_folders => new_folders}.to_json
   end
   
-  get "/addressbook/", :provides => :html do
+  get "/settings/addressbook/", :provides => :html do
     @addresses = BMF::AddressStore.instance.address_book
     haml :addressbook
   end
 
-  get "/identities/", :provides => :html do
+  get "/settings/identities/", :provides => :html do
     @addresses = BMF::AddressStore.instance.identities
     haml :identities
   end
 
-  post "/identities/new/", :provides => :html do
+  post "/settings/identities/new/", :provides => :html do
     if params[:label]
       label = Base64.encode64(params[:label])
       response = BMF::XmlrpcClient.instance.createRandomAddress label
@@ -211,12 +211,12 @@ class BMF::BMF < Sinatra::Base
     
   end
   
-  get "/settings/", :provides => :html do
+  get "/settings/site/", :provides => :html do
     load_settings
     haml :settings
   end
 
-  post "/settings/update", :provides => :html do
+  post "/settings/site/update", :provides => :html do
     params.each_pair do |key, value|
       BMF::Settings.instance.update(key,value)
     end
@@ -230,7 +230,7 @@ class BMF::BMF < Sinatra::Base
 
   post "/settings/mark_all_read", :provides => :html do
     BMF::ThreadStatus.instance.mark_all_read
-    redirect "/settings/"
+    redirect "/settings/site/"
   end
 
   def init_compose
@@ -354,13 +354,13 @@ class BMF::BMF < Sinatra::Base
     haml(:message)
   end
   
-  get "/subscriptions/", :provides => :html do
+  get "/settings/subscriptions/", :provides => :html do
 
     @addresses = BMF::AddressStore.instance.subscriptions
     haml :subscriptions
   end
   
-  post "/subscriptions/create/", :provides => :html do
+  post "/settings/subscriptions/create/", :provides => :html do
     res = BMF::XmlrpcClient.instance.addSubscription params[:address], Base64.encode64(params[:label])
     
     if BMF::XmlrpcClient.is_error? res
@@ -370,7 +370,7 @@ class BMF::BMF < Sinatra::Base
     end
   end
   
-  post "/subscriptions/delete/", :provides => :html do
+  post "/settings/subscriptions/delete/", :provides => :html do
     res = BMF::XmlrpcClient.instance.deleteSubscription params[:address]
     if BMF::XmlrpcClient.is_error? res
       halt(500, haml("Error deleting subscrition.  #{res}"))
@@ -379,7 +379,7 @@ class BMF::BMF < Sinatra::Base
     end
   end
   
-  post "/addressbook/create/", :provides => :html do
+  post "/settings/addressbook/create/", :provides => :html do
     res = BMF::XmlrpcClient.instance.addAddressBookEntry params[:address], Base64.encode64(params[:label])
     
     if BMF::XmlrpcClient.is_error? res
@@ -389,7 +389,7 @@ class BMF::BMF < Sinatra::Base
     end
   end
   
-  post "/addressbook/delete/", :provides => :html do
+  post "/settings/addressbook/delete/", :provides => :html do
     res = BMF::XmlrpcClient.instance.deleteAddressBookEntry params[:address]
     if BMF::XmlrpcClient.is_error? res
       halt(500, haml("Error deleting address book entry.  #{res}"))

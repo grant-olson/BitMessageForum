@@ -5,7 +5,7 @@
     %button.close{:'data-dismiss' => "alert"} &times;
     = @flash
 
-%form{:method => :post, :action => "/settings/update"}
+%form{:method => :post, :action => "/settings/site/update"}
   %table.table.table-striped
     - @settings.each_pair do |key, value|
       %tr

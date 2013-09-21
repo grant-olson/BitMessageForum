@@ -12,7 +12,7 @@
 .row
   .col-lg-6
     %h4 Add New Subscription
-    %form{:method => :post, :action => "/subscriptions/create/"}
+    %form{:method => :post, :action => "/settings/subscriptions/create/"}
       %label Label
       %input.form-control.input-small{:type => :text, :name => :label, :value => params[:label], :size => 50}
       %label Address
@@ -22,7 +22,7 @@
 
   .col-lg-6
     %h4 Delete Subscription
-    %form{:method => :post, :action => "/subscriptions/delete/", :onsubmit => "return confirm('Are you sure');"}
+    %form{:method => :post, :action => "/settings/subscriptions/delete/", :onsubmit => "return confirm('Are you sure');"}
       %label Address
       %input.form-control.input-small{:type => :text, :name => :address, :size => 50}
       %br

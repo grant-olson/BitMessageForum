@@ -8,7 +8,7 @@
     %h4 Create random address
 
     %div
-      %form{:method => :post, :action => "/identities/new/"}
+      %form{:method => :post, :action => "/settings/identities/new/"}
         %label
           Label:
           %input.form-control.input-small{:type => :text, :name => :label, :size => 50}
@@ -18,7 +18,7 @@
     %h4 Create deterministic address
 
     %div
-      %form{:method => :post, :action => "/identities/new/"}
+      %form{:method => :post, :action => "/settings/identities/new/"}
         %label
           Password:
           %input.form-control.input-small{:type => :text, :name => :passphrase, :size => 50}

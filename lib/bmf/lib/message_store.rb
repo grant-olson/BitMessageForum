@@ -77,7 +77,7 @@ class BMF::MessageStore
 
     to_address = m["toAddress"]
 
-    # Temp hack for lists
+    # Temp hack for subscriptions
     if to_address == "[Broadcast subscribers]"
       hack_mailing_list_name = m["fromAddress"]
       to_address += " " + hack_mailing_list_name
@@ -234,7 +234,7 @@ class BMF::MessageStore
     end
   end
 
-  def lists
+  def subscriptions
     by_recipient.select do |toAddress, messages|
       toAddress.include? "[Broadcast subscribers]"
     end

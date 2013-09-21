@@ -163,7 +163,7 @@ class BMF::BMF < Sinatra::Base
 
     new_folders = []
     if new_message_count > 0
-      ["inbox", "chans", "lists"].each do |folder|
+      ["inbox", "chans", "subscriptions"].each do |folder|
         if BMF::Folder.new(folder).new_messages?
           new_folders << folder
         end

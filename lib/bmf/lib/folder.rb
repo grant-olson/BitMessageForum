@@ -2,7 +2,7 @@ require_relative "message_store.rb"
 require_relative "thread_status.rb"
 
 class BMF::Folder
-  VALID_FOLDERS = %w{chans inbox sent lists}
+  VALID_FOLDERS = %w{chans inbox sent subscriptions}
 
   attr_reader :name
 

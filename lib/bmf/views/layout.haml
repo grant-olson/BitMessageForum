@@ -38,7 +38,7 @@
             %li.dropdown
               %a.dropdown-toggle{:href => "#", :'data-toggle' => "dropdown"}
                 Messages
-                - if BMF::Folder.new("inbox").new_messages? | BMF::Folder.new("lists").new_messages? | BMF::Folder.new("chans").new_messages?
+                - if BMF::Folder.new("inbox").new_messages? | BMF::Folder.new("subscriptions").new_messages? | BMF::Folder.new("chans").new_messages?
                   %span.label.label-success New!
                 %b.caret
               %ul.dropdown-menu
@@ -48,9 +48,9 @@
                     - if BMF::Folder.new('inbox').new_messages?
                       %span.label.label-success New!
                 %li
-                  %a{:href => "/lists/"}
-                    Lists
-                    - if BMF::Folder.new('lists').new_messages?
+                  %a{:href => "/subscriptions/"}
+                    Subscriptions
+                    - if BMF::Folder.new('subscriptions').new_messages?
                       %span.label.label-success New!
                 %li
                   %a{:href => "/chans/"}

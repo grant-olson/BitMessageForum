@@ -24,23 +24,15 @@ class BMF::Settings
 
   VALID_SETTINGS = SETTINGS_AND_DESCRIPTIONS.keys
 
-  SETTING_DIR = ".bitmessageforum"
-  SETTINGS_FILE = "settings.yml"
+  HOME_DIR = ENV["HOME"] || ENV["HOMEPATH"]
+  SETTINGS_DIR = ENV["BMF_SETTINGS"] || File.join(HOME_DIR, ".bitmessageforum")
+  SETTINGS_FILE = File.join(SETTINGS_DIR, "settings.yml")
 
-  def self.fully_qualified_filename filename
-    home_dir = ENV["HOME"] || ENV["HOMEPATH"]
-    File.join(home_dir, SETTING_DIR, filename)
-  end
-  
   def initialize
-    home_dir = ENV["HOME"] || ENV["HOMEPATH"]
-    
-    setting_dir = File.join(home_dir, SETTING_DIR)
-    Dir.mkdir(setting_dir, 0700) if !File.directory? setting_dir
+    Dir.mkdir(SETTINGS_DIR, 0700) if !File.directory? SETTINGS_DIR
+    settings_filename = SETTINGS_FILE
 
-    settings_filename = BMF::Settings.fully_qualified_filename(SETTINGS_FILE)
-
-    if !File.exists? (settings_filename)
+    if !File.exists? (SETTINGS_FILE)
       puts "No existing settings.  Copying defaults into place."
       @settings = DEFAULT_SETTINGS
       persist
@@ -57,7 +49,7 @@ class BMF::Settings
   end
 
   def persist
-    File.open(BMF::Settings.fully_qualified_filename(SETTINGS_FILE),'w',0600) do |out|
+    File.open(SETTINGS_FILE,'w',0600) do |out|
       out.write(@settings.to_yaml)
     end
   end

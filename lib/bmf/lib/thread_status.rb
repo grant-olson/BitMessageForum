@@ -6,7 +6,7 @@ require 'digest/sha2'
 class BMF::ThreadStatus
   include Singleton
 
-  STASH_FILE = BMF::Settings.fully_qualified_filename("thread_status_stash")
+  STASH_FILE = File.join(BMF::Settings::SETTINGS_DIR,"thread_status_stash")
 
   def initialize
     @thread_last_visited = {}

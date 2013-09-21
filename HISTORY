@@ -1,3 +1,6 @@
+* Allow alternate location of settings files via BMF_SETTINGS
+  environment variable. #66
+
 * use "subscriptions" not "lists" in UI.
 
 * Allow optional marking of messages as read in PyBitmessage.
